@@ -1,0 +1,285 @@
+---
+/**
+ * Phase 0 — prove the recording path.
+ *
+ * One page, no auth, no database. It answers the single question the provider decision
+ * hangs off:
+ *
+ *   Does `MediaRecorder.isTypeSupported('video/mp4;codecs=avc1')` hold on every phone in
+ *   the group, and does the resulting file play on the other phone?
+ *
+ * If yes, R2 alone is the whole video layer and there is no second vendor. If no, Bunny
+ * Stream earns its dollar a month by normalising whatever the browser hands us.
+ *
+ * Deliberately ugly and deliberately unauthenticated: it is a measuring instrument, and it
+ * gets deleted at the end of Phase 0. Uploads go to a separate prefix in the bucket so they
+ * can be swept without touching anything real.
+ */
+import Base from '../layouts/Base.astro';
+import {
+  AUDIO_BITS_PER_SECOND,
+  TARGET_BYTES,
+  VIDEO_BITS_PER_SECOND,
+  formatBytes,
+} from '../lib/media.ts';
+---
+
+<Base title="Phase 0 probe">
+  <main class="mx-auto max-w-lg px-margin-sm py-space-lg">
+    <h1 class="font-serif text-headline text-on-surface">Phase 0 — recording probe</h1>
+    <p class="mt-space-xs text-body-sm text-on-surface-variant">
+      Record up to three minutes, check the size, upload it, then open this page on the other
+      phone and play it back. Target is {formatBytes(TARGET_BYTES)} for a full three minutes at
+      720p / {VIDEO_BITS_PER_SECOND / 1000} kbps video + {AUDIO_BITS_PER_SECOND / 1000} kbps audio.
+    </p>
+
+    <!-- What this browser says it can do, before anything is recorded. -->
+    <section class="ghost-border mt-space-lg rounded-xl bg-surface-container-low p-space-md">
+      <h2 class="text-label-md uppercase tracking-wider text-tertiary">This browser</h2>
+      <dl class="mt-space-sm space-y-1 text-body-sm" id="support"></dl>
+      <p class="mt-space-sm text-label-sm text-outline" id="verdict"></p>
+    </section>
+
+    <div
+      class="sunken-well relative mt-space-md aspect-[3/4] w-full overflow-hidden rounded-xl bg-surface-container-lowest"
+    >
+      <video class="h-full w-full object-cover" id="preview" muted playsinline></video>
+      <video class="hidden h-full w-full object-cover" controls id="playback" playsinline></video>
+      <span
+        class="absolute left-space-sm top-space-sm hidden rounded-full bg-surface-container-lowest/85 px-space-sm py-1 text-label-md text-on-surface"
+        id="timer">3:00</span
+      >
+    </div>
+
+    <p class="mt-space-sm min-h-6 text-center text-label-sm text-primary" id="readout"></p>
+
+    <div class="mt-space-md flex flex-wrap gap-space-sm">
+      <button
+        class="rounded-lg bg-primary px-space-md py-space-sm text-label-md text-on-primary"
+        id="camera"
+        type="button">Camera on</button
+      >
+      <button
+        class="rounded-lg bg-surface-container-high px-space-md py-space-sm text-label-md text-on-surface disabled:opacity-40"
+        disabled
+        id="toggle"
+        type="button">Record</button
+      >
+      <button
+        class="rounded-lg bg-surface-container-high px-space-md py-space-sm text-label-md text-on-surface disabled:opacity-40"
+        disabled
+        id="upload"
+        type="button">Upload</button
+      >
+      <label
+        class="cursor-pointer rounded-lg bg-surface-container-high px-space-md py-space-sm text-label-md text-on-surface"
+      >
+        Pick a file
+        <input accept="video/*" class="hidden" id="picker" type="file" />
+      </label>
+    </div>
+
+    <pre
+      class="mt-space-md overflow-x-auto rounded-lg bg-surface-container-lowest p-space-sm text-label-sm text-on-surface-variant"
+      id="log"></pre>
+
+    <!-- What has been uploaded so far, playable from any device on the same URL. -->
+    <section class="mt-space-lg">
+      <h2 class="text-label-md uppercase tracking-wider text-tertiary">Uploaded</h2>
+      <ul class="mt-space-sm space-y-space-sm" id="list">
+        <li class="text-body-sm text-outline">Loading…</li>
+      </ul>
+    </section>
+
+    <p class="mt-space-xl text-label-sm text-outline">
+      Delete this page and /api/probe/* at the end of Phase 0. The decision it exists to settle
+      is recorded in docs/decisions.md.
+    </p>
+  </main>
+</Base>
+
+<script>
+  import {
+    AUDIO_BITS_PER_SECOND,
+    CAPTURE_HEIGHT,
+    CAPTURE_WIDTH,
+    MAX_DURATION_SECONDS,
+    RECORDER_MIME_CANDIDATES,
+    VIDEO_BITS_PER_SECOND,
+    formatBytes,
+    probeVideo,
+  } from '../lib/media.ts';
+
+  const el = (id: string) => document.getElementById(id)!;
+  const preview = el('preview') as HTMLVideoElement;
+  const playback = el('playback') as HTMLVideoElement;
+  const log = el('log');
+  const readout = el('readout');
+  const timer = el('timer');
+  const toggle = el('toggle') as HTMLButtonElement;
+  const uploadButton = el('upload') as HTMLButtonElement;
+
+  const note = (line: string) => {
+    log.textContent = `${log.textContent}${line}\n`;
+  };
+
+  /* --- What the browser admits to before anything is recorded. ------------- */
+  const supported = RECORDER_MIME_CANDIDATES.map((type) => ({
+    type,
+    ok: typeof MediaRecorder !== 'undefined' && MediaRecorder.isTypeSupported(type),
+  }));
+
+  el('support').innerHTML = supported
+    .map(
+      ({ type, ok }) =>
+        `<div class="flex justify-between gap-3"><dt class="truncate text-on-surface-variant">${type}</dt><dd class="${ok ? 'text-secondary' : 'text-outline'}">${ok ? 'yes' : 'no'}</dd></div>`,
+    )
+    .join('');
+
+  const h264 = supported.find((entry) => entry.type.includes('avc1') && entry.ok);
+  el('verdict').textContent = h264
+    ? 'H.264 in MP4 is available here. If that holds on every phone, R2 alone is enough.'
+    : 'No H.264 MP4 recording here — this browser will produce WebM, which iOS may not play. One phone like this and Bunny earns its keep.';
+  note(`${navigator.userAgent}`);
+
+  /* --- Record ------------------------------------------------------------- */
+  let stream: MediaStream | null = null;
+  let recorder: MediaRecorder | null = null;
+  let chunks: Blob[] = [];
+  let blob: Blob | null = null;
+  let startedAt = 0;
+  let ticker: number | undefined;
+
+  el('camera').addEventListener('click', async () => {
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: 'user', width: { ideal: CAPTURE_WIDTH }, height: { ideal: CAPTURE_HEIGHT } },
+        audio: true,
+      });
+      preview.srcObject = stream;
+      await preview.play();
+      toggle.disabled = false;
+      const track = stream.getVideoTracks()[0];
+      const settings = track?.getSettings();
+      note(`camera: ${settings?.width}x${settings?.height} @ ${settings?.frameRate ?? '?'}fps`);
+    } catch (error) {
+      note(`camera failed: ${String(error)}`);
+    }
+  });
+
+  toggle.addEventListener('click', () => {
+    if (recorder?.state === 'recording') {
+      recorder.stop();
+      return;
+    }
+    if (!stream) return;
+
+    const mimeType = RECORDER_MIME_CANDIDATES.find((type) => MediaRecorder.isTypeSupported(type));
+    chunks = [];
+    recorder = new MediaRecorder(stream, {
+      ...(mimeType ? { mimeType } : {}),
+      videoBitsPerSecond: VIDEO_BITS_PER_SECOND,
+      audioBitsPerSecond: AUDIO_BITS_PER_SECOND,
+    });
+    note(`asked for: ${mimeType ?? '(browser default)'}`);
+
+    recorder.addEventListener('dataavailable', (event) => {
+      if (event.data.size > 0) chunks.push(event.data);
+      const total = chunks.reduce((sum, chunk) => sum + chunk.size, 0);
+      const elapsed = (Date.now() - startedAt) / 1000;
+      readout.textContent = `${formatBytes(total)} · ${elapsed.toFixed(0)}s · ${((total * 8) / elapsed / 1000).toFixed(0)} kbps`;
+    });
+
+    recorder.addEventListener('stop', async () => {
+      window.clearInterval(ticker);
+      timer.classList.add('hidden');
+      toggle.textContent = 'Record';
+
+      blob = new Blob(chunks, { type: recorder!.mimeType });
+      const seconds = (Date.now() - startedAt) / 1000;
+      preview.classList.add('hidden');
+      playback.classList.remove('hidden');
+      playback.src = URL.createObjectURL(blob);
+
+      // The same probe the server uses, so what it reads out of the file is visible here.
+      const probe = probeVideo(new Uint8Array(await blob.arrayBuffer()));
+      note(`got: ${recorder!.mimeType}`);
+      note(
+        `file: ${formatBytes(blob.size)} over ${seconds.toFixed(1)}s = ${((blob.size * 8) / seconds / 1000).toFixed(0)} kbps total`,
+      );
+      note(
+        `probe: container=${probe.container} video=${probe.videoCodec} audio=${probe.audioCodec} duration=${probe.durationSeconds?.toFixed(1) ?? 'none in file'}`,
+      );
+      note(`3 min at this rate would be ${formatBytes((blob.size / seconds) * 180)}`);
+      uploadButton.disabled = false;
+    });
+
+    recorder.start(1000);
+    startedAt = Date.now();
+    toggle.textContent = 'Stop';
+    timer.classList.remove('hidden');
+    ticker = window.setInterval(() => {
+      const left = Math.max(0, MAX_DURATION_SECONDS - (Date.now() - startedAt) / 1000);
+      timer.textContent = `${Math.floor(left / 60)}:${String(Math.floor(left % 60)).padStart(2, '0')}`;
+      if (left <= 0) recorder?.stop();
+    }, 200);
+  });
+
+  (el('picker') as HTMLInputElement).addEventListener('change', async (event) => {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+    blob = file;
+    preview.classList.add('hidden');
+    playback.classList.remove('hidden');
+    playback.src = URL.createObjectURL(file);
+    const probe = probeVideo(new Uint8Array(await file.arrayBuffer()));
+    note(`picked: ${file.name} ${formatBytes(file.size)} (${file.type || 'no type'})`);
+    note(
+      `probe: container=${probe.container} video=${probe.videoCodec} audio=${probe.audioCodec} duration=${probe.durationSeconds?.toFixed(1) ?? 'unknown'}`,
+    );
+    uploadButton.disabled = false;
+  });
+
+  /* --- Upload and list ---------------------------------------------------- */
+  uploadButton.addEventListener('click', async () => {
+    if (!blob) return;
+    uploadButton.disabled = true;
+    const startedUploadAt = Date.now();
+    const body = new FormData();
+    body.set('video', blob, 'probe');
+
+    const response = await fetch('/api/probe/upload', { method: 'POST', body });
+    const seconds = (Date.now() - startedUploadAt) / 1000;
+    const text = await response.text();
+    note(`upload ${response.status} in ${seconds.toFixed(1)}s — ${text}`);
+    uploadButton.disabled = false;
+    void refresh();
+  });
+
+  async function refresh() {
+    const list = el('list');
+    try {
+      const entries = (await (await fetch('/api/probe/list')).json()) as Array<{
+        key: string;
+        size: number;
+        uploaded: string;
+        contentType: string;
+      }>;
+      list.innerHTML =
+        entries.length === 0
+          ? '<li class="text-body-sm text-outline">Nothing yet.</li>'
+          : entries
+              .map(
+                (entry) => `<li class="ghost-border rounded-lg bg-surface-container-low p-space-sm">
+                  <div class="text-label-sm text-outline">${entry.contentType} · ${formatBytes(entry.size)} · ${new Date(entry.uploaded).toLocaleString('en-AU')}</div>
+                  <video class="mt-2 w-full rounded" controls playsinline preload="metadata" src="/api/probe/video/${encodeURIComponent(entry.key)}"></video>
+                </li>`,
+              )
+              .join('');
+    } catch (error) {
+      list.innerHTML = `<li class="text-body-sm text-error">Couldn't list: ${String(error)}</li>`;
+    }
+  }
+
+  void refresh();
+</script>

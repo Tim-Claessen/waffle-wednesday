@@ -34,3 +34,40 @@ These are decisions already taken, not open questions. Each one has its reasonin
 - All scheduling is Australia/Perth, which has no daylight saving. Cron lines are fixed offsets from
   UTC and should never need seasonal adjustment.
 - Week identity is a `week_start` date column, not a background job that moves rows at midnight.
+
+## Where things are
+
+| | |
+| --- | --- |
+| `src/lib/week.ts` | Week identity. Perth is UTC+8 fixed, so no date library — shift the clock eight hours and read the UTC fields |
+| `src/lib/media.ts` | The upload barriers, and a small ISO-BMFF/EBML probe that reads duration and codec out of the file rather than the form |
+| `src/lib/storage.ts` | The only file that knows which video provider is in use. Swapping providers means changing this and nothing else |
+| `src/lib/db.ts` | Every query. Note what it deliberately doesn't offer |
+| `src/lib/reminders.ts` | The only place that computes who hasn't posted, to address an envelope |
+| `supabase/migrations/0001_init.sql` | The schema, and the row-level security that is the whole access model |
+| `docs/setup.md` | Everything that can't be done from this repo |
+| `docs/decisions.md` | What was decided while building, and where the design files disagree with PLAN.md |
+
+## Things that will bite
+
+- **Rows in `database.types.ts` must be `type`, not `interface`.** Supabase constrains a
+  schema to `Record<string, unknown>`; TypeScript gives an implicit index signature to a
+  type alias but never to an interface. Get this wrong and every query resolves to `never`,
+  which type-checks until you touch a property and then fails everywhere at once.
+- **`Astro.locals.runtime.env` no longer exists** (removed in Astro 6). Bindings and vars
+  come from `import { env } from 'cloudflare:workers'`, which is wrapped in `src/lib/config.ts`.
+  That module only resolves inside the Worker runtime, so nothing unit-tested may import it.
+- **The middleware builds its Supabase client lazily.** That is what lets the Phase 0 probe
+  run with no Supabase project at all. Don't make it eager.
+- **Range requests are not optional.** iOS Safari won't play a video it can't seek in, so
+  `/api/video/[id]` has to answer 206s or the player shows a black frame.
+- **Astro rejects cross-site form posts.** A `curl` test of any route taking `multipart/form-data`
+  needs an `Origin` header matching the site, or it gets a 403.
+
+## Two corrections to PLAN.md, both reasoned in docs/decisions.md
+
+- **Workers, not Pages.** Pages Functions can't have cron triggers, and PLAN.md says never
+  to cut the reminders.
+- **The cron fires every 30 minutes, not at two fixed times.** Reminder times live in the
+  `groups` table so they can change without a deploy; hard-coded cron lines would make the
+  settings screen a lie.

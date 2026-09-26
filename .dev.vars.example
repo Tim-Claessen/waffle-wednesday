@@ -1,0 +1,13 @@
+# Copy to .dev.vars for local development. .dev.vars is gitignored and must stay that way.
+# The deployed Worker gets these with `wrangler secret put NAME`, or in the Cloudflare
+# dashboard under the Worker's Settings → Variables and Secrets.
+
+# Supabase → Project Settings → API
+PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+
+# Resend → API Keys
+RESEND_API_KEY=
+
+# Any long random string. The same value goes on the reminders Worker.
+CRON_SECRET=

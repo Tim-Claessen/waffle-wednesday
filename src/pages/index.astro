@@ -1,0 +1,30 @@
+---
+/**
+ * The front door, which is never a page.
+ *
+ * Sends you to your first group, or explains the one situation where you have none.
+ * Middleware has already established that somebody is signed in.
+ */
+import Base from '../layouts/Base.astro';
+import { listGroups } from '../lib/db.ts';
+
+const { supabase, user } = Astro.locals;
+const groups = await listGroups(supabase, user!.id);
+
+if (groups.length > 0) {
+  return Astro.redirect(`/g/${groups[0]!.slug}`, 302);
+}
+---
+
+<Base title="No groups yet">
+  <main class="mx-auto flex min-h-dvh max-w-lg flex-col justify-center px-margin-sm text-center">
+    <p aria-hidden="true" class="text-[40px]">🧇</p>
+    <h1 class="mt-space-md font-serif text-headline text-on-surface">You're not in a group yet</h1>
+    <p class="mx-auto mt-space-sm max-w-xs text-body-md text-on-surface-variant">
+      Somebody has to add you to one. Once they have, this is where your week will be.
+    </p>
+    <p class="mt-space-lg text-label-sm text-outline">
+      <a class="underline decoration-outline-variant hover:text-primary" href="/logout">Sign out</a>
+    </p>
+  </main>
+</Base>

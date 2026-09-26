@@ -1,0 +1,117 @@
+---
+/**
+ * One waffle in the week's feed.
+ *
+ * Shows whose it is, how long it runs, whether you've watched it, and the caption if
+ * there is one. It never shows a play count, a "new" badge in red, or anything that
+ * implies urgency: the video is the content and the card is a door to it.
+ */
+import Icon from './Icon.astro';
+import Monogram from './Monogram.astro';
+import { REACTION_GLYPHS } from '../lib/database.types.ts';
+import type { FeedWaffle } from '../lib/db.ts';
+import { formatDuration } from '../lib/week.ts';
+
+interface Props {
+  waffle: FeedWaffle;
+  /** The rest of the week's feed, so the player can move to the next person. */
+  playlist: string[];
+  groupSlug: string;
+}
+
+const { waffle, playlist, groupSlug } = Astro.props;
+
+const href = `/g/${groupSlug}/watch/${waffle.id}?from=${playlist.join(',')}`;
+const totalReactions = waffle.reactions.reduce((total, tally) => total + tally.count, 0);
+---
+
+<a
+  class="ghost-border group block overflow-hidden rounded-xl bg-surface-container-low transition-colors hover:ghost-border-active"
+  href={href}
+>
+  <div class="sunken-well relative aspect-[4/3] bg-surface-container-lowest">
+    {
+      waffle.thumbnailPath ? (
+        <img
+          alt=""
+          class="h-full w-full object-cover opacity-90 transition-opacity group-hover:opacity-100"
+          height="480"
+          loading="lazy"
+          src={waffle.thumbnailPath}
+          width="640"
+        />
+      ) : (
+        <span class="flex h-full w-full items-center justify-center">
+          <Monogram glow={!waffle.watched} initials={waffle.initials} size="lg" />
+        </span>
+      )
+    }
+
+    <span
+      class="absolute bottom-space-sm right-space-sm flex items-center gap-1 rounded-full bg-surface-container-lowest/85 px-2 py-0.5 text-label-sm text-on-surface"
+    >
+      {formatDuration(waffle.durationSeconds)}
+    </span>
+
+    {
+      waffle.watched && (
+        <span
+          class="absolute left-space-sm top-space-sm flex items-center gap-1 rounded-full bg-secondary-container/80 px-2 py-0.5 text-label-sm text-on-secondary-container"
+        >
+          <Icon name="check" size={12} />
+          Watched
+        </span>
+      )
+    }
+
+    <span
+      class="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity group-hover:opacity-100"
+    >
+      <span
+        class="flex h-14 w-14 items-center justify-center rounded-full bg-primary-container text-on-primary-container shadow-ember"
+      >
+        <Icon filled name="play" size={26} />
+      </span>
+    </span>
+  </div>
+
+  <div class="flex items-start justify-between gap-space-sm p-space-md">
+    <div class="min-w-0">
+      <p class="font-serif text-headline-sm text-on-surface">
+        {waffle.isMine ? 'Yours' : waffle.displayName}
+      </p>
+      {
+        waffle.caption ? (
+          <p class="mt-0.5 line-clamp-2 text-body-sm text-on-surface-variant">{waffle.caption}</p>
+        ) : null
+      }
+      {
+        /*
+          Only ever on your own waffle, and only ever a count. "Four of the group have
+          watched yours" is encouraging; naming who hasn't is the thing this app exists
+          not to do, so there is no branch here that could.
+        */
+        waffle.isMine && waffle.watchedByCount > 0 ? (
+          <p class="mt-space-xs flex items-center gap-1 text-label-sm text-outline">
+            <Icon name="eye" size={13} />
+            {waffle.watchedByCount === 1
+              ? 'One of the group has watched yours'
+              : `${waffle.watchedByCount} of the group have watched yours`}
+          </p>
+        ) : null
+      }
+    </div>
+
+    {
+      totalReactions > 0 && (
+        <span class="flex shrink-0 items-center gap-0.5 pt-1 text-body-sm">
+          {waffle.reactions
+            .filter((tally) => tally.count > 0)
+            .map((tally) => (
+              <span aria-hidden="true" class="text-[15px]">{REACTION_GLYPHS[tally.emoji].glyph}</span>
+            ))}
+        </span>
+      )
+    }
+  </div>
+</a>

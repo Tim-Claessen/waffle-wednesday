@@ -1,0 +1,243 @@
+---
+/**
+ * Watch.
+ *
+ * Full screen, chrome mostly out of the way, and a natural path to the next person — the
+ * week is meant to play like a mixtape rather than a list you tap back into each time.
+ *
+ * The playlist travels in the query string rather than in a session: it makes the whole
+ * screen a plain link, so a reminder email can deep-link straight into the week.
+ */
+import Base from '../../../../layouts/Base.astro';
+import Icon from '../../../../components/Icon.astro';
+import Monogram from '../../../../components/Monogram.astro';
+import { REACTION_GLYPHS, REACTIONS } from '../../../../lib/database.types.ts';
+import { listGroups, loadWaffle, loadWeekFeed } from '../../../../lib/db.ts';
+import { formatDuration } from '../../../../lib/week.ts';
+
+const { supabase, user } = Astro.locals;
+const { slug, id } = Astro.params;
+
+const groups = await listGroups(supabase, user!.id);
+const group = groups.find((candidate) => candidate.slug === slug);
+if (!group) return Astro.redirect('/', 302);
+
+const waffle = await loadWaffle(supabase, id!, user!.id);
+// Not found and not-allowed are the same answer here, deliberately: a waffle from a week
+// that has closed is simply not there any more.
+if (!waffle) return Astro.redirect(`/g/${group.slug}`, 302);
+
+const feed = await loadWeekFeed(supabase, group, user!.id);
+
+/** The order to play them in, from the link, filtered to what's actually still there. */
+const requested = (Astro.url.searchParams.get('from') ?? '')
+  .split(',')
+  .filter((value) => value.length > 0);
+const available = feed.waffles.map((entry) => entry.id);
+const playlist = requested.filter((entry) => available.includes(entry));
+const order = playlist.length > 0 ? playlist : available;
+
+const position = order.indexOf(waffle.id);
+const nextId = position >= 0 ? order[position + 1] : undefined;
+const next = nextId ? feed.waffles.find((entry) => entry.id === nextId) : undefined;
+const nextHref = next
+  ? `/g/${group.slug}/watch/${next.id}?from=${order.join(',')}`
+  : `/g/${group.slug}`;
+---
+
+<Base bodyClass="bg-surface-container-lowest" title={waffle.isMine ? 'Yours' : waffle.displayName}>
+  <div class="mx-auto flex min-h-dvh max-w-lg flex-col">
+    <!-- Top chrome: a way out, whose it is, and nothing else. -->
+    <header
+      class="flex items-center justify-between gap-space-sm px-margin-sm pb-space-sm pt-[calc(env(safe-area-inset-top)+0.75rem)]"
+    >
+      <a
+        aria-label="Back to this week"
+        class="flex h-10 w-10 items-center justify-center rounded-full bg-surface-container-high text-on-surface"
+        href={`/g/${group.slug}`}
+      >
+        <Icon name="chevronLeft" size={20} />
+      </a>
+      <div class="min-w-0 text-center">
+        <p class="truncate font-serif text-headline-sm text-on-surface">
+          {waffle.isMine ? 'Yours' : waffle.displayName}
+        </p>
+        <p class="text-label-sm text-outline">{formatDuration(waffle.durationSeconds)}</p>
+      </div>
+      <button
+        aria-label="Mute"
+        class="flex h-10 w-10 items-center justify-center rounded-full bg-surface-container-high text-on-surface"
+        id="sound"
+        type="button"
+      >
+        <Icon name="sound" size={20} />
+      </button>
+    </header>
+
+    <!-- The video well. -->
+    <div class="sunken-well relative flex-1 overflow-hidden bg-black">
+      <video
+        autoplay
+        class="h-full w-full object-contain"
+        controls
+        data-waffle-id={waffle.id}
+        id="player"
+        playsinline
+        poster={waffle.thumbnailPath ?? undefined}
+        preload="metadata"
+        src={waffle.playbackPath}
+      ></video>
+    </div>
+
+    {waffle.caption && (
+      <p class="px-margin-sm pt-space-md font-serif text-body-lg italic text-on-surface-variant">
+        “{waffle.caption}”
+      </p>
+    )}
+
+    <!-- Reactions: five, fixed. Tapping toggles. -->
+    <div class="px-margin-sm pt-space-md">
+      <ul class="flex items-center gap-space-xs" id="reactions">
+        {
+          REACTIONS.map((emoji) => {
+            const tally = waffle.reactions.find((entry) => entry.emoji === emoji)!;
+            return (
+              <li>
+                <button
+                  aria-label={REACTION_GLYPHS[emoji].label}
+                  aria-pressed={tally.mine ? 'true' : 'false'}
+                  class:list={[
+                    'flex items-center gap-1.5 rounded-full px-space-sm py-1.5 text-body-md transition-colors',
+                    tally.mine
+                      ? 'bg-primary-container/30 text-on-surface ghost-border-active'
+                      : 'bg-surface-container-low text-on-surface-variant ghost-border',
+                  ]}
+                  data-emoji={emoji}
+                  type="button"
+                >
+                  <span aria-hidden="true">{REACTION_GLYPHS[emoji].glyph}</span>
+                  <span class="min-w-2 text-label-sm" data-count>
+                    {tally.count > 0 ? tally.count : ''}
+                  </span>
+                </button>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </div>
+
+    <!-- Up next, in the thumb zone. Tapping it, or the video ending, moves on. -->
+    <div class="px-margin-sm pb-[calc(env(safe-area-inset-bottom)+1.25rem)] pt-space-md">
+      {
+        next ? (
+          <a
+            class="ghost-border flex items-center justify-between gap-space-sm rounded-xl bg-surface-container-low p-space-sm"
+            data-next
+            href={nextHref}
+          >
+            <span class="flex items-center gap-space-sm">
+              <Monogram initials={next.initials} size="sm" />
+              <span>
+                <span class="block text-label-sm uppercase tracking-wider text-outline">Up next</span>
+                <span class="block text-body-md text-on-surface">
+                  {next.isMine ? 'Yours' : next.displayName}
+                </span>
+              </span>
+            </span>
+            <span class="flex items-center gap-1 pr-space-xs text-label-md text-primary">
+              Next
+              <Icon name="chevronLeft" class="rotate-180" size={16} />
+            </span>
+          </a>
+        ) : (
+          <a
+            class="ghost-border flex items-center justify-center gap-2 rounded-xl bg-surface-container-low p-space-md text-label-md text-on-surface"
+            data-next
+            href={nextHref}
+          >
+            That's the week so far
+          </a>
+        )
+      }
+    </div>
+  </div>
+</Base>
+
+<script>
+  const player = document.getElementById('player') as HTMLVideoElement;
+  const soundButton = document.getElementById('sound') as HTMLButtonElement;
+  const nextLink = document.querySelector<HTMLAnchorElement>('[data-next]');
+  const waffleId = player.dataset.waffleId!;
+
+  /**
+   * Some browsers refuse to autoplay with sound. Rather than showing a dead player,
+   * start muted and let the first tap turn the sound on.
+   */
+  player.play().catch(() => {
+    player.muted = true;
+    soundButton.setAttribute('aria-label', 'Unmute');
+    void player.play();
+  });
+
+  soundButton.addEventListener('click', () => {
+    player.muted = !player.muted;
+    soundButton.setAttribute('aria-label', player.muted ? 'Unmute' : 'Mute');
+  });
+
+  /**
+   * A view is recorded once a few seconds in, not on page load: opening something and
+   * immediately backing out isn't watching it, and the author is going to be shown this
+   * number.
+   */
+  let recorded = false;
+  player.addEventListener('timeupdate', () => {
+    if (recorded || player.currentTime < 5) return;
+    recorded = true;
+    void fetch('/api/views', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ waffleId }),
+    });
+  });
+
+  // Straight on to the next person, the way a mixtape does.
+  player.addEventListener('ended', () => {
+    if (nextLink) location.assign(nextLink.href);
+  });
+
+  document.getElementById('reactions')?.addEventListener('click', async (event) => {
+    const button = (event.target as HTMLElement).closest<HTMLButtonElement>('[data-emoji]');
+    if (!button) return;
+
+    const emoji = button.dataset.emoji!;
+    const countEl = button.querySelector<HTMLElement>('[data-count]')!;
+    const wasOn = button.getAttribute('aria-pressed') === 'true';
+    const count = Number(countEl.textContent?.trim() || '0');
+
+    // Optimistic, then reconciled. A reaction that doesn't respond instantly feels broken.
+    const nextCount = wasOn ? count - 1 : count + 1;
+    button.setAttribute('aria-pressed', String(!wasOn));
+    countEl.textContent = nextCount > 0 ? String(nextCount) : '';
+    button.classList.toggle('ghost-border-active', !wasOn);
+    button.classList.toggle('ghost-border', wasOn);
+    button.classList.toggle('bg-primary-container/30', !wasOn);
+    button.classList.toggle('bg-surface-container-low', wasOn);
+
+    const response = await fetch('/api/reactions', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ waffleId, emoji }),
+    }).catch(() => null);
+
+    if (!response?.ok) {
+      // Put it back exactly as it was.
+      button.setAttribute('aria-pressed', String(wasOn));
+      countEl.textContent = count > 0 ? String(count) : '';
+      button.classList.toggle('ghost-border-active', wasOn);
+      button.classList.toggle('ghost-border', !wasOn);
+      button.classList.toggle('bg-primary-container/30', wasOn);
+      button.classList.toggle('bg-surface-container-low', !wasOn);
+    }
+  });
+</script>

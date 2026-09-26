@@ -1,0 +1,33 @@
+{
+	"$schema": "./node_modules/wrangler/config-schema.json",
+	"compatibility_date": "2026-09-25",
+	"compatibility_flags": ["global_fetch_strictly_public"],
+	"name": "waffle-wednesday",
+	"main": "@astrojs/cloudflare/entrypoints/server",
+	"assets": {
+		"directory": "./dist",
+		"binding": "ASSETS"
+	},
+	"observability": {
+		"enabled": true
+	},
+
+	// Video storage. Originals live here forever; nothing is ever deleted by a
+	// schedule, only by a member deliberately deleting their own waffle.
+	"r2_buckets": [
+		{
+			"binding": "WAFFLES",
+			"bucket_name": "waffle-wednesday-video",
+			"preview_bucket_name": "waffle-wednesday-video-dev"
+		}
+	],
+
+	// Non-secret configuration. Secrets are set with `wrangler secret put` or in the
+	// dashboard, and locally in `.dev.vars` — never in this file.
+	"vars": {
+		"PUBLIC_SUPABASE_URL": "",
+		"PUBLIC_SITE_URL": "http://localhost:4321",
+		"WEEK_TIMEZONE": "Australia/Perth",
+		"EMAIL_FROM": "Waffle Wednesday <waffle@example.com>"
+	}
+}

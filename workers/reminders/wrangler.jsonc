@@ -1,0 +1,21 @@
+{
+	"$schema": "../../node_modules/wrangler/config-schema.json",
+	"name": "waffle-wednesday-reminders",
+	"main": "src/index.ts",
+	"compatibility_date": "2026-09-25",
+	"observability": { "enabled": true },
+
+	// Every thirty minutes. The app decides whether anything is actually due, using each
+	// group's own reminder times and timezone from the database — so changing a reminder
+	// time never needs a deploy of this.
+	"triggers": {
+		"crons": ["*/30 * * * *"]
+	},
+
+	"vars": {
+		// Set to the deployed app's origin before the first deploy.
+		"APP_URL": "http://localhost:4321"
+	}
+	// CRON_SECRET is a secret: `wrangler secret put CRON_SECRET` in this directory, and the
+	// same value on the app Worker.
+}

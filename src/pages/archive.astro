@@ -1,0 +1,172 @@
+---
+/**
+ * My waffles — the personal archive.
+ *
+ * This is the whole reason the app exists rather than a group chat, and the quiet
+ * emotional payoff of never deleting anything. It gets more care than a list: grouped by
+ * year and month, in the same serif the rest of the app reserves for things that speak.
+ *
+ * It is also where the escape hatch lives. Retention by default needs a real delete or
+ * the app becomes something to be wary of.
+ */
+import App from '../layouts/App.astro';
+import Icon from '../components/Icon.astro';
+import Monogram from '../components/Monogram.astro';
+import { REACTION_GLYPHS } from '../lib/database.types.ts';
+import { listGroups, loadArchive, type ArchiveEntry } from '../lib/db.ts';
+import { formatBytes } from '../lib/media.ts';
+import { formatDuration, formatMonth, formatWeekStart, weekYear } from '../lib/week.ts';
+
+const { supabase, user } = Astro.locals;
+
+const groups = await listGroups(supabase, user!.id);
+if (groups.length === 0) return Astro.redirect('/', 302);
+
+const entries = await loadArchive(supabase, user!.id);
+
+/** Grouped by year, then by month, newest first. */
+const years = new Map<number, Map<string, ArchiveEntry[]>>();
+for (const entry of entries) {
+  const year = weekYear(entry.weekStart);
+  const month = formatMonth(entry.weekStart);
+  const months = years.get(year) ?? new Map<string, ArchiveEntry[]>();
+  months.set(month, [...(months.get(month) ?? []), entry]);
+  years.set(year, months);
+}
+
+const totalSeconds = entries.reduce((total, entry) => total + entry.durationSeconds, 0);
+const totalBytes = entries.reduce((total, entry) => total + entry.sizeBytes, 0);
+const since = entries.length > 0 ? entries[entries.length - 1]!.weekStart : null;
+---
+
+<App group={groups[0]!} groups={groups} tab="archive" title="My waffles">
+  <h1 class="font-serif text-headline text-on-surface">My waffles</h1>
+
+  {
+    entries.length > 0 ? (
+      <>
+        <p class="mt-space-xs text-body-sm text-on-surface-variant">
+          {entries.length === 1 ? 'One waffle' : `${entries.length} waffles`} · since{' '}
+          {formatMonth(since!)} · {Math.round(totalSeconds / 60)} minutes of you ·{' '}
+          {formatBytes(totalBytes)}
+        </p>
+        <p class="mt-space-xs text-label-sm text-outline">
+          Yours to keep. Nothing here ever leaves unless you remove it.
+        </p>
+
+        {[...years.entries()].map(([year, months]) => (
+          <section class="mt-space-lg">
+            <h2 class="font-serif text-headline-md text-on-surface">{year}</h2>
+            {[...months.entries()].map(([month, monthEntries]) => (
+              <section class="mt-space-md">
+                <h3 class="text-label-md uppercase tracking-wider text-tertiary">{month}</h3>
+                <ul class="mt-space-sm space-y-space-sm">
+                  {monthEntries.map((entry) => (
+                    <li class="ghost-border overflow-hidden rounded-xl bg-surface-container-low">
+                      <div class="flex items-start gap-space-sm p-space-sm">
+                        <a
+                          class="sunken-well relative block h-20 w-28 shrink-0 overflow-hidden rounded-md bg-surface-container-lowest"
+                          href={`/g/${groups.find((g) => g.name === entry.groupName)?.slug ?? groups[0]!.slug}/watch/${entry.id}`}
+                        >
+                          {entry.thumbnailPath ? (
+                            <img
+                              alt=""
+                              class="h-full w-full object-cover"
+                              height="160"
+                              loading="lazy"
+                              src={entry.thumbnailPath}
+                              width="224"
+                            />
+                          ) : (
+                            <span class="flex h-full w-full items-center justify-center">
+                              <Monogram initials={entry.initials} size="sm" />
+                            </span>
+                          )}
+                          <span
+                            class="absolute bottom-1 right-1 rounded-full bg-surface-container-lowest/85 px-1.5 text-label-sm text-on-surface"
+                          >
+                            {formatDuration(entry.durationSeconds)}
+                          </span>
+                        </a>
+
+                        <div class="min-w-0 flex-1">
+                          <p class="font-serif text-body-lg text-on-surface">
+                            {formatWeekStart(entry.weekStart, { year: false })}
+                          </p>
+                          <p class="text-label-sm text-outline">{entry.groupName}</p>
+                          {entry.caption && (
+                            <p class="mt-space-xs line-clamp-2 text-body-sm italic text-on-surface-variant">
+                              “{entry.caption}”
+                            </p>
+                          )}
+                          {entry.reactions.some((tally) => tally.count > 0) && (
+                            <p class="mt-space-xs flex items-center gap-space-sm text-body-sm">
+                              {entry.reactions
+                                .filter((tally) => tally.count > 0)
+                                .map((tally) => (
+                                  <span class="text-on-surface-variant">
+                                    <span aria-hidden="true">{REACTION_GLYPHS[tally.emoji].glyph}</span>{' '}
+                                    <span class="text-label-sm">{tally.count}</span>
+                                  </span>
+                                ))}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+
+                      {/*
+                        The escape hatch. A plain form so it works with no JavaScript, with
+                        a confirm step because this one is genuinely irreversible.
+                      */}
+                      <details class="border-t border-outline-variant/30">
+                        <summary
+                          class="flex cursor-pointer list-none items-center gap-1.5 px-space-sm py-2 text-label-sm text-outline transition-colors hover:text-error"
+                        >
+                          <Icon name="trash" size={13} />
+                          Remove this one
+                        </summary>
+                        <form
+                          action={`/api/waffles/${entry.id}`}
+                          class="space-y-space-sm px-space-sm pb-space-sm"
+                          method="post"
+                        >
+                          <input name="_method" type="hidden" value="delete" />
+                          <p class="text-body-sm text-on-surface-variant">
+                            This deletes the video for good — yours and the group's copy. There is
+                            no undo.
+                          </p>
+                          <button
+                            class="rounded-lg bg-error-container/40 px-space-md py-space-sm text-label-md text-on-error-container"
+                            type="submit"
+                          >
+                            Delete it
+                          </button>
+                        </form>
+                      </details>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ))}
+          </section>
+        ))}
+      </>
+    ) : (
+      <section class="mt-space-xl text-center">
+        <p aria-hidden="true" class="text-[40px]">📼</p>
+        <h2 class="mt-space-md font-serif text-headline-sm text-on-surface">Nothing in here yet</h2>
+        <p class="mx-auto mt-space-sm max-w-xs text-body-md text-on-surface-variant">
+          Every waffle you post stays here for good, long after it has left the group's feed.
+          In a year this page is the point of the whole thing.
+        </p>
+        <a
+          class="mt-space-lg inline-flex items-center gap-2 rounded-lg bg-primary px-space-md py-space-sm text-label-md text-on-primary"
+          href={`/g/${groups[0]!.slug}/record`}
+        >
+          <Icon filled name="record" size={18} />
+          Record your first
+        </a>
+      </section>
+    )
+  }
+</App>
