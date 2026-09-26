@@ -115,6 +115,26 @@ if there is no declaration either it accepts the file — at which point the rec
 hard stop at 3:00 is the only control left. Bunny would close this gap by reporting a real
 duration after ingest.
 
+### Known risk: a 50 MB upload is buffered whole in the Worker
+
+`/api/waffles` reads the entire file into memory so the probe can walk it, then writes it
+to R2. At the 20 MB target this is comfortable. At the 50 MB cap it is not obviously safe —
+a Worker isolate has a bounded memory budget, and `formData()` plus `arrayBuffer()` holds
+the file twice.
+
+This is untested and should be tested deliberately in Phase 1: pick a file just under 50 MB
+from a camera roll and post it. If it falls over, the fixes in order of preference are
+
+1. lower the cap — 50 MB only ever catches camera-roll picks anyway, and the message
+   already steers those to the recorder;
+2. probe from a bounded head of the file and accept a weaker duration check on `.mov`,
+   where `moov` sits at the end;
+3. upload straight to R2 with a presigned URL and probe asynchronously afterwards, which is
+   a larger change and reintroduces an `uploading` state that currently never occurs.
+
+The in-app recording path, which is the one everybody will actually use, is nowhere near
+this limit.
+
 ### Six tables, and no table of who hasn't posted
 
 The schema is exactly the six from PLAN.md. There is no seventh table, and more
