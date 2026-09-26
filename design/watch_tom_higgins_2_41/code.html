@@ -1,0 +1,253 @@
+<!DOCTYPE html><html class="dark" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport">
+<title>Waffle Wednesday — Watch</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Google Fonts: EB Garamond & Manrope -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS with Forms & Container Queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-error": "#690005",
+            "primary": "#ffb77e",
+            "on-error-container": "#ffdad6",
+            "tertiary": "#cdc5c1",
+            "primary-fixed": "#ffdcc3",
+            "inverse-surface": "#e8e1dd",
+            "tertiary-fixed-dim": "#cdc5c1",
+            "secondary-container": "#3b4b3b",
+            "on-tertiary": "#342f2d",
+            "surface-bright": "#3c3936",
+            "secondary-fixed": "#d5e8d2",
+            "on-primary-fixed-variant": "#6e3900",
+            "on-primary-container": "#442000",
+            "on-primary-fixed": "#2f1500",
+            "tertiary-container": "#968f8c",
+            "surface-container": "#211f1d",
+            "secondary": "#bacbb6",
+            "on-secondary-fixed": "#101f11",
+            "on-secondary-container": "#a8baa5",
+            "inverse-on-surface": "#33302d",
+            "surface-container-high": "#2c2927",
+            "on-tertiary-fixed": "#1f1b19",
+            "surface": "#151311",
+            "error-container": "#93000a",
+            "on-background": "#e8e1dd",
+            "on-tertiary-container": "#2d2927",
+            "tertiary-fixed": "#eae1dd",
+            "on-surface-variant": "#dac2b2",
+            "on-secondary-fixed-variant": "#3b4b3b",
+            "surface-container-low": "#1d1b19",
+            "secondary-fixed-dim": "#bacbb6",
+            "surface-variant": "#373432",
+            "on-surface": "#e8e1dd",
+            "background": "#151311",
+            "surface-tint": "#ffb77e",
+            "outline": "#a28d7e",
+            "on-primary": "#4d2600",
+            "surface-dim": "#151311",
+            "inverse-primary": "#914c00",
+            "primary-container": "#d17c2f",
+            "outline-variant": "#544438",
+            "error": "#ffb4ab",
+            "primary-fixed-dim": "#ffb77e",
+            "surface-container-lowest": "#100e0c",
+            "on-tertiary-fixed-variant": "#4b4643",
+            "surface-container-highest": "#373432",
+            "on-secondary": "#253425"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin-lg": "4rem",
+            "space-lg": "2rem",
+            "gutter-sm": "1rem",
+            "space-sm": "0.75rem",
+            "space-xs": "0.375rem",
+            "gutter": "1.5rem",
+            "space-xl": "3rem",
+            "gutter-lg": "2.5rem",
+            "margin": "2rem",
+            "margin-sm": "1.25rem",
+            "space-md": "1.25rem"
+          },
+          "fontFamily": {
+            "body-lg": ["Manrope"],
+            "body-sm": ["Manrope"],
+            "headline-lg": ["EB Garamond"],
+            "display-lg": ["EB Garamond"],
+            "body-md": ["Manrope"],
+            "label-sm": ["Manrope"],
+            "headline-lg-mobile": ["EB Garamond"],
+            "headline-sm": ["EB Garamond"],
+            "label-md": ["Manrope"],
+            "headline-md": ["EB Garamond"]
+          },
+          "fontSize": {
+            "body-lg": ["1.125rem", { "lineHeight": "1.875rem", "letterSpacing": "0.01em", "fontWeight": "400" }],
+            "body-sm": ["0.8125rem", { "lineHeight": "1.375rem", "letterSpacing": "0.02em", "fontWeight": "400" }],
+            "headline-lg": ["2.25rem", { "lineHeight": "2.75rem", "letterSpacing": "-0.005em", "fontWeight": "400" }],
+            "display-lg": ["3rem", { "lineHeight": "3.5rem", "letterSpacing": "-0.01em", "fontWeight": "400" }],
+            "body-md": ["0.9375rem", { "lineHeight": "1.6rem", "letterSpacing": "0.01em", "fontWeight": "400" }],
+            "label-sm": ["0.6875rem", { "lineHeight": "1rem", "letterSpacing": "0.08em", "fontWeight": "600" }],
+            "headline-lg-mobile": ["1.75rem", { "lineHeight": "2.25rem", "letterSpacing": "0em", "fontWeight": "400" }],
+            "headline-sm": ["1.25rem", { "lineHeight": "1.75rem", "letterSpacing": "0em", "fontWeight": "500" }],
+            "label-md": ["0.8125rem", { "lineHeight": "1.25rem", "letterSpacing": "0.06em", "fontWeight": "600" }],
+            "headline-md": ["1.625rem", { "lineHeight": "2.125rem", "letterSpacing": "0em", "fontWeight": "500" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 20px;
+      line-height: 1;
+      display: inline-block;
+      text-transform: none;
+      letter-spacing: normal;
+      word-wrap: normal;
+      white-space: nowrap;
+      direction: ltr;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    /* Tactile hearth ember glow & sunken video shadow */
+    .sunken-frame {
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.75), 0 16px 48px -12px rgba(200, 117, 40, 0.12);
+    }
+    .amber-scrub-glow {
+      box-shadow: 0 0 10px rgba(255, 183, 126, 0.5);
+    }
+    
+    /* Disable tap highlighting for natural mobile feeling */
+    * {
+      -webkit-tap-highlight-color: transparent;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface antialiased select-none font-body-md text-body-md min-h-screen flex items-center justify-center p-0 m-0 overflow-hidden">
+<!-- Mobile Viewport Frame (390px fixed container for mobile web) -->
+<main class="relative w-full max-w-[390px] h-[100dvh] max-h-[844px] bg-surface overflow-hidden flex flex-col justify-between shadow-2xl">
+<!-- Layer 0: Full Screen Ambient Video Dispatch Content -->
+<div class="absolute inset-0 w-full h-full cursor-pointer z-0 group" id="videoCanvas">
+<!-- Candid domestic background video still -->
+<img class="w-full h-full object-cover object-center filter brightness-[0.92] contrast-[1.03] transition-transform duration-700 group-active:scale-[1.01]" data-alt="Warm intimate candid portrait of a 30-year-old Australian man in a soft wool jumper seated at an unvarnished timber kitchen table at dusk in Melbourne. A steaming ceramic mug rests near his hands under low amber incandescent pendant lighting. Smoked peat and deep espresso shadows envelop the domestic rustic kitchen interior, conveying natural relaxed honesty and heirloom storytelling tone." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDl7MA77rPSjZafw64M8q_jV6qzTLMItdRJDzO9rKoCrFe9miAI4Gi3nFHaTKaFD9Mxf3laWq_jE2bUM6gl7FIE6i3HMFtlINQg3YIrhkP7wynS4diIVVMfC8evcHuq-AGUKowhpQ66vClp3-GnZcO3mU0Yo-mlgTQ1uXDvjOQIx1ODXESjfTCwrV2i9FiQiIEInVptxAAj9iMKUaJOr2vJWM-SrJR-NXEPfvsm0a5aqQbzT4Qxc2tpcA">
+<!-- Natural Cinematic Vignette (Peat shadows at top and base) -->
+<div class="absolute inset-0 bg-gradient-to-t from-surface via-surface/30 to-surface/90 pointer-events-none"></div>
+<div class="absolute inset-0 bg-gradient-to-b from-surface/80 via-transparent to-surface/95 pointer-events-none"></div>
+<!-- Sunken Well Depth Overlay -->
+<div class="absolute inset-0 sunken-frame pointer-events-none"></div>
+<!-- Play / Pause Tap Ripple Indicator (Micro-interaction indicator) -->
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 transition-opacity duration-300" id="playbackStateIndicator">
+<div class="w-16 h-16 rounded-full bg-surface-container-low/80 backdrop-blur-md border border-outline-variant/30 flex items-center justify-center text-primary shadow-xl">
+<span class="material-symbols-outlined text-3xl" id="playIcon">play_arrow</span>
+</div>
+</div>
+</div>
+<!-- Layer 1: Minimalist Top Bar (Subtle Dismiss & Hearth Metadata) -->
+<!-- Following TopAppBar guidance: docked full-width, no harsh borders, subtle peat tonal backing -->
+<header class="relative z-20 w-full px-gutter-sm pt-4 pb-2 flex items-center justify-between bg-gradient-to-b from-surface/90 to-transparent">
+<!-- Back / Dismiss to Wednesday feed -->
+<a aria-label="Return to Hearth" class="w-10 h-10 -ml-2 rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary transition-all duration-200 active:scale-95" href="#">
+<span class="material-symbols-outlined text-2xl">expand_more</span>
+</a>
+<!-- Current Dispatch Context ( ऑस्ट्रेलियाई unhurried tone ) -->
+<div class="flex flex-col items-center text-center">
+<div class="flex items-center space-x-1.5"><span class="font-headline-sm text-headline-sm text-on-surface tracking-normal">Tom Higgins</span></div>
+<div class="flex items-center space-x-2 pt-0.5">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+<span class="font-label-sm text-label-sm text-on-surface-variant/70 tracking-widest uppercase">Wednesday Dispatch</span>
+</div>
+</div>
+<!-- Quiet Audio / Options Anchor -->
+<button aria-label="Dispatch actions" class="w-10 h-10 -mr-2 rounded-full flex items-center justify-center text-on-surface-variant/70 hover:text-primary transition-all duration-200 active:scale-95">
+<span class="material-symbols-outlined text-xl">volume_up</span>
+</button>
+</header>
+<!-- Layer 2: Lower Content Canvas (One-Handed Evening Zone) -->
+<div class="relative z-20 w-full flex flex-col justify-end px-gutter-sm pb-5 space-y-3.5">
+<!-- Quiet Unvarnished Caption Pill -->
+
+<!-- Slim Tactile Scrub Bar & Timecodes -->
+<div class="w-full space-y-1.5 pt-1" id="scrubberContainer">
+<div class="relative w-full h-1.5 bg-surface-variant/60 rounded-full overflow-hidden cursor-pointer flex items-center">
+<!-- Active scrubbed duration (1:14 out of 2:41 ≈ 46%) -->
+<div class="h-full bg-primary rounded-full amber-scrub-glow" style="width: 46%;"></div>
+</div>
+<div class="flex items-center justify-between font-label-sm text-label-sm text-on-surface-variant/80 px-0.5">
+<span class="font-medium tracking-wide">1:14</span>
+<span class="text-on-surface-variant/50 tracking-wider">2:41</span>
+</div>
+</div>
+<!-- Unobtrusive Hearth Reactions (Exactly 5 Warm Ritual Emoticons) -->
+<div class="relative flex items-center justify-between w-full"><button id="reactionToggleBtn" onclick="document.getElementById('reactionMenu').classList.toggle('hidden'); document.getElementById('reactionMenu').classList.toggle('flex');" aria-label="Send reaction" class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-surface-container-low/80 hover:bg-surface-variant/80 border border-outline-variant/20 backdrop-blur-md text-on-surface-variant hover:text-primary transition-all duration-200 active:scale-95"><span class="text-base leading-none">☕</span><span class="font-label-sm text-xs text-on-surface-variant/80 font-medium">React</span><span class="material-symbols-outlined text-[16px] text-on-surface-variant/60">add</span></button><div class="flex items-center space-x-1.5 text-on-surface-variant/75"><span class="inline-flex -space-x-1"><span class="w-4 h-4 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center text-[9px] font-bold">M</span><span class="w-4 h-4 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center text-[9px] font-bold">D</span></span><span class="font-body-sm text-[11px] text-tertiary">Marcus, Dave &amp; 8 others</span></div><div id="reactionMenu" class="hidden absolute bottom-10 left-0 bg-surface-container-high/90 border border-outline-variant/30 backdrop-blur-lg rounded-full px-2 py-1.5 items-center space-x-2 shadow-xl z-30"><button onclick="this.parentElement.classList.add('hidden'); this.parentElement.classList.remove('flex');" class="p-1 text-lg hover:scale-125 transition-transform active:scale-95">☕</button><button onclick="this.parentElement.classList.add('hidden'); this.parentElement.classList.remove('flex');" class="p-1 text-lg hover:scale-125 transition-transform active:scale-95">🫂</button><button onclick="this.parentElement.classList.add('hidden'); this.parentElement.classList.remove('flex');" class="p-1 text-lg hover:scale-125 transition-transform active:scale-95">😂</button><button onclick="this.parentElement.classList.add('hidden'); this.parentElement.classList.remove('flex');" class="p-1 text-lg hover:scale-125 transition-transform active:scale-95">🍻</button><button onclick="this.parentElement.classList.add('hidden'); this.parentElement.classList.remove('flex');" class="p-1 text-lg hover:scale-125 transition-transform active:scale-95">🧇</button></div></div>
+<!-- Seamless Next Person Trigger (Thumb Zone Navigation) -->
+<nav aria-label="Next Friend at Table" class="w-full">
+<a class="group flex items-center justify-between w-full px-3.5 py-3 rounded-2xl bg-surface-container-high/90 hover:bg-surface-variant backdrop-blur-lg border border-outline-variant/25 transition-all duration-300 ease-out active:scale-[0.98]" href="#next-dispatch">
+<div class="flex items-center space-x-2.5">
+<div class="relative w-7 h-7 rounded-full bg-surface-container-highest border border-primary/40 flex items-center justify-center overflow-hidden">
+<span class="font-headline-sm text-xs text-primary font-medium">SL</span>
+</div>
+<div class="flex flex-col text-left">
+<div class="flex items-center space-x-1.5">
+<span class="font-label-sm text-label-sm text-on-surface-variant/70 uppercase tracking-widest text-[10px]">Up Next</span>
+<span class="w-1 h-1 rounded-full bg-outline-variant/40"></span>
+<span class="font-body-sm text-xs text-on-surface-variant/80">1:58</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-on-surface group-hover:text-primary transition-colors">Sarah Lin</span>
+</div>
+</div>
+<div class="flex items-center space-x-1 text-primary pl-2">
+<span class="font-label-md text-label-md">Next</span>
+<span class="material-symbols-outlined text-lg group-hover:translate-x-0.5 transition-transform">arrow_forward</span>
+</div>
+</a>
+</nav>
+</div>
+</main>
+<!-- Lightweight Inline Interaction Script -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const videoCanvas = document.getElementById('videoCanvas');
+      const indicator = document.getElementById('playbackStateIndicator');
+      const playIcon = document.getElementById('playIcon');
+      let isPlaying = true;
+
+      // Tap on dispatch canvas toggles play/pause feedback
+      videoCanvas.addEventListener('click', (e) => {
+        // Prevent toggle if clicking on interactive controls
+        if (e.target.closest('button') || e.target.closest('a')) return;
+
+        isPlaying = !isPlaying;
+        playIcon.textContent = isPlaying ? 'play_arrow' : 'pause';
+        
+        indicator.classList.remove('opacity-0');
+        indicator.classList.add('opacity-100');
+        
+        setTimeout(() => {
+          indicator.classList.remove('opacity-100');
+          indicator.classList.add('opacity-0');
+        }, 550);
+      });
+    });
+  </script>
+
+
+</body></html>

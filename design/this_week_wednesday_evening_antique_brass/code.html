@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>Waffle Wednesday — Old Grammarians</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400&amp;family=Plus+Jakarta+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-secondary-fixed": "#271900",
+            "error": "#ffb4ab",
+            "surface-container-highest": "#383432",
+            "inverse-on-surface": "#33302d",
+            "outline-variant": "#534437",
+            "surface-tint": "#ffb877",
+            "on-primary-fixed": "#2e1600",
+            "on-primary-fixed-variant": "#6c3a00",
+            "on-error-container": "#ffdad6",
+            "secondary-fixed-dim": "#f0bf65",
+            "surface-container-lowest": "#100e0c",
+            "on-primary-container": "#542c00",
+            "on-secondary-fixed-variant": "#5e4200",
+            "on-tertiary-fixed": "#062013",
+            "on-tertiary-fixed-variant": "#324c3d",
+            "surface-container": "#221f1d",
+            "on-error": "#690005",
+            "primary-fixed-dim": "#ffb877",
+            "secondary-fixed": "#ffdea7",
+            "on-tertiary": "#1c3627",
+            "on-tertiary-container": "#223c2d",
+            "surface-bright": "#3c3836",
+            "inverse-surface": "#e9e1dd",
+            "inverse-primary": "#8e4f00",
+            "primary": "#ffb877",
+            "surface-dim": "#161311",
+            "tertiary-fixed": "#ccead5",
+            "on-secondary": "#412d00",
+            "error-container": "#93000a",
+            "tertiary-fixed-dim": "#b0ceb9",
+            "surface-variant": "#383432",
+            "background": "#161311",
+            "surface-container-low": "#1e1b19",
+            "primary-fixed": "#ffdcc1",
+            "on-primary": "#4c2700",
+            "on-surface": "#e9e1dd",
+            "secondary-container": "#7c5800",
+            "secondary": "#f0bf65",
+            "primary-container": "#e08b34",
+            "outline": "#a18d7e",
+            "surface-container-high": "#2d2927",
+            "surface": "#161311",
+            "on-surface-variant": "#d9c2b1",
+            "on-background": "#e9e1dd",
+            "on-secondary-container": "#ffd281",
+            "tertiary": "#b0ceb9",
+            "tertiary-container": "#89a693"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "gutter": "1rem",
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "margin-tablet": "2rem",
+            "margin": "1.25rem",
+            "space-xl": "2.25rem",
+            "gutter-tablet": "1.5rem",
+            "space-lg": "1.5rem",
+            "space-md": "1rem"
+          },
+          "fontFamily": {
+            "label-md": ["Plus Jakarta Sans"],
+            "headline-md": ["Newsreader"],
+            "body-md": ["Plus Jakarta Sans"],
+            "body-sm": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Newsreader"],
+            "headline-lg": ["Newsreader"],
+            "label-sm": ["Plus Jakarta Sans"],
+            "title-quote": ["Newsreader"],
+            "headline-xl-mobile": ["Newsreader"],
+            "headline-xl": ["Newsreader"],
+            "body-lg": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "label-md": ["0.8125rem", { lineHeight: "1.125rem", letterSpacing: "0.02em", fontWeight: "500" }],
+            "headline-md": ["1.25rem", { lineHeight: "1.75rem", fontWeight: "400" }],
+            "body-md": ["0.9375rem", { lineHeight: "1.5rem", fontWeight: "400" }],
+            "body-sm": ["0.8125rem", { lineHeight: "1.25rem", fontWeight: "400" }],
+            "headline-lg-mobile": ["1.5rem", { lineHeight: "2rem", letterSpacing: "-0.01em", fontWeight: "400" }],
+            "headline-lg": ["1.75rem", { lineHeight: "2.25rem", letterSpacing: "-0.01em", fontWeight: "400" }],
+            "label-sm": ["0.6875rem", { lineHeight: "0.875rem", letterSpacing: "0.04em", fontWeight: "600" }],
+            "title-quote": ["1.125rem", { lineHeight: "1.625rem", letterSpacing: "0", fontWeight: "400" }],
+            "headline-xl-mobile": ["1.75rem", { lineHeight: "2.25rem", letterSpacing: "-0.015em", fontWeight: "400" }],
+            "headline-xl": ["2.25rem", { lineHeight: "2.75rem", letterSpacing: "-0.02em", fontWeight: "400" }],
+            "body-lg": ["1rem", { lineHeight: "1.6rem", fontWeight: "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 20px;
+      line-height: 1;
+      letter-spacing: normal;
+      text-transform: none;
+      display: inline-block;
+      white-space: nowrap;
+      word-wrap: normal;
+      direction: ltr;
+      -webkit-font-smoothing: antialiased;
+    }
+    /* Hide scrollbars gracefully for clean mobile presentation */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface antialiased min-h-screen selection:bg-primary-container selection:text-on-primary-container flex justify-center">
+<!-- Mobile Shell Container (Fixed 390px Max Canvas for True Handheld Parlour Ergonomics) -->
+<div class="w-full max-w-[390px] min-h-screen flex flex-col bg-background relative overflow-x-hidden pb-36">
+<!-- Top Navigation Anchor (As defined in Shared Components JSON: TopAppBar) -->
+<header class="sticky top-0 z-40 bg-surface border-b border-outline-variant/20 shadow-none">
+<div class="flex justify-between items-center w-full px-5 py-3 max-w-xl mx-auto">
+<!-- Leading: Circle Monogram Avatar + Group Switcher -->
+<button class="flex items-center gap-2.5 active:scale-[0.98] transition-transform duration-150 text-left focus:outline-none" type="button">
+<div class="w-8 h-8 rounded-full bg-surface-container-high border border-outline-variant/30 flex items-center justify-center text-primary font-body-sm font-semibold tracking-wide">
+            OG
+          </div>
+<div class="flex items-center gap-1">
+<span class="text-headline-md font-headline-md text-on-surface">Old Grammarians</span>
+<span class="material-symbols-outlined text-outline" data-icon="expand_more">expand_more</span>
+</div>
+</button>
+<!-- Trailing action: Circle settings / profile whisper -->
+<button aria-label="Parlour settings" class="w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-primary transition-colors duration-150 active:scale-95" type="button">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</div>
+</header>
+<!-- Main Content Stream -->
+<main class="flex-1 px-4 pt-4 flex flex-col gap-5">
+<!-- Wednesday Occasion Ritual Banner: Warm Hearth Ambience -->
+<section class="relative overflow-hidden rounded-xl bg-surface-container border border-outline-variant/20 p-4 transition-all" style="box-shadow: 0 12px 28px -6px rgba(224, 139, 52, 0.12);">
+<!-- Ambient honey glow layer -->
+<div class="absolute -right-10 -bottom-10 w-36 h-36 bg-primary-container/15 rounded-full blur-2xl pointer-events-none"></div>
+<div class="flex items-start justify-between relative z-10">
+<div class="space-y-1">
+<div class="flex items-center gap-1.5">
+<span class="inline-block w-2 h-2 rounded-full bg-primary animate-pulse" style="background-color: #C9973B;"></span>
+<span class="text-label-sm font-label-sm uppercase tracking-wider text-secondary">Wednesday Ritual</span>
+</div>
+<h1 class="text-headline-lg-mobile font-headline-lg-mobile text-on-surface">
+              It’s Wednesday night.
+            </h1>
+<p class="text-body-md font-body-md text-on-surface-variant font-light">
+              Put the kettle on. Week 42 has arrived.
+            </p>
+</div>
+<div class="w-10 h-10 rounded-full bg-surface-container-high border border-outline-variant/30 flex items-center justify-center text-primary-container shrink-0 mt-0.5" style="color: #C9973B;">
+<span class="material-symbols-outlined" data-icon="local_cafe">local_cafe</span>
+</div>
+</div>
+<div class="mt-3.5 pt-3 border-t border-outline-variant/15 flex items-center justify-between">
+<span class="text-body-sm font-body-sm text-outline">
+            4 updates by the hearth
+          </span>
+<span class="text-label-sm font-label-sm text-primary flex items-center gap-1" style="color: #D4A359;">
+            Catch up in your own time
+          </span>
+</div>
+</section>
+<!-- Video Feed Cards List (Strictly friends who have shared; no absent tallies) -->
+<div class="flex flex-col gap-4">
+<!-- Card 1: Tom Higgins (Unwatched - Honey Amber Accent) -->
+<article class="bg-surface-container-low border border-outline-variant/25 rounded-xl overflow-hidden transition-all duration-200 focus-within:ring-1 focus-within:ring-primary/40" style="box-shadow: 0 10px 24px -4px rgba(224, 139, 52, 0.08);">
+<!-- Video Screen Simulation Slot (16:9 warm parlour aspect) -->
+<div class="relative w-full aspect-[16/10] bg-surface-container-lowest overflow-hidden">
+<img class="w-full h-full object-cover opacity-85 transition-transform duration-300 hover:scale-102" data-alt="An authentic, cinematic low-light video still of a 30-year-old Australian man in a cosy kitchen with timber shelving and warm incandescent pendant lighting. Soft natural grain, warm charcoal shadows, and deep espresso tones reflect the intimate parlour aesthetic. A paint swatch card lies resting on a rustic timber kitchen island." src="https://lh3.googleusercontent.com/aida-public/AB6AXuABu-9uROx8DgZnVMjiqyupqthD-bbr-uV3SBLWtekDTfFCJ8AkY06y5fVsCyvOQudmRGmGBdKe3WXUmBrzFTJrqlUo2MYJ9IxfxJRyRQBknOpNM_033Ep9E2uJNai-84aCIvfrqLYiumYQcvGobW5CeOs2whlf5RPaL4vx9pNiMifVWN2oygs9jqKnETBYvjU3EC4WHf5m0EJUQAifFh-nd_ndmXkDQejHj5FG3D6gsm7oBxdqoL8Qsw"/>
+<!-- Video Overlay Controls -->
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-black/30 p-3.5 flex flex-col justify-between">
+<!-- Top tags: Status & Duration -->
+<div class="flex items-center justify-between">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-label-sm font-label-sm bg-surface-container-high/90 text-primary border border-primary/30 backdrop-blur-md">
+<span class="w-1.5 h-1.5 rounded-full bg-primary-container" style="background-color: #C9973B;"></span>
+                  Unwatched
+                </span>
+<span class="px-2 py-0.5 rounded-full text-label-sm font-label-sm bg-surface-container-lowest/80 text-on-surface border border-outline-variant/20 backdrop-blur-md">
+                  2:41
+                </span>
+</div>
+<!-- Center Play Anchor -->
+<div class="self-center">
+<button aria-label="Play Tom's catchup" class="w-12 h-12 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center shadow-lg active:scale-90 transition-transform duration-150" style="background-color: #C9973B; color: #161311; box-shadow: 0 4px 16px rgba(201, 151, 59, 0.35);" type="button">
+<span class="material-symbols-outlined" data-icon="play_arrow" data-weight="fill" style="font-variation-settings: 'FILL' 1; font-size: 26px;">play_arrow</span>
+</button>
+</div>
+<!-- Bottom Progress Line -->
+<div class="w-full bg-surface-container-highest/60 h-1 rounded-full overflow-hidden">
+<div class="bg-primary-container h-full w-0"></div>
+</div>
+</div>
+</div>
+<!-- Card Details & Personal Dispatch Note -->
+<div class="p-3.5 space-y-2">
+<div class="flex items-baseline justify-between">
+<h2 class="text-headline-md font-headline-md text-on-surface">Tom Higgins</h2>
+<span class="text-body-sm font-body-sm text-outline">45m ago • Melbourne</span>
+</div>
+<p class="text-body-md font-body-md text-on-surface-variant font-light italic leading-snug">
+              “Kitchen renovation disaster and why I hate Bunnings paint swatches.”
+            </p>
+<div class="pt-2 flex items-center justify-between border-t border-outline-variant/10 text-body-sm font-body-sm">
+<span class="text-outline text-xs">Recorded on kettle boil</span>
+<button class="text-primary hover:text-primary-fixed transition-colors font-label-md flex items-center gap-1" style="color: #D4A359;" type="button">
+                Listen now
+                <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 2: Sarah Lin (Watched) -->
+<article class="bg-surface-container-low border border-outline-variant/15 rounded-xl overflow-hidden transition-all duration-200 opacity-95">
+<!-- Video Screen Simulation Slot -->
+<div class="relative w-full aspect-[16/10] bg-surface-container-lowest overflow-hidden">
+<img class="w-full h-full object-cover opacity-75" data-alt="An authentic, gentle home video capture of a smiling woman relaxing on a dark green linen armchair next to a sleeping greyhound dog curled on a hearth rug. Atmospheric soft warm interior lighting, subdued dark timber textures, and calm domestic parlour tones create a quiet evening mood." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCoE7umG70lte8g7txOrlLHoxvXEwEm_vy8LZ7SNAJH033hGqztn5MFTgLQ1HuC3fOvlIkC7AG08EchBkFNKyUyvSkAAaZbPwyT5NKNx8kqvtbk-aqYsnwZmRQ1WFEpG3UBoJvQwCbDZA1uHo3RufHB_MmvBIQxtI6LvYARx-qsrbWRrQALhpYN1si5mexBT7YpmVvQxrTPTh1Dvab6gHTU_lv3cBGYrArXM9c7bBg78C5wVKq8h35dyw"/>
+<!-- Video Overlay Controls -->
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-black/30 p-3.5 flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-label-sm font-label-sm bg-surface-container-high/80 text-outline border border-outline-variant/20 backdrop-blur-md">
+<span class="w-1.5 h-1.5 rounded-full border border-outline"></span>
+                  Watched
+                </span>
+<span class="px-2 py-0.5 rounded-full text-label-sm font-label-sm bg-surface-container-lowest/80 text-on-surface-variant border border-outline-variant/20 backdrop-blur-md">
+                  1:58
+                </span>
+</div>
+<!-- Replay Trigger -->
+<div class="self-center">
+<button aria-label="Replay Sarah's catchup" class="w-11 h-11 rounded-full bg-surface-container-high/80 text-on-surface border border-outline-variant/30 flex items-center justify-center backdrop-blur-md active:scale-90 transition-transform" type="button">
+<span class="material-symbols-outlined" data-icon="replay">replay</span>
+</button>
+</div>
+<!-- Hairline progress (full) -->
+<div class="w-full bg-surface-container-highest/60 h-1 rounded-full overflow-hidden">
+<div class="bg-outline h-full w-full opacity-60"></div>
+</div>
+</div>
+</div>
+<!-- Card Details -->
+<div class="p-3.5 space-y-2">
+<div class="flex items-baseline justify-between">
+<h2 class="text-headline-md font-headline-md text-on-surface">Sarah Lin</h2>
+<span class="text-body-sm font-body-sm text-outline">2h ago • Hobart</span>
+</div>
+<p class="text-body-md font-body-md text-on-surface-variant font-light italic leading-snug">
+              “Adopted a greyhound. He sleeps 20 hours a day.”
+            </p>
+</div>
+</article>
+<!-- Card 3: Marcus Bell (Watched) -->
+<article class="bg-surface-container-low border border-outline-variant/15 rounded-xl overflow-hidden transition-all duration-200 opacity-95">
+<div class="relative w-full aspect-[16/10] bg-surface-container-lowest overflow-hidden">
+<img class="w-full h-full object-cover opacity-75" data-alt="A candid handheld video frame of a tired but relieved man sitting in a moody book-lined study desk with warm tungsten lamplight. Stacks of draft papers and an empty coffee mug rest nearby. The palette features deep charred timber, parchment paper tones, and soft espresso shadows." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDe8_dY1D1E6swE3w88f0xpFeNvUqVArZPydXZE6SjyE2lvJX08Ssy1FSeYPQO_JAfyiCaxXd7qqDQW7_E8Ndmd23atMFoRxFVq9Q79Yr4jL4InOcJ-9HXvvVd-WzyBMP8IQLpF-jhK4FRRrjK9Ep6IPuEC9OUv3FBV119NEuFKIYAdGzBJznv0RG-tToSBWqsazp9bDm_rIViOwGrS5Q0rkTtKtQt4CDpQpRbs8nvijamgHDFoWB1J0A"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-black/30 p-3.5 flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-label-sm font-label-sm bg-surface-container-high/80 text-outline border border-outline-variant/20 backdrop-blur-md">
+<span class="w-1.5 h-1.5 rounded-full border border-outline"></span>
+                  Watched
+                </span>
+<span class="px-2 py-0.5 rounded-full text-label-sm font-label-sm bg-surface-container-lowest/80 text-on-surface-variant border border-outline-variant/20 backdrop-blur-md">
+                  3:00
+                </span>
+</div>
+<div class="self-center">
+<button aria-label="Replay Marcus's catchup" class="w-11 h-11 rounded-full bg-surface-container-high/80 text-on-surface border border-outline-variant/30 flex items-center justify-center backdrop-blur-md active:scale-90 transition-transform" type="button">
+<span class="material-symbols-outlined" data-icon="replay">replay</span>
+</button>
+</div>
+<div class="w-full bg-surface-container-highest/60 h-1 rounded-full overflow-hidden">
+<div class="bg-outline h-full w-full opacity-60"></div>
+</div>
+</div>
+</div>
+<div class="p-3.5 space-y-2">
+<div class="flex items-baseline justify-between">
+<h2 class="text-headline-md font-headline-md text-on-surface">Marcus Bell</h2>
+<span class="text-body-sm font-body-sm text-outline">4h ago • Sydney</span>
+</div>
+<p class="text-body-md font-body-md text-on-surface-variant font-light italic leading-snug">
+              “Finally handed in the thesis draft. Need three pints.”
+            </p>
+</div>
+</article>
+<!-- Card 4: Dave O'Connor (Watched) -->
+<article class="bg-surface-container-low border border-outline-variant/15 rounded-xl overflow-hidden transition-all duration-200 opacity-95">
+<div class="relative w-full aspect-[16/10] bg-surface-container-lowest overflow-hidden">
+<img class="w-full h-full object-cover opacity-75" data-alt="A warm twilight balcony video still of a friendly Australian man holding his camera on an outdoor Queenslander verandah surrounded by lush tropical palms and humid evening dusk. Warm golden porch light glows against dark weathered timber railings." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAe_gSsATq6voblifO578zajEmhp5YboXhMlGdWEpXL_LVDd4XAYgeyVZ67o8GOhvE3WAHmAJTpYABrZGkA-ZYnLCHW6rMB4CZEFk5alQGtRJ1tCEPxWwOl7lL6DqwSfJJPgx7Gx7Zyqxv7y0_KjM9DpkL6Cc-rDlmHk26vCy3FwtxCh8ST3bg1X4gV27DUF3yETT6yfyZnYlQhfoEObdGcEfyqVAAtSL_6jHJO-vjIJBLfMwfJZSRlNA"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-black/30 p-3.5 flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-label-sm font-label-sm bg-surface-container-high/80 text-outline border border-outline-variant/20 backdrop-blur-md">
+<span class="w-1.5 h-1.5 rounded-full border border-outline"></span>
+                  Watched
+                </span>
+<span class="px-2 py-0.5 rounded-full text-label-sm font-label-sm bg-surface-container-lowest/80 text-on-surface-variant border border-outline-variant/20 backdrop-blur-md">
+                  2:15
+                </span>
+</div>
+<div class="self-center">
+<button aria-label="Replay Dave's catchup" class="w-11 h-11 rounded-full bg-surface-container-high/80 text-on-surface border border-outline-variant/30 flex items-center justify-center backdrop-blur-md active:scale-90 transition-transform" type="button">
+<span class="material-symbols-outlined" data-icon="replay">replay</span>
+</button>
+</div>
+<div class="w-full bg-surface-container-highest/60 h-1 rounded-full overflow-hidden">
+<div class="bg-outline h-full w-full opacity-60"></div>
+</div>
+</div>
+</div>
+<div class="p-3.5 space-y-2">
+<div class="flex items-baseline justify-between">
+<h2 class="text-headline-md font-headline-md text-on-surface">Dave O'Connor</h2>
+<span class="text-body-sm font-body-sm text-outline">5h ago • Brisbane</span>
+</div>
+<p class="text-body-md font-body-md text-on-surface-variant font-light italic leading-snug">
+              “Humid as hell up here. Quick garden update.”
+            </p>
+</div>
+</article>
+</div>
+<!-- Hearth Affirmation (Anti-metric, warm domestic sign-off) -->
+<footer class="text-center py-6 px-4">
+<p class="font-headline-md italic text-outline text-sm">
+          That’s everyone for now. The kettle stays warm.
+        </p>
+</footer>
+</main>
+<!-- Floating One-Thumb Action Dispatch Trigger (Record Waffle) -->
+<aside class="fixed bottom-20 left-0 right-0 z-40 max-w-[390px] mx-auto px-4 pointer-events-none flex justify-end">
+<button class="pointer-events-auto flex items-center gap-2.5 px-5 py-3.5 rounded-full bg-primary-container text-on-primary-container font-label-md shadow-2xl active:scale-[0.98] transition-all duration-150 border border-primary/30" style="background-color: #C9973B; color: #161311; font-weight: 600; box-shadow: 0 8px 24px -2px rgba(201, 151, 59, 0.45); border-color: rgba(201, 151, 59, 0.5);" type="button">
+<span class="material-symbols-outlined" data-icon="videocam" data-weight="fill" style="font-variation-settings: 'FILL' 1;">videocam</span>
+<span class="text-sm tracking-wide">Record your waffle</span>
+</button>
+</aside>
+<!-- Docked Bottom Navigation Anchor (As defined in Shared Components JSON: BottomNavBar) -->
+<nav aria-label="Parlour Navigation" class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 pb-6 max-w-xl mx-auto inset-x-0 bg-surface-container dark:bg-surface-container border-t border-outline-variant/15 shadow-none">
+<!-- Tab 1: This Week (ACTIVE) -->
+<a class="flex flex-col items-center justify-center text-primary dark:text-primary font-medium hover:text-primary dark:hover:text-primary transition-colors duration-150 active:scale-95 transition-transform duration-150" href="#this-week" style="color: #C9973B;">
+<span class="material-symbols-outlined" data-icon="local_cafe" data-weight="fill" style="font-variation-settings: 'FILL' 1;">local_cafe</span>
+<span class="text-label-sm font-label-sm mt-0.5">This Week</span>
+</a>
+<!-- Tab 2: Record (Direct action shortcut) -->
+<a class="flex flex-col items-center justify-center text-outline dark:text-outline font-normal hover:text-primary dark:hover:text-primary transition-colors duration-150 active:scale-95 transition-transform duration-150" href="#record">
+<span class="material-symbols-outlined" data-icon="videocam">videocam</span>
+<span class="text-label-sm font-label-sm mt-0.5">Record</span>
+</a>
+<!-- Tab 3: Archive (Historical dispatches) -->
+<a class="flex flex-col items-center justify-center text-outline dark:text-outline font-normal hover:text-primary dark:hover:text-primary transition-colors duration-150 active:scale-95 transition-transform duration-150" href="#archive">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="text-label-sm font-label-sm mt-0.5">Archive</span>
+</a>
+</nav>
+</div>
+</body></html>
