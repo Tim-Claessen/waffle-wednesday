@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>My Waffles — Personal Archive</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..700&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-bright": "#3c3936",
+            "surface-container": "#211f1d",
+            "error": "#ffb4ab",
+            "secondary-container": "#3b4b3b",
+            "on-primary-fixed-variant": "#6e3900",
+            "on-primary": "#4d2600",
+            "on-tertiary-fixed-variant": "#4b4643",
+            "surface-container-highest": "#373432",
+            "on-secondary": "#253425",
+            "tertiary": "#cdc5c1",
+            "on-secondary-fixed-variant": "#3b4b3b",
+            "on-background": "#e8e1dd",
+            "outline-variant": "#544438",
+            "primary-container": "#d17c2f",
+            "surface": "#151311",
+            "on-tertiary": "#342f2d",
+            "secondary": "#bacbb6",
+            "primary": "#ffb77e",
+            "tertiary-container": "#968f8c",
+            "primary-fixed": "#ffdcc3",
+            "on-error": "#690005",
+            "on-error-container": "#ffdad6",
+            "error-container": "#93000a",
+            "on-tertiary-fixed": "#1f1b19",
+            "on-primary-container": "#442000",
+            "tertiary-fixed": "#eae1dd",
+            "surface-dim": "#151311",
+            "on-surface-variant": "#dac2b2",
+            "outline": "#a28d7e",
+            "secondary-fixed": "#d5e8d2",
+            "tertiary-fixed-dim": "#cdc5c1",
+            "on-tertiary-container": "#2d2927",
+            "on-secondary-fixed": "#101f11",
+            "inverse-surface": "#e8e1dd",
+            "on-surface": "#e8e1dd",
+            "surface-tint": "#ffb77e",
+            "surface-container-high": "#2c2927",
+            "surface-variant": "#373432",
+            "surface-container-low": "#1d1b19",
+            "secondary-fixed-dim": "#bacbb6",
+            "background": "#151311",
+            "on-primary-fixed": "#2f1500",
+            "on-secondary-container": "#a8baa5",
+            "inverse-on-surface": "#33302d",
+            "surface-container-lowest": "#100e0c",
+            "primary-fixed-dim": "#ffb77e",
+            "inverse-primary": "#914c00"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "gutter-lg": "2.5rem",
+            "margin-sm": "1.25rem",
+            "gutter-sm": "1rem",
+            "space-sm": "0.75rem",
+            "margin": "2rem",
+            "gutter": "1.5rem",
+            "space-xl": "3rem",
+            "space-lg": "2rem",
+            "margin-lg": "4rem",
+            "space-xs": "0.375rem",
+            "space-md": "1.25rem"
+          },
+          "fontFamily": {
+            "body-lg": ["Manrope"],
+            "label-md": ["Manrope"],
+            "headline-md": ["EB Garamond"],
+            "display-lg": ["EB Garamond"],
+            "body-sm": ["Manrope"],
+            "headline-sm": ["EB Garamond"],
+            "label-sm": ["Manrope"],
+            "headline-lg-mobile": ["EB Garamond"],
+            "headline-lg": ["EB Garamond"],
+            "body-md": ["Manrope"]
+          },
+          "fontSize": {
+            "body-lg": ["1.125rem", { "lineHeight": "1.875rem", "letterSpacing": "0.01em", "fontWeight": "400" }],
+            "label-md": ["0.8125rem", { "lineHeight": "1.25rem", "letterSpacing": "0.06em", "fontWeight": "600" }],
+            "headline-md": ["1.625rem", { "lineHeight": "2.125rem", "letterSpacing": "0em", "fontWeight": "500" }],
+            "display-lg": ["3rem", { "lineHeight": "3.5rem", "letterSpacing": "-0.01em", "fontWeight": "400" }],
+            "body-sm": ["0.8125rem", { "lineHeight": "1.375rem", "letterSpacing": "0.02em", "fontWeight": "400" }],
+            "headline-sm": ["1.25rem", { "lineHeight": "1.75rem", "letterSpacing": "0em", "fontWeight": "500" }],
+            "label-sm": ["0.6875rem", { "lineHeight": "1rem", "letterSpacing": "0.08em", "fontWeight": "600" }],
+            "headline-lg-mobile": ["1.75rem", { "lineHeight": "2.25rem", "letterSpacing": "0em", "fontWeight": "400" }],
+            "headline-lg": ["2.25rem", { "lineHeight": "2.75rem", "letterSpacing": "-0.005em", "fontWeight": "400" }],
+            "body-md": ["0.9375rem", { "lineHeight": "1.6rem", "letterSpacing": "0.01em", "fontWeight": "400" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      background-color: #151311;
+      color: #e8e1dd;
+      -webkit-font-smoothing: antialiased;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 350, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .sunken-well {
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.65);
+    }
+    .amber-glow {
+      box-shadow: 0 16px 48px -12px rgba(200, 117, 40, 0.12);
+    }
+  </style>
+</head>
+<body class="bg-background min-h-screen flex flex-col font-body-md text-on-surface antialiased selection:bg-primary-container selection:text-on-primary-container">
+<!-- Max Mobile Viewport Container (390px calibrated) -->
+<div class="w-full max-w-[390px] mx-auto min-h-screen flex flex-col bg-surface relative pb-28">
+<!-- TopAppBar (From Shared Component JSON) -->
+<header class="bg-surface dark:bg-surface docked full-width top-0 z-40 sticky">
+<div class="flex justify-between items-center w-full px-6 py-4 max-w-5xl mx-auto">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary dark:text-primary text-xl" data-icon="local_cafe">local_cafe</span>
+<span class="font-headline-md text-headline-md text-on-surface dark:text-on-surface tracking-normal font-normal">Old Grammarians</span>
+</div>
+<button class="text-tertiary dark:text-tertiary hover:text-primary dark:hover:text-primary transition-colors duration-200 active:opacity-80 transition-opacity duration-150 p-1 flex items-center justify-center" type="button">
+<span class="material-symbols-outlined text-xl" data-icon="settings">settings</span>
+</button>
+</div>
+</header>
+<!-- Sub-header & Archival Toggle -->
+<div class="px-6 pt-2 pb-5 border-b border-surface-container-highest/30">
+<div class="flex items-center justify-between mb-4">
+<div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface tracking-tight">My Waffles</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant/80 mt-0.5">Chronicle of unhurried Wednesdays</p>
+</div>
+<!-- Circle subtle indicator of chronological sort -->
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-primary/70 border border-outline-variant/20">
+<span class="material-symbols-outlined text-sm" data-icon="hourglass_bottom">hourglass_bottom</span>
+</div>
+</div>
+<!-- Archive Scope Segmented Toggle -->
+<div class="flex items-center p-1 bg-surface-container-low rounded-xl border border-outline-variant/15">
+<button class="flex-1 py-1.5 px-3 rounded-lg bg-surface-container-high text-primary font-label-sm text-label-sm text-center shadow-sm transition-all duration-150" type="button">
+          My Vault
+        </button>
+<button class="flex-1 py-1.5 px-3 rounded-lg text-tertiary hover:text-on-surface font-label-sm text-label-sm text-center transition-colors duration-150" type="button">
+          Parlor Circle
+        </button>
+</div>
+<!-- Quiet Stat / Emotional Payoff Note -->
+<div class="mt-4 pt-3 flex items-center justify-between border-t border-surface-container/50">
+<div class="flex items-center gap-1.5 text-on-surface-variant/75">
+<span class="material-symbols-outlined text-xs text-primary/80" data-icon="auto_stories">auto_stories</span>
+<span class="font-label-sm text-label-sm font-normal tracking-normal">42 waffles recorded · Since Oct 2023</span>
+</div>
+<span class="font-label-sm text-label-sm text-tertiary-container/60 italic font-serif">Quiet archive</span>
+</div>
+</div>
+<!-- Main Archival Stream -->
+<main class="flex-1 px-5 pt-6 space-y-8">
+<!-- Timeline Group: October 2023 -->
+<section class="space-y-4">
+<!-- Month Marker -->
+<div class="flex items-center gap-3">
+<span class="font-headline-sm text-headline-sm text-on-surface font-normal">October 2023</span>
+<div class="h-px flex-1 bg-surface-container-highest/40"></div>
+<span class="font-label-sm text-label-sm text-on-surface-variant/60">Genesis</span>
+</div>
+<!-- Dispatch Item 1 -->
+<article class="bg-surface-container-low rounded-xl p-3.5 border border-outline-variant/20 hover:border-primary/30 transition-colors duration-200">
+<div class="flex gap-3.5 items-start">
+<!-- Video Inset Snapshot -->
+<div class="relative w-24 h-24 rounded-lg overflow-hidden shrink-0 sunken-well bg-surface-container-lowest border border-outline-variant/25">
+<img class="w-full h-full object-cover" data-alt="Close up warm documentary video thumbnail snapshot of a young man speaking to camera amidst cardboard moving boxes in a dimly lit rainy evening room. Warm amber tungsten desk lamp casting soft chiaroscuro rim light. Natural subdued film grain, cinematic depth with moody smoked peat and dark leather tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9iOCHqfANZf_WSijjtRPeOZUmi-mPphnkeuZAOwzlxrkcOIU0mqt1UV31DU8UqtNbmfdORNoGEMqlSEJox64h6Bt1751NNRjzNftyOCfNFdWmW98WC8ZRwA0qwxPmbWwwgbhLIO1MG3LceckQpw3mXpsXePXa-2yECnT81VU1WIiimgketjxRuX7Ci7FjLOltP6k8liezAx_6mma-aCj15cK7ArrbphcXaGk6uT62Kb9KAaiiKqAAsw"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest/80 via-transparent to-transparent"></div>
+<div class="absolute bottom-1 right-1.5 bg-surface-container-lowest/80 backdrop-blur-sm px-1.5 py-0.5 rounded text-[10px] font-label-sm text-on-surface">
+                2:45
+              </div>
+</div>
+<!-- Content Details -->
+<div class="flex-1 flex flex-col justify-between min-h-[5.75rem]">
+<div>
+<div class="flex items-baseline justify-between mb-1">
+<span class="font-headline-sm text-headline-sm text-primary text-base font-normal">Wed 18 Oct</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant/50">#01</span>
+</div>
+<p class="font-headline-md text-headline-sm text-on-surface italic text-sm leading-snug line-clamp-2">
+                  "Moving house in the rain. Everything in boxes."
+                </p>
+</div>
+<!-- Quiet Mates Reactions -->
+<div class="pt-2 flex items-center justify-between border-t border-surface-container-highest/20 mt-2">
+<div class="flex items-center gap-2 text-on-surface-variant/75 text-xs font-label-sm">
+<span class="inline-flex items-center gap-1">☕ <span class="text-on-surface-variant">3</span></span>
+<span class="text-outline-variant/40">·</span>
+<span class="inline-flex items-center gap-1">🍻 <span class="text-on-surface-variant">2</span></span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary/80 flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                  Watched
+                </span>
+</div>
+</div>
+</div>
+</article>
+<!-- Dispatch Item 2 -->
+<article class="bg-surface-container-low rounded-xl p-3.5 border border-outline-variant/20 hover:border-primary/30 transition-colors duration-200">
+<div class="flex gap-3.5 items-start">
+<!-- Video Inset Snapshot -->
+<div class="relative w-24 h-24 rounded-lg overflow-hidden shrink-0 sunken-well bg-surface-container-lowest border border-outline-variant/25">
+<img class="w-full h-full object-cover" data-alt="Moody cinematic portrait video frame of a tired man leaning against an old wooden study chair holding a ceramic steaming mug. Nighttime domestic atmosphere with warm amber reflections on window glass, dark espresso wood walls, heavy cream textured parchment lighting, rich peaceful shadows." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8sA_mc3MWMDNx0f4-kcam-Hdmg82sE2SKDvhu8a-80VgkZ6LibKXsrgDeftk7crJztUTiKWmEOgTSPi2TpHBm7iT6JsD05bX3-lAPf_I4vjyhDQo8xmFirYyW0HiLPUBN6WpjQA7V8aGAzrxVzzHsmt73S7xvdhcEDt0Z1hUS_X9ney7xD6KKVrsDtNFXJqfB9HjS7WXbk1a8vuL2zFf3ppwlXopsVkNPWOmUJqdukM4z_qCiVoA90g"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest/80 via-transparent to-transparent"></div>
+<div class="absolute bottom-1 right-1.5 bg-surface-container-lowest/80 backdrop-blur-sm px-1.5 py-0.5 rounded text-[10px] font-label-sm text-on-surface">
+                1:50
+              </div>
+</div>
+<!-- Content Details -->
+<div class="flex-1 flex flex-col justify-between min-h-[5.75rem]">
+<div>
+<div class="flex items-baseline justify-between mb-1">
+<span class="font-headline-sm text-headline-sm text-primary text-base font-normal">Wed 25 Oct</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant/50">#02</span>
+</div>
+<p class="font-headline-md text-headline-sm text-on-surface italic text-sm leading-snug line-clamp-2">
+                  "Started the new job. Exhausted, but kettle is boiling."
+                </p>
+</div>
+<!-- Quiet Mates Reactions -->
+<div class="pt-2 flex items-center justify-between border-t border-surface-container-highest/20 mt-2">
+<div class="flex items-center gap-2 text-on-surface-variant/75 text-xs font-label-sm">
+<span class="inline-flex items-center gap-1">☕ <span class="text-on-surface-variant">4</span></span>
+<span class="text-outline-variant/40">·</span>
+<span class="inline-flex items-center gap-1">🌿 <span class="text-on-surface-variant">1</span></span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary/80 flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                  Watched
+                </span>
+</div>
+</div>
+</div>
+</article>
+</section>
+<!-- Timeline Group: November 2023 -->
+<section class="space-y-4">
+<!-- Month Marker -->
+<div class="flex items-center gap-3">
+<span class="font-headline-sm text-headline-sm text-on-surface font-normal">November 2023</span>
+<div class="h-px flex-1 bg-surface-container-highest/40"></div>
+<span class="font-label-sm text-label-sm text-on-surface-variant/60">Late Autumn</span>
+</div>
+<!-- Dispatch Item 3 -->
+<article class="bg-surface-container-low rounded-xl p-3.5 border border-outline-variant/20 hover:border-primary/30 transition-colors duration-200">
+<div class="flex gap-3.5 items-start">
+<!-- Video Inset Snapshot -->
+<div class="relative w-24 h-24 rounded-lg overflow-hidden shrink-0 sunken-well bg-surface-container-lowest border border-outline-variant/25">
+<img class="w-full h-full object-cover" data-alt="Still video dispatch capture of a rustic kitchen counter with a dense round sourdough loaf and flour dusting. Warm peat tones, candlelight flicker, cast iron cookware in soft focus background, quiet domestic comfort in dark heirloom aesthetic with muted sage and ember tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRdZNqpPRoc_fvpqsZ4f038ChtzufzZEJ4Ns0s3Sq-qH7i82_dp4eJGSbSTDgUYXiHaS6-49pOd93niApoxeKYTQascZazOajDMU4sFRRuseetIgZf2X0aFFdC7wXDZOMhk3Cpghao2pDGSYbd7Uu2JGVis3rfV8gyh4qK936fQfArMZlZeyjryMY6xTD__KRQ7fCe57THqSHe1sViSduRa-RqqrUyJutaXiH9wdrsq5gwG1X5XyKjkg"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest/80 via-transparent to-transparent"></div>
+<div class="absolute bottom-1 right-1.5 bg-surface-container-lowest/80 backdrop-blur-sm px-1.5 py-0.5 rounded text-[10px] font-label-sm text-on-surface">
+                3:12
+              </div>
+</div>
+<!-- Content Details -->
+<div class="flex-1 flex flex-col justify-between min-h-[5.75rem]">
+<div>
+<div class="flex items-baseline justify-between mb-1">
+<span class="font-headline-sm text-headline-sm text-primary text-base font-normal">Wed 08 Nov</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant/50">#04</span>
+</div>
+<p class="font-headline-md text-headline-sm text-on-surface italic text-sm leading-snug line-clamp-2">
+                  "Made sourdough, didn't rise. We ate the dense brick anyway."
+                </p>
+</div>
+<!-- Quiet Mates Reactions -->
+<div class="pt-2 flex items-center justify-between border-t border-surface-container-highest/20 mt-2">
+<div class="flex items-center gap-2 text-on-surface-variant/75 text-xs font-label-sm">
+<span class="inline-flex items-center gap-1">🥖 <span class="text-on-surface-variant">3</span></span>
+<span class="text-outline-variant/40">·</span>
+<span class="inline-flex items-center gap-1">🍻 <span class="text-on-surface-variant">4</span></span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary/80 flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                  Watched
+                </span>
+</div>
+</div>
+</div>
+</article>
+<!-- Dispatch Item 4 -->
+<article class="bg-surface-container-low rounded-xl p-3.5 border border-outline-variant/20 hover:border-primary/30 transition-colors duration-200">
+<div class="flex gap-3.5 items-start">
+<!-- Video Inset Snapshot -->
+<div class="relative w-24 h-24 rounded-lg overflow-hidden shrink-0 sunken-well bg-surface-container-lowest border border-outline-variant/25">
+<img class="w-full h-full object-cover" data-alt="Subtle video still of an evening train journey, face mirrored faintly in cold dark carriage window with passing misty amber station lights. Melancholic yet serene, intimate personal diary framing, warm vintage grain, deep charcoal and espresso palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAx_TiFJpcipoiT3bkBS4m4rL852kFSMZUm2ykewJzGTOuB1IwIE4Wj-I9VQAo1Sw9KvZarkCORy92N9uQIyGTDL8WCYWxBx2ud2fUQC9Cl6Ws8TBs0NCnp8k2xRD0QIrPOCEmb1kuF__1vkq5Y6R1Tx1-UefJ4InirErNvU7vbvu_4H6rZu50QJWtnBJPhy8wKDalejTSnhbGmMJx1eAF2V50WcwUNJJ-ey6e8gfH93_A3yoACaUnIWg"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest/80 via-transparent to-transparent"></div>
+<div class="absolute bottom-1 right-1.5 bg-surface-container-lowest/80 backdrop-blur-sm px-1.5 py-0.5 rounded text-[10px] font-label-sm text-on-surface">
+                2:05
+              </div>
+</div>
+<!-- Content Details -->
+<div class="flex-1 flex flex-col justify-between min-h-[5.75rem]">
+<div>
+<div class="flex items-baseline justify-between mb-1">
+<span class="font-headline-sm text-headline-sm text-primary text-base font-normal">Wed 22 Nov</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant/50">#06</span>
+</div>
+<p class="font-headline-md text-headline-sm text-on-surface italic text-sm leading-snug line-clamp-2">
+                  "Late commute out of St Pancras. Listening to your dispatches."
+                </p>
+</div>
+<!-- Quiet Mates Reactions -->
+<div class="pt-2 flex items-center justify-between border-t border-surface-container-highest/20 mt-2">
+<div class="flex items-center gap-2 text-on-surface-variant/75 text-xs font-label-sm">
+<span class="inline-flex items-center gap-1">☕ <span class="text-on-surface-variant">5</span></span>
+<span class="text-outline-variant/40">·</span>
+<span class="inline-flex items-center gap-1">🕯️ <span class="text-on-surface-variant">2</span></span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary/80 flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                  Watched
+                </span>
+</div>
+</div>
+</div>
+</article>
+</section>
+<!-- Timeline Group: 2024 (Spring & Summer) -->
+<section class="space-y-4">
+<!-- Month Marker -->
+<div class="flex items-center gap-3">
+<span class="font-headline-sm text-headline-sm text-on-surface font-normal">2024</span>
+<div class="h-px flex-1 bg-surface-container-highest/40"></div>
+<span class="font-label-sm text-label-sm text-on-surface-variant/60">38 Dispatches</span>
+</div>
+<!-- Dispatch Item 5 -->
+<article class="bg-surface-container-low rounded-xl p-3.5 border border-outline-variant/20 hover:border-primary/30 transition-colors duration-200">
+<div class="flex gap-3.5 items-start">
+<!-- Video Inset Snapshot -->
+<div class="relative w-24 h-24 rounded-lg overflow-hidden shrink-0 sunken-well bg-surface-container-lowest border border-outline-variant/25">
+<img class="w-full h-full object-cover" data-alt="Evening outdoor video dispatch screenshot around a low stone garden fire pit. Gentle embers floating upwards in dusk air, blurred silhouettes of garden trees, warm golden orange glow on wool jacket, analog film texture, peat smoke tone." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDs-WpqX2y2QuBRPTG9fP9goN80bHq-mjRZ1jAj7R5pTI_wtdxgC3DDgt2h5hXDOFWS_Gofg6li6-u7610LXTxPbFfp-ov29Sz0XdbTvhKRW2voE5q6C5N0Q_zV3l0Iub5vqykaT51baIsFcQsQxvMnv4aXsaOJKM4zViza-Bwjj8xuYAGUjtVerPO-Canwt1gY6gJfKLc7H5rY34XNTuu8m2osW0sjyc250fIswW4EnRXxZOh7k0KCMg"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest/80 via-transparent to-transparent"></div>
+<div class="absolute bottom-1 right-1.5 bg-surface-container-lowest/80 backdrop-blur-sm px-1.5 py-0.5 rounded text-[10px] font-label-sm text-on-surface">
+                4:15
+              </div>
+</div>
+<!-- Content Details -->
+<div class="flex-1 flex flex-col justify-between min-h-[5.75rem]">
+<div>
+<div class="flex items-baseline justify-between mb-1">
+<span class="font-headline-sm text-headline-sm text-primary text-base font-normal">Wed 17 Apr</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant/50">#27</span>
+</div>
+<p class="font-headline-md text-headline-sm text-on-surface italic text-sm leading-snug line-clamp-2">
+                  "First garden fire of the year. Thinking of university nights."
+                </p>
+</div>
+<!-- Quiet Mates Reactions -->
+<div class="pt-2 flex items-center justify-between border-t border-surface-container-highest/20 mt-2">
+<div class="flex items-center gap-2 text-on-surface-variant/75 text-xs font-label-sm">
+<span class="inline-flex items-center gap-1">🔥 <span class="text-on-surface-variant">4</span></span>
+<span class="text-outline-variant/40">·</span>
+<span class="inline-flex items-center gap-1">🍻 <span class="text-on-surface-variant">3</span></span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary/80 flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                  Watched
+                </span>
+</div>
+</div>
+</div>
+</article>
+<!-- Dispatch Item 6 (Recent) -->
+<article class="bg-surface-container-low rounded-xl p-3.5 border border-outline-variant/20 hover:border-primary/30 transition-colors duration-200">
+<div class="flex gap-3.5 items-start">
+<!-- Video Inset Snapshot -->
+<div class="relative w-24 h-24 rounded-lg overflow-hidden shrink-0 sunken-well bg-surface-container-lowest border border-outline-variant/25">
+<img class="w-full h-full object-cover" data-alt="Quiet interior study video dispatch snapshot showing worn hardcover books on an oak desk next to an antique reading lamp. A man speaking calmly into camera, soft dusk window light mixing with cozy amber lamp radiance, quiet heirloom atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVm5h6hQAD9KTEO2hmTnIgW8Qm76zkU_IrnBnVnNsgpE2G833bgQX_Lj2Wgmrd0p2upGauTPqrSzNMWHHiT0ZcP6Em1BunKq0EDV7EMCxYK2S0rBV_ZaQXWi1Nwa8kK0iBxLjMGBHNGfJIEP63l47P8p06FlkS01IJrkgurPj4u9Yk0Lo_Z7Oa_2o-aW0admtPAEFmFuwfR-WIlJG9eoSRU4FUlOV18gk6318bW2ptAsHencY-gsE4nQ"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest/80 via-transparent to-transparent"></div>
+<div class="absolute bottom-1 right-1.5 bg-surface-container-lowest/80 backdrop-blur-sm px-1.5 py-0.5 rounded text-[10px] font-label-sm text-on-surface">
+                2:28
+              </div>
+</div>
+<!-- Content Details -->
+<div class="flex-1 flex flex-col justify-between min-h-[5.75rem]">
+<div>
+<div class="flex items-baseline justify-between mb-1">
+<span class="font-headline-sm text-headline-sm text-primary text-base font-normal">Wed 09 Oct</span>
+<span class="font-label-sm text-label-sm text-primary-container font-semibold">#42 · Latest</span>
+</div>
+<p class="font-headline-md text-headline-sm text-on-surface italic text-sm leading-snug line-clamp-2">
+                  "One full year of Wednesdays. Grateful for this table."
+                </p>
+</div>
+<!-- Quiet Mates Reactions -->
+<div class="pt-2 flex items-center justify-between border-t border-surface-container-highest/20 mt-2">
+<div class="flex items-center gap-2 text-on-surface-variant/75 text-xs font-label-sm">
+<span class="inline-flex items-center gap-1">☕ <span class="text-on-surface-variant">5</span></span>
+<span class="text-outline-variant/40">·</span>
+<span class="inline-flex items-center gap-1">🍻 <span class="text-on-surface-variant">4</span></span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary/80 flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                  Watched
+                </span>
+</div>
+</div>
+</div>
+</article>
+</section>
+<!-- Archival Tail / Quiet Solace Whisper -->
+<div class="py-6 text-center">
+<p class="font-headline-sm text-headline-sm italic text-on-surface-variant/60 text-sm">
+          "The kettle is always on for old friends."
+        </p>
+<div class="w-12 h-px bg-outline-variant/20 mx-auto mt-3"></div>
+</div>
+</main>
+<!-- BottomNavBar (From Shared Component JSON - Destination Count: 3, Labels: ["This Week", "Record", "Archive"], Archive is ACTIVE) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 max-w-5xl mx-auto bg-surface-container dark:bg-surface-container docked full-width bottom-0">
+<!-- Destination 1: This Week (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant font-label-sm text-label-sm hover:text-primary dark:hover:text-primary transition-colors duration-200 active:scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined text-2xl mb-0.5" data-icon="chair">chair</span>
+<span>This Week</span>
+</a>
+<!-- Destination 2: Record (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant font-label-sm text-label-sm hover:text-primary dark:hover:text-primary transition-colors duration-200 active:scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined text-2xl mb-0.5" data-icon="videocam">videocam</span>
+<span>Record</span>
+</a>
+<!-- Destination 3: Archive (ACTIVE MATCH FOR PERSONAL ARCHIVE SCREEN) -->
+<a class="flex flex-col items-center justify-center text-primary dark:text-primary font-label-sm text-label-sm hover:text-primary dark:hover:text-primary transition-colors duration-200 active:scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined text-2xl mb-0.5" data-icon="inventory_2" data-weight="fill" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+<span>Archive</span>
+</a>
+</nav>
+</div>
+</body></html>

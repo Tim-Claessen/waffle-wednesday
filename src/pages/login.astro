@@ -1,0 +1,130 @@
+---
+/**
+ * The doorstep.
+ *
+ * Email and password. Nine people will use this twice a year, so it should be plain and
+ * forgettable rather than designed. There is no sign-up link because there is no sign-up:
+ * accounts are created, and sign-ups are disabled in Supabase itself.
+ *
+ * The email address is the username. A bare handle would mean no password reset and no
+ * Wednesday reminder, and the reminder is what makes this a ritual rather than a folder.
+ */
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import { createRequestClient } from '../lib/supabase.ts';
+import { config } from '../lib/config.ts';
+
+let problem: string | null = null;
+let sentLinkTo: string | null = null;
+
+/** Where they were headed before middleware sent them here. */
+const rawNext = Astro.url.searchParams.get('next') ?? '/';
+// Only ever a path on this site: an open redirect in a sign-in form is how phishing works.
+const next = rawNext.startsWith('/') && !rawNext.startsWith('//') ? rawNext : '/';
+
+if (Astro.request.method === 'POST') {
+  const form = await Astro.request.formData();
+  const email = String(form.get('email') ?? '').trim().toLowerCase();
+  const password = String(form.get('password') ?? '');
+  const wantsLink = form.get('intent') === 'link';
+
+  const { supabase } = createRequestClient(Astro.request, Astro.cookies);
+
+  if (!email) {
+    problem = 'Pop your email address in first.';
+  } else if (wantsLink) {
+    // The recovery path: a one-time link, rather than a reset form nobody can find.
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: { emailRedirectTo: `${config.siteUrl}/api/auth/callback?next=${encodeURIComponent(next)}` },
+    });
+    if (error) problem = "That didn't send. Try again in a minute.";
+    else sentLinkTo = email;
+  } else {
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) {
+      // Deliberately vague: which half was wrong is not information worth giving out.
+      problem = "That email and password don't match. Try again, or send yourself a link.";
+    } else {
+      return Astro.redirect(next, 303);
+    }
+  }
+}
+---
+
+<Base title="Sign in">
+  <main class="mx-auto flex min-h-dvh max-w-sm flex-col justify-center px-margin-sm">
+    <div class="text-center">
+      <p aria-hidden="true" class="text-[40px]">🧇</p>
+      <h1 class="mt-space-sm font-serif text-headline text-on-surface">Waffle Wednesday</h1>
+      <p class="mt-space-xs text-body-sm text-on-surface-variant">
+        Private, and by invitation. Nothing here is public.
+      </p>
+    </div>
+
+    {
+      sentLinkTo ? (
+        <div
+          class="ghost-border mt-space-lg rounded-xl bg-surface-container-low p-space-md text-center"
+        >
+          <p class="flex items-center justify-center gap-2 text-body-md text-on-surface">
+            <Icon name="mail" size={18} />
+            Link sent
+          </p>
+          <p class="mt-space-xs text-body-sm text-on-surface-variant">
+            Check {sentLinkTo}. The link signs you straight in and lets you set a new password.
+          </p>
+        </div>
+      ) : (
+        <form class="mt-space-lg space-y-space-md" method="post">
+          {problem && (
+            <p
+              class="rounded-lg border border-error/40 bg-error-container/20 p-space-sm text-body-sm text-on-error-container"
+              role="alert"
+            >
+              {problem}
+            </p>
+          )}
+
+          <label class="block">
+            <span class="text-label-md text-on-surface-variant">Email</span>
+            <input
+              autocomplete="username"
+              class="mt-space-xs w-full rounded-lg bg-surface-container-low px-space-md py-space-sm text-body-md text-on-surface ghost-border placeholder:text-outline focus:outline-none"
+              inputmode="email"
+              name="email"
+              required
+              type="email"
+            />
+          </label>
+
+          <label class="block">
+            <span class="text-label-md text-on-surface-variant">Password</span>
+            <input
+              autocomplete="current-password"
+              class="mt-space-xs w-full rounded-lg bg-surface-container-low px-space-md py-space-sm text-body-md text-on-surface ghost-border placeholder:text-outline focus:outline-none"
+              name="password"
+              type="password"
+            />
+          </label>
+
+          <button
+            class="w-full rounded-lg bg-primary px-space-md py-space-md text-label-md text-on-primary shadow-ember"
+            type="submit"
+          >
+            Sign in
+          </button>
+
+          <button
+            class="w-full text-label-sm text-outline underline decoration-outline-variant transition-colors hover:text-primary"
+            name="intent"
+            type="submit"
+            value="link"
+          >
+            Forgotten it? Send me a sign-in link instead
+          </button>
+        </form>
+      )
+    }
+  </main>
+</Base>

@@ -1,0 +1,81 @@
+---
+/**
+ * The signed-in shell: a top bar, the page, and a three-tab dock in the thumb zone.
+ *
+ * Three tabs is the whole navigation. Posting has to feel like almost nothing, so the
+ * recorder is one tap from anywhere in the app rather than a screen you navigate to.
+ */
+import Base from './Base.astro';
+import GroupSwitcher from '../components/GroupSwitcher.astro';
+import Icon from '../components/Icon.astro';
+import type { GroupSummary } from '../lib/db.ts';
+
+interface Props {
+  title: string;
+  groups: GroupSummary[];
+  group: GroupSummary;
+  /** Which dock tab reads as current. */
+  tab: 'week' | 'record' | 'archive';
+}
+
+const { title, groups, group, tab } = Astro.props;
+
+const tabs = [
+  { id: 'week', label: 'This week', href: `/g/${group.slug}`, icon: 'home' },
+  { id: 'record', label: 'Record', href: `/g/${group.slug}/record`, icon: 'record' },
+  { id: 'archive', label: 'My waffles', href: '/archive', icon: 'archive' },
+] as const;
+---
+
+<Base bodyClass="min-h-dvh" title={title}>
+  <div class="mx-auto flex min-h-dvh max-w-lg flex-col bg-surface-container-lowest">
+    <header class="sticky top-0 z-40 border-b border-outline-variant/30 bg-surface">
+      <div class="flex items-center justify-between px-margin-sm py-space-sm">
+        <a class="flex items-center gap-2 text-on-surface" href={`/g/${group.slug}`}>
+          <span aria-hidden="true" class="text-[20px]">🧇</span>
+          <span class="font-serif text-headline-sm">{group.name}</span>
+        </a>
+        <div class="flex items-center gap-space-sm">
+          {group.role === 'admin' && (
+            <a
+              class="text-label-sm text-on-surface-variant transition-colors hover:text-primary"
+              href={`/g/${group.slug}/settings`}
+            >
+              Settings
+            </a>
+          )}
+          <GroupSwitcher current={group} groups={groups} />
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-1 px-margin-sm pb-space-xl pt-space-md">
+      <slot />
+    </main>
+
+    <!-- The dock sits above the iOS home indicator rather than under it. -->
+    <nav
+      class="sticky bottom-0 z-40 border-t border-outline-variant/30 bg-surface/95 pb-[env(safe-area-inset-bottom)] backdrop-blur"
+    >
+      <ul class="flex items-stretch">
+        {
+          tabs.map((item) => (
+            <li class="flex-1">
+              <a
+                aria-current={item.id === tab ? 'page' : undefined}
+                class:list={[
+                  'flex flex-col items-center gap-1 py-space-sm text-label-sm transition-colors',
+                  item.id === tab ? 'text-primary' : 'text-on-surface-variant hover:text-on-surface',
+                ]}
+                href={item.href}
+              >
+                <Icon filled={item.id === tab} name={item.icon} size={22} />
+                <span>{item.label}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</Base>

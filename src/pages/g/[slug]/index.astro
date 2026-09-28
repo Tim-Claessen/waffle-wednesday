@@ -1,0 +1,184 @@
+---
+/**
+ * This week — the home screen.
+ *
+ * Leads with the day, because Wednesday should feel like an occasion and a Sunday
+ * shouldn't. Shows everyone who has waffled. Shows nothing at all about anyone who
+ * hasn't: no empty seats, no count of who's missing, no denominator. A quiet week is a
+ * legitimate week, and this screen is where that promise is either kept or broken.
+ */
+import App from '../../../layouts/App.astro';
+import Icon from '../../../components/Icon.astro';
+import Monogram from '../../../components/Monogram.astro';
+import WaffleCard from '../../../components/WaffleCard.astro';
+import { listGroups, loadWeekFeed, ownStreak } from '../../../lib/db.ts';
+import {
+  formatTotalDuration,
+  formatWeekStart,
+  hoursUntilWeekCloses,
+  perthMoment,
+  perthWeekdayName,
+} from '../../../lib/week.ts';
+
+const { supabase, user } = Astro.locals;
+const { slug } = Astro.params;
+
+const groups = await listGroups(supabase, user!.id);
+const group = groups.find((candidate) => candidate.slug === slug);
+if (!group) return Astro.redirect('/', 302);
+
+const feed = await loadWeekFeed(supabase, group, user!.id);
+const streak = feed.mine ? await ownStreak(supabase, user!.id, group.id, feed.weekStart) : 0;
+
+const isRitualDay = perthWeekdayName() === 'Wednesday';
+const hoursLeft = hoursUntilWeekCloses(feed.weekStart);
+const unwatched = feed.waffles.filter((waffle) => !waffle.isMine && !waffle.watched);
+const playlist = feed.waffles.filter((waffle) => !waffle.isMine).map((waffle) => waffle.id);
+const firstUnplayed = unwatched[0] ?? feed.waffles.find((waffle) => !waffle.isMine);
+---
+
+<App group={group} groups={groups} tab="week" title="This week">
+  <section class="space-y-space-sm">
+    <div class="flex items-baseline justify-between gap-space-sm">
+      <h1 class="font-serif text-headline text-on-surface">{perthMoment()}</h1>
+      <span class="shrink-0 text-label-sm text-outline">
+        Week {feed.weekNumber}
+      </span>
+    </div>
+    <p class="text-body-sm text-on-surface-variant">
+      {
+        isRitualDay
+          ? 'The kettle is on. Three minutes, no edits.'
+          : `This week opened ${formatWeekStart(feed.weekStart, { year: false })}.`
+      }
+    </p>
+  </section>
+
+  {
+    feed.waffles.length > 0 ? (
+      <>
+        {/*
+          Play all: one tap to watch the week as a mixtape, starting at the first one you
+          haven't seen. This is the "getting it watched" half of the whole bet.
+        */}
+        {firstUnplayed && (
+          <a
+            class="ghost-border group relative mt-space-lg flex items-center justify-between gap-4 overflow-hidden rounded-xl bg-surface-container p-space-md shadow-ember"
+            href={`/g/${group.slug}/watch/${firstUnplayed.id}?from=${playlist.join(',')}`}
+          >
+            <span
+              aria-hidden="true"
+              class="pointer-events-none absolute -bottom-6 -right-6 h-28 w-28 rounded-full bg-primary/10 blur-xl"
+            ></span>
+            <span class="relative z-10">
+              <span class="block font-serif text-headline-sm text-on-surface">
+                {unwatched.length > 0 ? 'Play what’s new' : 'Play all'}
+              </span>
+              <span class="block text-body-sm text-on-surface-variant">
+                {formatTotalDuration(
+                  (unwatched.length > 0 ? unwatched : feed.waffles.filter((w) => !w.isMine)).reduce(
+                    (total, waffle) => total + waffle.durationSeconds,
+                    0,
+                  ),
+                )}
+              </span>
+            </span>
+            <span
+              class="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary-container text-on-primary-container transition-transform group-hover:scale-105"
+            >
+              <Icon filled name="play" size={26} />
+            </span>
+          </a>
+        )}
+
+        {/*
+          Who's at the table. Only people who have posted appear here — there is no
+          branch in this loop for anybody else, and there is no data available to write
+          one with.
+        */}
+        <section class="mt-space-lg space-y-2.5">
+          <h2 class="text-label-md uppercase tracking-wider text-tertiary">Round the table</h2>
+          <ul class="-mx-margin-sm flex items-start gap-3 overflow-x-auto px-margin-sm py-1 hide-scrollbar">
+            {feed.waffles.map((waffle) => (
+              <li class="flex w-18 shrink-0 flex-col items-center gap-1.5">
+                <a
+                  class="flex flex-col items-center gap-1.5"
+                  href={`/g/${group.slug}/watch/${waffle.id}?from=${playlist.join(',')}`}
+                >
+                  <Monogram glow={!waffle.watched && !waffle.isMine} initials={waffle.initials} />
+                  <span class="w-full truncate text-center text-label-sm text-on-surface">
+                    {waffle.isMine ? 'You' : waffle.displayName.split(' ')[0]}
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section class="mt-space-lg space-y-space-md">
+          {feed.waffles.map((waffle) => (
+            <WaffleCard groupSlug={group.slug} playlist={playlist} waffle={waffle} />
+          ))}
+        </section>
+      </>
+    ) : (
+      /*
+        The first-week empty state, and the highest-stakes screen in the app: it is what
+        everyone sees on day one. It has to read as an invitation and never as a vacancy.
+      */
+      <section class="mt-space-xl text-center">
+        <p aria-hidden="true" class="text-[40px]">🧇</p>
+        <h2 class="mt-space-md font-serif text-headline text-on-surface">
+          Nothing here yet this week
+        </h2>
+        <p class="mx-auto mt-space-sm max-w-xs text-body-md text-on-surface-variant">
+          Somebody has to go first. Three minutes about your week, however it's been — bad hair
+          and all.
+        </p>
+      </section>
+    )
+  }
+
+  {/* The primary action, last in the document and in the thumb zone. */}
+  <section class="mt-space-xl">
+    {
+      feed.mine ? (
+        <div class="ghost-border rounded-xl bg-surface-container-low p-space-md">
+          <p class="flex items-center gap-2 text-body-md text-on-surface">
+            <Icon class="text-secondary" name="check" size={18} />
+            Yours is in for this week.
+          </p>
+          {streak > 1 && (
+            <p class="mt-space-xs text-label-sm text-outline">
+              {/* Private, on your own screen. The group never sees this. */}
+              {streak} weeks running, just between us.
+            </p>
+          )}
+          <a
+            class="mt-space-md inline-flex items-center gap-2 text-label-md text-primary hover:underline"
+            href={`/g/${group.slug}/record`}
+          >
+            <Icon name="retake" size={16} />
+            Record a different one
+          </a>
+        </div>
+      ) : (
+        <a
+          class="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-space-md py-space-md text-label-md text-on-primary shadow-ember transition-colors hover:bg-primary-fixed"
+          href={`/g/${group.slug}/record`}
+        >
+          <Icon filled name="record" size={20} />
+          Record your waffle
+        </a>
+      )
+    }
+    {
+      !feed.mine && hoursLeft < 48 && hoursLeft > 0 && (
+        <p class="mt-space-sm text-center text-label-sm text-outline">
+          {/* Softening copy, never a countdown. There is nothing to be late for. */}
+          This week's feed is open for another {hoursLeft < 24 ? 'day' : 'two days'} or so.
+        </p>
+      )
+    }
+  </section>
+</App>

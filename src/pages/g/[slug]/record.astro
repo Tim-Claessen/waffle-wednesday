@@ -1,0 +1,486 @@
+---
+/**
+ * Record and review.
+ *
+ * The 20 MB file starts here. `MediaRecorder` is given an explicit bitrate, so the small
+ * file is what the phone produces rather than something reconstructed from a large one
+ * afterwards — nothing downstream can undo a bloated source.
+ *
+ * The recorded blob is held in the page until the server confirms it, so a failed upload
+ * offers a retry rather than a re-record. That is the difference between an annoyance and
+ * losing three minutes you are not going to say again.
+ */
+import App from '../../../layouts/App.astro';
+import Icon from '../../../components/Icon.astro';
+import { listGroups, loadWeekFeed } from '../../../lib/db.ts';
+import {
+  ACCEPTED_EXTENSIONS,
+  MAX_BYTES,
+  MAX_DURATION_SECONDS,
+  formatBytes,
+} from '../../../lib/media.ts';
+
+const { supabase, user } = Astro.locals;
+const { slug } = Astro.params;
+
+const groups = await listGroups(supabase, user!.id);
+const group = groups.find((candidate) => candidate.slug === slug);
+if (!group) return Astro.redirect('/', 302);
+
+const feed = await loadWeekFeed(supabase, group, user!.id);
+const replacing = feed.mine !== null;
+---
+
+<App group={group} groups={groups} tab="record" title="Record">
+  <h1 class="font-serif text-headline text-on-surface">
+    {replacing ? 'Record another' : 'Your waffle'}
+  </h1>
+  <p class="mt-space-xs text-body-sm text-on-surface-variant">
+    {
+      replacing
+        ? 'This will replace the one you posted this week. Nobody is told you changed it.'
+        : 'Up to three minutes. No edits, no captions needed, no need to tidy up first.'
+    }
+  </p>
+
+  <!-- The camera well. Sits *in* the desk surface rather than on it. -->
+  <div
+    class="sunken-well relative mt-space-md aspect-[3/4] w-full overflow-hidden rounded-xl bg-surface-container-lowest"
+    data-stage="idle"
+    id="stage"
+  >
+    <!-- The live preview. Muted, or the room howls. -->
+    <video
+      class="h-full w-full object-cover data-[hidden]:hidden"
+      id="preview"
+      muted
+      playsinline
+    ></video>
+
+    <!-- The recorded clip, played back for review. -->
+    <video
+      class="h-full w-full object-cover"
+      controls
+      data-hidden
+      id="playback"
+      playsinline
+    ></video>
+
+    <!-- Before permission has been granted there is nothing to show. -->
+    <div
+      class="absolute inset-0 flex flex-col items-center justify-center gap-space-md px-margin-sm text-center"
+      id="gate"
+    >
+      <p aria-hidden="true" class="text-[36px]">🎥</p>
+      <p class="text-body-md text-on-surface-variant">
+        The camera needs your permission. Nothing is recorded until you press the button.
+      </p>
+      <button
+        class="rounded-lg bg-primary px-space-md py-space-sm text-label-md text-on-primary"
+        id="start-camera"
+        type="button"
+      >
+        Turn the camera on
+      </button>
+    </div>
+
+    <!-- The countdown, only while recording. -->
+    <div
+      class="absolute left-space-sm top-space-sm hidden items-center gap-1.5 rounded-full bg-surface-container-lowest/85 px-space-sm py-1 text-label-md data-[on]:flex"
+      id="timer"
+    >
+      <span
+        aria-hidden="true"
+        class="h-2 w-2 animate-pulse rounded-full bg-error"
+        id="timer-dot"
+      ></span>
+      <span id="timer-text">3:00 left</span>
+    </div>
+  </div>
+
+  <!-- Live feedback on the file as it grows, so the size cap is never a surprise. -->
+  <p class="mt-space-sm min-h-6 text-center text-label-sm text-outline" id="readout"></p>
+
+  <!-- Whatever went wrong, in plain words. -->
+  <div
+    class="mt-space-sm hidden rounded-lg border border-error/40 bg-error-container/20 p-space-md text-body-sm text-on-error-container data-[on]:block"
+    id="problem"
+    role="alert"
+  >
+  </div>
+
+  <!-- Controls, in the thumb zone. -->
+  <div class="mt-space-md space-y-space-md" id="controls">
+    <!-- Idle and recording share one big tactile button. -->
+    <div class="flex flex-col items-center gap-space-sm" data-role="capture">
+      <button
+        aria-label="Start recording"
+        class="flex h-20 w-20 items-center justify-center rounded-full bg-primary text-on-primary shadow-ember transition-transform active:scale-95 disabled:opacity-40"
+        disabled
+        id="shutter"
+        type="button"
+      >
+        <span class="h-7 w-7 rounded-full bg-on-primary" id="shutter-inner"></span>
+      </button>
+      <span class="text-label-sm text-outline" id="shutter-label">Record</span>
+    </div>
+
+    <!-- Review: keep it, or go again. -->
+    <div class="hidden space-y-space-md data-[on]:block" data-role="review" id="review">
+      <label class="block">
+        <span class="text-label-md text-on-surface-variant">A line about it, if you like</span>
+        <input
+          class="mt-space-xs w-full rounded-lg bg-surface-container-low px-space-md py-space-sm text-body-md text-on-surface placeholder:text-outline focus:outline-none"
+          id="caption"
+          maxlength="140"
+          placeholder="Optional"
+          type="text"
+        />
+      </label>
+      <button
+        class="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-space-md py-space-md text-label-md text-on-primary shadow-ember disabled:opacity-50"
+        id="post"
+        type="button"
+      >
+        <Icon name="upload" size={18} />
+        {replacing ? 'Replace this week’s' : 'Post it'}
+      </button>
+      <button
+        class="flex w-full items-center justify-center gap-2 rounded-lg bg-surface-container-low px-space-md py-space-sm text-label-md text-on-surface ghost-border"
+        id="retake"
+        type="button"
+      >
+        <Icon name="retake" size={16} />
+        Go again
+      </button>
+    </div>
+
+    <!-- Uploading: a progress bar and, if it fails, a retry from memory. -->
+    <div class="hidden space-y-space-sm data-[on]:block" data-role="uploading" id="uploading">
+      <div class="h-1.5 w-full overflow-hidden rounded-full bg-surface-container-high">
+        <div class="h-full w-0 bg-primary transition-[width]" id="progress"></div>
+      </div>
+      <p class="text-center text-label-sm text-on-surface-variant" id="progress-text">Sending…</p>
+    </div>
+  </div>
+
+  <!-- The fallback path. Kept because someone's camera will be locked down or denied. -->
+  <div class="mt-space-xl border-t border-outline-variant/30 pt-space-md">
+    <p class="text-label-md uppercase tracking-wider text-tertiary">Or upload one you have</p>
+    <p class="mt-space-xs text-body-sm text-on-surface-variant">
+      {ACCEPTED_EXTENSIONS.join(', ')}, up to {formatBytes(MAX_BYTES)} and {MAX_DURATION_SECONDS / 60} minutes.
+      Recording here is usually quicker — the file comes out about a fifth of the size.
+    </p>
+    <label
+      class="mt-space-sm inline-flex cursor-pointer items-center gap-2 rounded-lg bg-surface-container-low px-space-md py-space-sm text-label-md text-on-surface ghost-border"
+    >
+      <Icon name="upload" size={16} />
+      Choose a file
+      <input accept="video/mp4,video/quicktime,video/webm" class="hidden" id="picker" type="file" />
+    </label>
+  </div>
+</App>
+
+<script>
+  import {
+    AUDIO_BITS_PER_SECOND,
+    CAPTURE_HEIGHT,
+    CAPTURE_WIDTH,
+    MAX_BYTES,
+    MAX_DURATION_SECONDS,
+    RECORDER_MIME_CANDIDATES,
+    WARN_FROM_SECONDS,
+    VIDEO_BITS_PER_SECOND,
+    formatBytes,
+    validateVideo,
+  } from '../../../lib/media.ts';
+  import { remuxToPlainMp4 } from '../../../lib/remux.ts';
+
+  const el = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
+
+  const stage = el('stage');
+  const preview = el<HTMLVideoElement>('preview');
+  const playback = el<HTMLVideoElement>('playback');
+  const gate = el('gate');
+  const timer = el('timer');
+  const timerText = el('timer-text');
+  const readout = el('readout');
+  const problem = el('problem');
+  const shutter = el<HTMLButtonElement>('shutter');
+  const shutterInner = el('shutter-inner');
+  const shutterLabel = el('shutter-label');
+  const review = el('review');
+  const uploading = el('uploading');
+  const progress = el('progress');
+  const progressText = el('progress-text');
+  const caption = el<HTMLInputElement>('caption');
+  const postButton = el<HTMLButtonElement>('post');
+  const capture = document.querySelector<HTMLElement>('[data-role="capture"]')!;
+
+  const groupSlug = location.pathname.split('/')[2]!;
+
+  let stream: MediaStream | null = null;
+  let recorder: MediaRecorder | null = null;
+  let chunks: Blob[] = [];
+  /** Held in memory until the server confirms, so a failed upload offers a retry. */
+  let recorded: { blob: Blob; durationSeconds: number; thumbnail: Blob | null } | null = null;
+  let startedAt = 0;
+  let ticker: number | undefined;
+
+  function setStage(value: 'idle' | 'recording' | 'review' | 'uploading') {
+    stage.dataset.stage = value;
+    capture.hidden = value === 'review' || value === 'uploading';
+    review.toggleAttribute('data-on', value === 'review');
+    uploading.toggleAttribute('data-on', value === 'uploading');
+    timer.toggleAttribute('data-on', value === 'recording');
+    preview.toggleAttribute('data-hidden', value === 'review');
+    playback.toggleAttribute('data-hidden', value !== 'review');
+  }
+
+  function say(message: string | null) {
+    problem.textContent = message ?? '';
+    problem.toggleAttribute('data-on', message !== null);
+  }
+
+  function tick() {
+    const elapsed = (Date.now() - startedAt) / 1000;
+    const left = Math.max(0, MAX_DURATION_SECONDS - elapsed);
+    const minutes = Math.floor(left / 60);
+    timerText.textContent = `${minutes}:${String(Math.floor(left % 60)).padStart(2, '0')} left`;
+    // A warning, not an alarm: the ember warms rather than turning red.
+    timer.classList.toggle('text-primary', elapsed >= WARN_FROM_SECONDS);
+    if (elapsed >= MAX_DURATION_SECONDS) stop();
+  }
+
+  async function turnCameraOn() {
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: 'user',
+          // Asked for as an ideal: a phone that can't do 720p portrait should still work.
+          width: { ideal: CAPTURE_WIDTH },
+          height: { ideal: CAPTURE_HEIGHT },
+        },
+        audio: true,
+      });
+      preview.srcObject = stream;
+      await preview.play();
+      gate.hidden = true;
+      shutter.disabled = false;
+      say(null);
+    } catch {
+      say(
+        "The camera didn't open. Check the browser's camera permission, or upload a file instead — both end up in the same place.",
+      );
+    }
+  }
+
+  /** The first container the browser will actually give us, best first. */
+  function chooseMimeType(): string | undefined {
+    for (const candidate of RECORDER_MIME_CANDIDATES) {
+      if (MediaRecorder.isTypeSupported(candidate)) return candidate;
+    }
+    return undefined;
+  }
+
+  function start() {
+    if (!stream) return;
+    const mimeType = chooseMimeType();
+    chunks = [];
+    recorder = new MediaRecorder(stream, {
+      ...(mimeType ? { mimeType } : {}),
+      // The whole cost model of the app is these two numbers.
+      videoBitsPerSecond: VIDEO_BITS_PER_SECOND,
+      audioBitsPerSecond: AUDIO_BITS_PER_SECOND,
+    });
+
+    recorder.addEventListener('dataavailable', (event) => {
+      if (event.data.size > 0) {
+        chunks.push(event.data);
+        const total = chunks.reduce((sum, chunk) => sum + chunk.size, 0);
+        readout.textContent = `${formatBytes(total)} so far`;
+      }
+    });
+
+    recorder.addEventListener('stop', () => void finish(recorder!.mimeType));
+
+    // A chunk a second, so the readout moves and a crash loses at most a second.
+    recorder.start(1000);
+    startedAt = Date.now();
+    ticker = window.setInterval(tick, 200);
+    setStage('recording');
+    shutterInner.className = 'h-6 w-6 rounded-sm bg-on-primary';
+    shutterLabel.textContent = 'Stop';
+    shutter.setAttribute('aria-label', 'Stop recording');
+  }
+
+  function stop() {
+    window.clearInterval(ticker);
+    if (recorder?.state === 'recording') recorder.stop();
+    stream?.getTracks().forEach((track) => track.stop());
+    stream = null;
+  }
+
+  /** Grabs a frame for the feed thumbnail. Best effort: a missing one is a monogram. */
+  async function grabThumbnail(video: HTMLVideoElement): Promise<Blob | null> {
+    try {
+      const width = 640;
+      const height = Math.round((video.videoHeight / video.videoWidth) * width) || 480;
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      canvas.getContext('2d')?.drawImage(video, 0, 0, width, height);
+      return await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', 0.7));
+    } catch {
+      return null;
+    }
+  }
+
+  async function finish(mimeType: string) {
+    const durationSeconds = Math.min(MAX_DURATION_SECONDS, (Date.now() - startedAt) / 1000);
+    readout.textContent = 'Preparing…';
+    // Before review, so the clip played back here is the one that gets posted.
+    const blob = await remuxToPlainMp4(new Blob(chunks, { type: mimeType || 'video/mp4' }));
+
+    playback.src = URL.createObjectURL(blob);
+    playback.muted = false;
+    await new Promise<void>((resolve) => {
+      playback.addEventListener('loadeddata', () => resolve(), { once: true });
+      // Don't hang the review screen on a browser that never fires the event.
+      window.setTimeout(resolve, 2000);
+    });
+
+    recorded = { blob, durationSeconds, thumbnail: await grabThumbnail(playback) };
+    readout.textContent = `${formatBytes(blob.size)} · ${Math.round(durationSeconds)}s`;
+    setStage('review');
+  }
+
+  /**
+   * The same checks the server will run, run here first so the failure is instant.
+   * The server runs them again regardless: this is a courtesy, not a control.
+   */
+  async function checkLocally(blob: Blob, declaredDurationSeconds: number | null) {
+    const bytes = new Uint8Array(await blob.arrayBuffer());
+    // `transcoding` here even on R2: the server decides the real codec policy, and a
+    // rejection is better delivered once, by the side that is actually enforcing it.
+    return validateVideo(bytes, { declaredDurationSeconds });
+  }
+
+  function upload(): Promise<void> {
+    if (!recorded) return Promise.resolve();
+    const body = new FormData();
+    body.set('video', recorded.blob);
+    body.set('durationSeconds', String(Math.round(recorded.durationSeconds)));
+    body.set('caption', caption.value.trim());
+    body.set('groupSlug', groupSlug);
+    if (recorded.thumbnail) body.set('thumbnail', recorded.thumbnail);
+
+    setStage('uploading');
+    say(null);
+
+    return new Promise((resolve) => {
+      // XHR rather than fetch, purely because it reports upload progress.
+      const request = new XMLHttpRequest();
+      request.open('POST', '/api/waffles');
+
+      request.upload.addEventListener('progress', (event) => {
+        if (!event.lengthComputable) return;
+        const percent = Math.round((event.loaded / event.total) * 100);
+        progress.style.width = `${percent}%`;
+        progressText.textContent = percent < 100 ? `Sending… ${percent}%` : 'Almost there…';
+      });
+
+      request.addEventListener('load', () => {
+        if (request.status >= 200 && request.status < 300) {
+          location.assign(`/g/${groupSlug}?posted=1`);
+          return resolve();
+        }
+        let message = 'That didn’t land. Nothing is lost — try again.';
+        try {
+          const parsed = JSON.parse(request.responseText) as { problems?: { message: string }[] };
+          if (parsed.problems?.length) message = parsed.problems.map((p) => p.message).join(' ');
+        } catch {
+          // Keep the generic message.
+        }
+        say(message);
+        setStage('review');
+        resolve();
+      });
+
+      request.addEventListener('error', () => {
+        say('The connection dropped. Your recording is still here — try again.');
+        setStage('review');
+        resolve();
+      });
+
+      request.send(body);
+    });
+  }
+
+  el('start-camera').addEventListener('click', () => void turnCameraOn());
+
+  shutter.addEventListener('click', () => {
+    if (stage.dataset.stage === 'recording') stop();
+    else start();
+  });
+
+  el('retake').addEventListener('click', () => {
+    recorded = null;
+    chunks = [];
+    readout.textContent = '';
+    say(null);
+    caption.value = '';
+    playback.removeAttribute('src');
+    shutterInner.className = 'h-7 w-7 rounded-full bg-on-primary';
+    shutterLabel.textContent = 'Record';
+    shutter.disabled = true;
+    gate.hidden = false;
+    setStage('idle');
+  });
+
+  postButton.addEventListener('click', () => {
+    postButton.disabled = true;
+    void upload().finally(() => {
+      postButton.disabled = false;
+    });
+  });
+
+  el<HTMLInputElement>('picker').addEventListener('change', async (event) => {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+
+    if (file.size > MAX_BYTES) {
+      // Checked before reading the file, so a 130 MB camera-roll pick fails instantly.
+      say(
+        `That's ${formatBytes(file.size)}, and the limit is ${formatBytes(MAX_BYTES)}. Record it here instead — it'll be quicker.`,
+      );
+      return;
+    }
+
+    const result = await checkLocally(file, null);
+    if (!result.ok) {
+      say(result.problems.map((p) => p.message).join(' '));
+      return;
+    }
+
+    playback.src = URL.createObjectURL(file);
+    await new Promise<void>((resolve) => {
+      playback.addEventListener('loadedmetadata', () => resolve(), { once: true });
+      window.setTimeout(resolve, 2000);
+    });
+
+    const durationSeconds = Number.isFinite(playback.duration)
+      ? playback.duration
+      : (result.probe.durationSeconds ?? 0);
+
+    stop();
+    gate.hidden = true;
+    recorded = { blob: file, durationSeconds, thumbnail: await grabThumbnail(playback) };
+    readout.textContent = `${formatBytes(file.size)} · ${Math.round(durationSeconds)}s`;
+    say(null);
+    setStage('review');
+  });
+
+  // Leaving the page with the camera on is rude to the battery.
+  window.addEventListener('pagehide', () => stop());
+</script>

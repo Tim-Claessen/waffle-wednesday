@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Waffle Wednesday — Email Dispatches &amp; Reminders</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "error": "#ffb4ab",
+            "secondary-container": "#3b4b3b",
+            "on-secondary-fixed-variant": "#3b4b3b",
+            "surface-container-high": "#2c2927",
+            "tertiary-fixed": "#eae1dd",
+            "surface-tint": "#ffb77e",
+            "on-secondary-container": "#a8baa5",
+            "primary-fixed-dim": "#ffb77e",
+            "on-tertiary-container": "#2d2927",
+            "inverse-on-surface": "#33302d",
+            "outline-variant": "#544438",
+            "outline": "#a28d7e",
+            "on-error": "#690005",
+            "surface-container-low": "#1d1b19",
+            "on-tertiary-fixed": "#1f1b19",
+            "on-primary-fixed-variant": "#6e3900",
+            "on-error-container": "#ffdad6",
+            "on-secondary-fixed": "#101f11",
+            "on-primary-container": "#442000",
+            "tertiary-fixed-dim": "#cdc5c1",
+            "on-primary": "#4d2600",
+            "on-surface-variant": "#dac2b2",
+            "secondary": "#bacbb6",
+            "on-tertiary": "#342f2d",
+            "surface-container-lowest": "#100e0c",
+            "on-secondary": "#253425",
+            "on-surface": "#e8e1dd",
+            "on-primary-fixed": "#2f1500",
+            "tertiary": "#cdc5c1",
+            "inverse-surface": "#e8e1dd",
+            "primary-fixed": "#ffdcc3",
+            "surface-variant": "#373432",
+            "tertiary-container": "#968f8c",
+            "surface-bright": "#3c3936",
+            "inverse-primary": "#914c00",
+            "on-background": "#e8e1dd",
+            "background": "#151311",
+            "surface-dim": "#151311",
+            "primary-container": "#d17c2f",
+            "error-container": "#93000a",
+            "secondary-fixed": "#d5e8d2",
+            "surface": "#151311",
+            "secondary-fixed-dim": "#bacbb6",
+            "surface-container-highest": "#373432",
+            "on-tertiary-fixed-variant": "#4b4643",
+            "primary": "#ffb77e",
+            "surface-container": "#211f1d"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin": "2rem",
+            "gutter": "1.5rem",
+            "margin-lg": "4rem",
+            "space-sm": "0.75rem",
+            "space-md": "1.25rem",
+            "space-xs": "0.375rem",
+            "space-lg": "2rem",
+            "space-xl": "3rem",
+            "gutter-sm": "1rem",
+            "margin-sm": "1.25rem",
+            "gutter-lg": "2.5rem"
+          },
+          "fontFamily": {
+            "headline-lg-mobile": ["EB Garamond"],
+            "headline-md": ["EB Garamond"],
+            "body-md": ["Manrope"],
+            "label-md": ["Manrope"],
+            "headline-lg": ["EB Garamond"],
+            "display-lg": ["EB Garamond"],
+            "body-lg": ["Manrope"],
+            "headline-sm": ["EB Garamond"],
+            "body-sm": ["Manrope"],
+            "label-sm": ["Manrope"]
+          },
+          "fontSize": {
+            "headline-lg-mobile": ["1.75rem", { lineHeight: "2.25rem", letterSpacing: "0em", fontWeight: "400" }],
+            "headline-md": ["1.625rem", { lineHeight: "2.125rem", letterSpacing: "0em", fontWeight: "500" }],
+            "body-md": ["0.9375rem", { lineHeight: "1.6rem", letterSpacing: "0.01em", fontWeight: "400" }],
+            "label-md": ["0.8125rem", { lineHeight: "1.25rem", letterSpacing: "0.06em", fontWeight: "600" }],
+            "headline-lg": ["2.25rem", { lineHeight: "2.75rem", letterSpacing: "-0.005em", fontWeight: "400" }],
+            "display-lg": ["3rem", { lineHeight: "3.5rem", letterSpacing: "-0.01em", fontWeight: "400" }],
+            "body-lg": ["1.125rem", { lineHeight: "1.875rem", letterSpacing: "0.01em", fontWeight: "400" }],
+            "headline-sm": ["1.25rem", { lineHeight: "1.75rem", letterSpacing: "0em", fontWeight: "500" }],
+            "body-sm": ["0.8125rem", { lineHeight: "1.375rem", letterSpacing: "0.02em", fontWeight: "400" }],
+            "label-sm": ["0.6875rem", { lineHeight: "1rem", letterSpacing: "0.08em", fontWeight: "600" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .ember-halo {
+      box-shadow: 0 16px 48px -12px rgba(200, 117, 40, 0.12);
+    }
+    .parchment-well {
+      box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.5);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen selection:bg-primary-container selection:text-on-primary-container antialiased flex flex-col items-center">
+<!-- Fixed Top Navigation Shell (Shared Component) -->
+<header class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-gutter-sm py-space-xs w-full max-w-[390px] md:max-w-4xl mx-auto bg-surface/80 dark:bg-surface/80 backdrop-blur-md transition-all duration-200">
+<button aria-label="Go back" class="p-2 rounded-full text-on-surface hover:text-primary transition-all duration-200 active:scale-95 flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<div class="font-headline-sm text-headline-sm text-on-surface dark:text-on-surface tracking-wide">
+      Waffle Wednesday
+    </div>
+<button aria-label="More options" class="p-2 rounded-full text-on-surface hover:text-primary transition-all duration-200 active:scale-95 flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</header>
+<!-- Ambient Quiet Atmospheric Canvas -->
+<main class="w-full max-w-4xl px-gutter-sm md:px-gutter py-24 pb-32 flex flex-col items-center">
+<!-- Editorial Header Introduction -->
+<div class="text-center max-w-lg mb-12 mt-4 space-y-2">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-high/60 border border-outline-variant/20 text-on-surface-variant font-label-sm text-label-sm tracking-widest uppercase">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+        Quiet Notifications
+      </div>
+<h1 class="font-headline-lg text-headline-lg md:font-display-lg md:text-display-lg text-on-surface tracking-tight">
+        Echoes from the Hearth
+      </h1>
+<p class="font-body-md text-body-md text-on-surface-variant/80 font-normal">
+        Two gentle automated dispatches sent each Wednesday. Stripped of noise, crafted like personal letters sent to an old desk.
+      </p>
+</div>
+<!-- Comparative Email Showcase Canvas: Side-by-Side or Stacked -->
+<div class="w-full grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10 items-start">
+<!-- EMAIL DISPATCH #1: 7:30 AM Morning Toast -->
+<article class="relative flex flex-col bg-surface-container-lowest/80 border border-outline-variant/20 rounded-xl overflow-hidden ember-halo transition-all duration-300 hover:border-outline-variant/40">
+<!-- Mail Client Header Bar -->
+<div class="px-5 py-3.5 bg-surface-container-low border-b border-outline-variant/15 flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<span class="w-2.5 h-2.5 rounded-full bg-outline-variant/30"></span>
+<span class="w-2.5 h-2.5 rounded-full bg-outline-variant/30"></span>
+<span class="w-2.5 h-2.5 rounded-full bg-outline-variant/30"></span>
+</div>
+<span class="font-label-sm text-label-sm text-primary tracking-wider">
+            7:30 AM — Wednesday Morning Toast
+          </span>
+<span class="material-symbols-outlined text-outline text-base" data-icon="mail">mail</span>
+</div>
+<!-- Envelope Metadata -->
+<div class="px-6 py-4 border-b border-outline-variant/10 space-y-1.5 bg-surface-container-lowest text-on-surface-variant/80 font-body-sm text-body-sm">
+<div class="flex justify-between items-baseline">
+<span class="text-on-surface-variant/50 font-label-sm text-label-sm uppercase tracking-wider">Subject</span>
+<span class="font-headline-sm text-headline-sm text-on-surface text-right font-medium">Wednesday. The kettle is on.</span>
+</div>
+<div class="flex justify-between items-baseline pt-1">
+<span class="text-on-surface-variant/50 font-label-sm text-label-sm uppercase tracking-wider">From</span>
+<span class="text-on-surface-variant font-label-md text-label-md">Waffle Wednesday &lt;hearth@wafflewednesday.internal&gt;</span>
+</div>
+<div class="flex justify-between items-baseline">
+<span class="text-on-surface-variant/50 font-label-sm text-label-sm uppercase tracking-wider">To</span>
+<span class="text-on-surface-variant font-label-md text-label-md">The Inner Circle</span>
+</div>
+</div>
+<!-- Letter Body Content -->
+<div class="px-6 py-8 md:px-8 space-y-8 flex-1 flex flex-col justify-between bg-surface-container-lowest">
+<div class="space-y-6">
+<!-- Salutation & Dispatch Text -->
+<p class="font-headline-sm text-headline-sm text-primary-fixed-dim italic">
+              Good morning.
+            </p>
+<p class="font-body-lg text-body-lg text-on-surface/90 leading-relaxed font-normal">
+              Take 3 minutes today to tell the circle how you are.
+            </p>
+<!-- Warm Inset Note Well -->
+<div class="parchment-well p-4 rounded-lg bg-surface-container-low/70 border border-outline-variant/10 text-on-surface-variant/80 font-body-sm text-body-sm space-y-2">
+<div class="flex items-center gap-1.5 text-primary">
+<span class="material-symbols-outlined text-sm" data-icon="local_fire_department">local_fire_department</span>
+<span class="font-label-sm text-label-sm uppercase tracking-widest">Morning Prompts</span>
+</div>
+<p class="italic text-on-surface/75">
+                "What made you pause this past week? Is the coffee bitter or sweet? No polish, just you."
+              </p>
+</div>
+</div>
+<!-- Direct Minimal Action Trigger -->
+<div class="pt-8 space-y-4">
+<a class="inline-flex w-full items-center justify-center px-6 py-3.5 rounded-lg bg-primary-container text-on-primary-container font-label-md text-label-md font-semibold tracking-wide transition-all duration-200 hover:bg-[#d9822b] hover:shadow-[0_8px_24px_rgba(200,117,40,0.25)] active:scale-[0.98]" href="#record">
+              Record today's waffle
+            </a>
+<!-- Substack-style quiet footer -->
+<div class="pt-4 border-t border-outline-variant/10 flex items-center justify-between text-on-surface-variant/40 font-label-sm text-label-sm">
+<span>Delivery via Hearth Wire</span>
+<span class="hover:text-on-surface-variant transition-colors cursor-pointer">Mute morning bell</span>
+</div>
+</div>
+</div>
+</article>
+<!-- EMAIL DISPATCH #2: 8:00 PM Evening Gathering Nudge -->
+<article class="relative flex flex-col bg-surface-container-lowest/80 border border-outline-variant/20 rounded-xl overflow-hidden ember-halo transition-all duration-300 hover:border-outline-variant/40">
+<!-- Mail Client Header Bar -->
+<div class="px-5 py-3.5 bg-surface-container-low border-b border-outline-variant/15 flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<span class="w-2.5 h-2.5 rounded-full bg-outline-variant/30"></span>
+<span class="w-2.5 h-2.5 rounded-full bg-outline-variant/30"></span>
+<span class="w-2.5 h-2.5 rounded-full bg-outline-variant/30"></span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary tracking-wider">
+            8:00 PM — Evening Gathering Nudge
+          </span>
+<span class="material-symbols-outlined text-outline text-base" data-icon="mark_email_read">mark_email_read</span>
+</div>
+<!-- Envelope Metadata -->
+<div class="px-6 py-4 border-b border-outline-variant/10 space-y-1.5 bg-surface-container-lowest text-on-surface-variant/80 font-body-sm text-body-sm">
+<div class="flex justify-between items-baseline">
+<span class="text-on-surface-variant/50 font-label-sm text-label-sm uppercase tracking-wider">Subject</span>
+<span class="font-headline-sm text-headline-sm text-on-surface text-right font-medium">4 of 7 dispatches are in tonight.</span>
+</div>
+<div class="flex justify-between items-baseline pt-1">
+<span class="text-on-surface-variant/50 font-label-sm text-label-sm uppercase tracking-wider">From</span>
+<span class="text-on-surface-variant font-label-md text-label-md">Waffle Wednesday &lt;parlor@wafflewednesday.internal&gt;</span>
+</div>
+<div class="flex justify-between items-baseline">
+<span class="text-on-surface-variant/50 font-label-sm text-label-sm uppercase tracking-wider">To</span>
+<span class="text-on-surface-variant font-label-md text-label-md">The Inner Circle</span>
+</div>
+</div>
+<!-- Letter Body Content -->
+<div class="px-6 py-8 md:px-8 space-y-8 flex-1 flex flex-col justify-between bg-surface-container-lowest">
+<div class="space-y-6">
+<!-- Attendance Indicator Badge -->
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary-container/30 border border-secondary/20 text-secondary font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+              Circle status: 4 checked in
+            </div>
+<!-- Body Statement -->
+<p class="font-body-lg text-body-lg text-on-surface/90 leading-relaxed font-normal">
+              Tom, Sarah, Dave &amp; Marcus have posted. Pull up a chair before bed.
+            </p>
+<!-- Organic Seat Tokens (Face Stack / Mini Table View) -->
+<div class="p-4 rounded-lg bg-surface-container-low/50 border border-outline-variant/10 space-y-3">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant/60">Around the fire tonight</span>
+<div class="grid grid-cols-4 gap-2 pt-1">
+<div class="flex flex-col items-center gap-1.5 p-2 rounded bg-surface-container/60">
+<div class="w-8 h-8 rounded-full bg-surface-variant flex items-center justify-center font-headline-sm text-sm text-primary">T</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant/90">Tom</span>
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+</div>
+<div class="flex flex-col items-center gap-1.5 p-2 rounded bg-surface-container/60">
+<div class="w-8 h-8 rounded-full bg-surface-variant flex items-center justify-center font-headline-sm text-sm text-primary">S</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant/90">Sarah</span>
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+</div>
+<div class="flex flex-col items-center gap-1.5 p-2 rounded bg-surface-container/60">
+<div class="w-8 h-8 rounded-full bg-surface-variant flex items-center justify-center font-headline-sm text-sm text-primary">D</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant/90">Dave</span>
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+</div>
+<div class="flex flex-col items-center gap-1.5 p-2 rounded bg-surface-container/60">
+<div class="w-8 h-8 rounded-full bg-surface-variant flex items-center justify-center font-headline-sm text-sm text-primary">M</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant/90">Marcus</span>
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+</div>
+</div>
+</div>
+</div>
+<!-- Direct Minimal Action Trigger -->
+<div class="pt-8 space-y-4">
+<a class="inline-flex w-full items-center justify-center px-6 py-3.5 rounded-lg bg-surface-container-high border border-outline-variant/30 text-on-surface font-label-md text-label-md font-semibold tracking-wide transition-all duration-200 hover:bg-surface-bright hover:border-primary/40 hover:text-primary active:scale-[0.98]" href="#watch">
+              Watch tonight's dispatches
+            </a>
+<!-- Substack-style quiet footer -->
+<div class="pt-4 border-t border-outline-variant/10 flex items-center justify-between text-on-surface-variant/40 font-label-sm text-label-sm">
+<span>Archive closes at dawn</span>
+<span class="hover:text-on-surface-variant transition-colors cursor-pointer">Preferences</span>
+</div>
+</div>
+</div>
+</article>
+</div>
+<!-- Tone & Craft Manifesto Footnote -->
+<div class="mt-16 text-center max-w-md border-t border-outline-variant/10 pt-8 space-y-2">
+<div class="flex justify-center items-center gap-3 text-outline">
+<span class="material-symbols-outlined text-sm" data-icon="fireplace">fireplace</span>
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant/60">The Hearth Protocol</span>
+<span class="material-symbols-outlined text-sm" data-icon="local_cafe">local_cafe</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant/60 italic">
+        "Letters penned in smoked peat and evening light. No click-through metrics or tracking pixels—only a quiet signal between true friends."
+      </p>
+</div>
+</main>
+<!-- Mobile Bottom Navigation Bar (Shared Component) -->
+<!-- Mapped semantically: Viewing Dispatches/Notifications corresponds to 'Dispatches' tab -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 flex justify-around items-center px-gutter-sm py-space-xs w-full max-w-[390px] mx-auto pb-safe bg-surface/90 dark:bg-surface/90 backdrop-blur-md" style="box-shadow: 0 16px 48px -12px rgba(200, 117, 40, 0.12);">
+<!-- Destination 1: Hearth -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 dark:text-on-surface-variant/70 font-label-sm text-label-sm transition-all duration-300 ease-out active:scale-95 hover:text-primary dark:hover:text-primary" href="#hearth">
+<span class="material-symbols-outlined text-2xl" data-icon="fireplace">fireplace</span>
+<span class="mt-1">Hearth</span>
+</a>
+<!-- Destination 2: Dispatches (ACTIVE for this dispatch/notifications view) -->
+<a class="flex flex-col items-center justify-center text-primary dark:text-primary font-label-sm text-label-sm transition-all duration-300 ease-out active:scale-95 hover:text-primary dark:hover:text-primary" href="#dispatches">
+<span class="material-symbols-outlined text-2xl" data-icon="videocam" data-weight="fill" style="font-variation-settings: 'FILL' 1;">videocam</span>
+<span class="mt-1">Dispatches</span>
+</a>
+<!-- Destination 3: Parlor -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 dark:text-on-surface-variant/70 font-label-sm text-label-sm transition-all duration-300 ease-out active:scale-95 hover:text-primary dark:hover:text-primary" href="#parlor">
+<span class="material-symbols-outlined text-2xl" data-icon="groups">groups</span>
+<span class="mt-1">Parlor</span>
+</a>
+</nav>
+</body></html>

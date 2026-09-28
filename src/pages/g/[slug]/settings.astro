@@ -1,0 +1,205 @@
+---
+/**
+ * Group settings, for an admin.
+ *
+ * Reminder times and recipients live in the database rather than in the code, so widening
+ * reminders from Tim to everyone at the start of Phase 2 is a form submission rather than
+ * a deploy. That is the only change that switch needs.
+ *
+ * Adding a member is deliberately not here: an account has to be created in Supabase,
+ * which is a service-role act. docs/setup.md has the steps.
+ */
+import App from '../../../layouts/App.astro';
+import Icon from '../../../components/Icon.astro';
+import Monogram from '../../../components/Monogram.astro';
+import { initialsFor } from '../../../lib/auth.ts';
+import { listGroups, loadMembers } from '../../../lib/db.ts';
+import { formatWeekStart } from '../../../lib/week.ts';
+
+const { supabase, user } = Astro.locals;
+const { slug } = Astro.params;
+
+const groups = await listGroups(supabase, user!.id);
+const group = groups.find((candidate) => candidate.slug === slug);
+if (!group) return Astro.redirect('/', 302);
+if (group.role !== 'admin') return Astro.redirect(`/g/${group.slug}`, 302);
+
+let saved = false;
+let problem: string | null = null;
+
+if (Astro.request.method === 'POST') {
+  const form = await Astro.request.formData();
+  const name = String(form.get('name') ?? '').trim();
+  const morning = String(form.get('morning_reminder_at') ?? '');
+  const evening = String(form.get('evening_reminder_at') ?? '');
+  const recipients = String(form.get('reminder_recipients') ?? 'admins');
+  const enabled = form.get('reminders_enabled') === 'on';
+
+  if (name.length === 0) {
+    problem = 'The group needs a name.';
+  } else {
+    const { error } = await supabase
+      .from('groups')
+      .update({
+        name,
+        morning_reminder_at: morning,
+        evening_reminder_at: evening,
+        reminder_recipients: recipients === 'everyone' ? 'everyone' : 'admins',
+        reminders_enabled: enabled,
+      })
+      .eq('id', group.id);
+    if (error) problem = error.message;
+    else saved = true;
+  }
+}
+
+// Re-read so the form shows what was actually stored rather than what was submitted.
+const current = (await listGroups(supabase, user!.id)).find((g) => g.id === group.id)!;
+const members = await loadMembers(supabase, group.id);
+---
+
+<App group={current} groups={groups} tab="week" title="Settings">
+  <h1 class="font-serif text-headline text-on-surface">Group settings</h1>
+
+  {saved && (
+    <p
+      class="mt-space-md rounded-lg border border-secondary/40 bg-secondary-container/25 p-space-sm text-body-sm text-on-secondary-container"
+      role="status"
+    >
+      Saved.
+    </p>
+  )}
+  {problem && (
+    <p
+      class="mt-space-md rounded-lg border border-error/40 bg-error-container/20 p-space-sm text-body-sm text-on-error-container"
+      role="alert"
+    >
+      {problem}
+    </p>
+  )}
+
+  <form class="mt-space-lg space-y-space-lg" method="post">
+    <label class="block">
+      <span class="text-label-md text-on-surface-variant">Name</span>
+      <input
+        class="mt-space-xs w-full rounded-lg bg-surface-container-low px-space-md py-space-sm text-body-md text-on-surface ghost-border focus:outline-none"
+        name="name"
+        required
+        type="text"
+        value={current.name}
+      />
+    </label>
+
+    <fieldset class="ghost-border rounded-xl bg-surface-container-low p-space-md">
+      <legend class="px-1 text-label-md uppercase tracking-wider text-tertiary">Reminders</legend>
+
+      <label class="mt-space-sm flex items-center gap-space-sm">
+        <input
+          checked={current.remindersEnabled}
+          class="h-4 w-4 accent-primary"
+          name="reminders_enabled"
+          type="checkbox"
+        />
+        <span class="text-body-md text-on-surface">Send the Wednesday emails</span>
+      </label>
+
+      <div class="mt-space-md grid grid-cols-2 gap-space-sm">
+        <label class="block">
+          <span class="text-label-sm text-on-surface-variant">Morning, to everyone</span>
+          <input
+            class="mt-space-xs w-full rounded-lg bg-surface-container px-space-sm py-space-sm text-body-md text-on-surface ghost-border focus:outline-none"
+            name="morning_reminder_at"
+            type="time"
+            value={current.morningReminderAt.slice(0, 5)}
+          />
+        </label>
+        <label class="block">
+          <span class="text-label-sm text-on-surface-variant">Evening, quietly</span>
+          <input
+            class="mt-space-xs w-full rounded-lg bg-surface-container px-space-sm py-space-sm text-body-md text-on-surface ghost-border focus:outline-none"
+            name="evening_reminder_at"
+            type="time"
+            value={current.eveningReminderAt.slice(0, 5)}
+          />
+        </label>
+      </div>
+
+      <p class="mt-space-sm text-body-sm text-on-surface-variant">
+        The evening one goes only to people who haven't posted, and never mentions anybody else.
+        All times are {current.timezone.replace('_', ' ')}.
+      </p>
+
+      <label class="mt-space-md block">
+        <span class="text-label-sm text-on-surface-variant">Who gets them</span>
+        <select
+          class="mt-space-xs w-full rounded-lg bg-surface-container px-space-sm py-space-sm text-body-md text-on-surface ghost-border focus:outline-none"
+          name="reminder_recipients"
+        >
+          <option selected={current.reminderRecipients === 'admins'} value="admins">
+            Admins only — while it's still being built
+          </option>
+          <option selected={current.reminderRecipients === 'everyone'} value="everyone">
+            Everyone in the group
+          </option>
+        </select>
+      </label>
+    </fieldset>
+
+    <button
+      class="w-full rounded-lg bg-primary px-space-md py-space-md text-label-md text-on-primary shadow-ember"
+      type="submit"
+    >
+      Save
+    </button>
+  </form>
+
+  <section class="mt-space-xl">
+    <h2 class="text-label-md uppercase tracking-wider text-tertiary">
+      {members.length === 1 ? 'One member' : `${members.length} members`}
+    </h2>
+    <ul class="mt-space-sm space-y-space-sm">
+      {
+        members.map((member) => (
+          <li class="ghost-border flex items-center gap-space-sm rounded-lg bg-surface-container-low p-space-sm">
+            <Monogram initials={initialsFor(member.displayName)} size="sm" />
+            <span class="min-w-0 flex-1">
+              <span class="block truncate text-body-md text-on-surface">{member.displayName}</span>
+              <span class="block truncate text-label-sm text-outline">{member.email}</span>
+            </span>
+            {member.role === 'admin' && (
+              <span class="shrink-0 rounded-full bg-surface-container-high px-2 py-0.5 text-label-sm text-on-surface-variant">
+                Admin
+              </span>
+            )}
+          </li>
+        ))
+      }
+    </ul>
+    <p class="mt-space-sm text-body-sm text-on-surface-variant">
+      Adding someone means creating their account, which happens in Supabase rather than here —
+      there is no self sign-up by design. The steps are in docs/setup.md.
+    </p>
+  </section>
+
+  <section class="mt-space-xl border-t border-outline-variant/30 pt-space-md">
+    <h2 class="text-label-md uppercase tracking-wider text-tertiary">This group</h2>
+    <dl class="mt-space-sm space-y-space-xs text-body-sm">
+      <div class="flex justify-between gap-space-sm">
+        <dt class="text-on-surface-variant">Week opens</dt>
+        <dd class="text-on-surface">
+          {['Sundays', 'Mondays', 'Tuesdays', 'Wednesdays', 'Thursdays', 'Fridays', 'Saturdays'][current.weekStartDay]}
+        </dd>
+      </div>
+      <div class="flex justify-between gap-space-sm">
+        <dt class="text-on-surface-variant">First week</dt>
+        <dd class="text-on-surface">{formatWeekStart(current.firstWeekStart)}</dd>
+      </div>
+    </dl>
+    <p class="mt-space-lg text-label-sm text-outline">
+      <a class="inline-flex items-center gap-1.5 hover:text-primary" href="/logout">
+        <Icon name="close" size={13} />
+        Sign out
+      </a>
+    </p>
+  </section>
+</App>

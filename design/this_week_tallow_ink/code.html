@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>Waffle Wednesday — Old Grammarians</title>
+<!-- Fonts: Fraunces & Inter (Tallow & Ink / Old Stationery aesthetic) -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            background: "#131619",
+            surface: "#131619",
+            "surface-card": "#1a1e23",
+            "surface-subtle": "#15191d",
+            "surface-elevated": "#21262d",
+            border: "#272d34",
+            "border-subtle": "#20252b",
+            "text-parchment": "#f1ede8",
+            "text-muted": "#9aa0a6",
+            "text-dim": "#666e75",
+            // Wax-seal oxblood & ink-slate accents (Strictly zero orange/amber/gold)
+            "oxblood": "#9c3b3b",
+            "oxblood-dark": "#7e2a2a",
+            "oxblood-subtle": "#2d1b1e",
+            "ink-blue": "#4e728e",
+            "ink-blue-muted": "#395267",
+            "seal-text": "#f4efe9"
+          },
+          fontFamily: {
+            serif: ["Fraunces", "serif"],
+            sans: ["Inter", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 20px;
+      line-height: 1;
+      letter-spacing: normal;
+      text-transform: none;
+      display: inline-block;
+      white-space: nowrap;
+      word-wrap: normal;
+      direction: ltr;
+      -webkit-font-smoothing: antialiased;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-text-parchment antialiased min-h-screen selection:bg-oxblood selection:text-seal-text flex justify-center font-sans">
+<!-- Mobile Shell Container -->
+<div class="w-full max-w-[390px] min-h-screen flex flex-col bg-background relative overflow-x-hidden pb-36">
+<!-- Top Navigation Header -->
+<header class="sticky top-0 z-40 bg-background/95 backdrop-blur-md border-b border-border">
+<div class="flex justify-between items-center w-full px-5 py-3.5 max-w-xl mx-auto">
+<!-- Monogram Signet + Group Switcher -->
+<button class="flex items-center gap-3 active:scale-[0.98] transition-transform duration-150 text-left focus:outline-none" type="button">
+<div class="w-8 h-8 rounded border border-border bg-surface-elevated flex items-center justify-center text-text-parchment font-serif font-medium text-xs tracking-wider shadow-inner">
+        OG
+      </div>
+<div class="flex items-center gap-1.5">
+<span class="font-serif text-lg font-normal tracking-tight text-text-parchment">Old Grammarians</span>
+<span class="material-symbols-outlined text-text-dim text-lg" data-icon="expand_more">expand_more</span>
+</div>
+</button>
+<!-- Settings Whisper -->
+<button aria-label="Parlour settings" class="w-8 h-8 rounded-full flex items-center justify-center text-text-muted hover:text-text-parchment transition-colors duration-150 active:scale-95" type="button">
+<span class="material-symbols-outlined text-lg" data-icon="settings">settings</span>
+</button>
+</div>
+</header>
+<!-- Main Stream Content -->
+<main class="flex-1 px-4 pt-4 flex flex-col gap-4">
+<!-- Wednesday Ritual Banner: Old Stationery & Tallow Letter Notice -->
+<section class="relative overflow-hidden rounded-lg bg-surface-card border border-border p-4.5 shadow-sm">
+<div class="flex items-start justify-between relative z-10">
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<!-- Wax Seal dot in Oxblood -->
+<span class="inline-block w-2 h-2 rounded-full bg-oxblood"></span>
+<span class="font-sans text-[11px] font-semibold uppercase tracking-[0.14em] text-text-muted">Wednesday Ritual</span>
+</div>
+<h1 class="font-serif text-[1.45rem] leading-tight text-text-parchment pt-0.5">
+          It’s Wednesday night.
+        </h1>
+<p class="font-serif italic text-[0.92rem] text-text-muted pt-0.5">
+          Put the kettle on. Week 42 has arrived.
+        </p>
+</div>
+<!-- Quiet Inkwell / Teacup icon badge -->
+<div class="w-9 h-9 rounded border border-border bg-surface-elevated flex items-center justify-center text-ink-blue shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[19px]" data-icon="local_cafe">local_cafe</span>
+</div>
+</div>
+<div class="mt-3.5 pt-3 border-t border-border/70 flex items-center justify-between text-xs">
+<span class="font-sans text-text-muted tracking-tight">
+        4 updates by the hearth
+      </span>
+<span class="font-sans font-medium text-ink-blue flex items-center gap-1">
+        Catch up in your own time
+      </span>
+</div>
+</section>
+<!-- Video Dispatches Feed -->
+<div class="flex flex-col gap-3.5">
+<!-- Card 1: Tom Higgins (Unwatched - Oxblood Accent) -->
+<article class="bg-surface-card border border-border rounded-lg overflow-hidden transition-all duration-200">
+<!-- Video Screen Frame -->
+<div class="relative w-full aspect-[16/10] bg-surface-subtle overflow-hidden">
+<img class="w-full h-full object-cover opacity-85 saturate-[0.85] contrast-[1.05]" data-alt="Cinematic low-light video still of Tom in a cosy kitchen" src="https://lh3.googleusercontent.com/aida-public/AB6AXuABu-9uROx8DgZnVMjiqyupqthD-bbr-uV3SBLWtekDTfFCJ8AkY06y5fVsCyvOQudmRGmGBdKe3WXUmBrzFTJrqlUo2MYJ9IxfxJRyRQBknOpNM_033Ep9E2uJNai-84aCIvfrqLYiumYQcvGobW5CeOs2whlf5RPaL4vx9pNiMifVWN2oygs9jqKnETBYvjU3EC4WHf5m0EJUQAifFh-nd_ndmXkDQejHj5FG3D6gsm7oBxdqoL8Qsw"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-black/40 p-3 flex flex-col justify-between">
+<!-- Top indicators -->
+<div class="flex items-center justify-between">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-[11px] font-sans font-medium bg-oxblood-subtle/95 text-seal-text border border-oxblood/50 backdrop-blur-md">
+<span class="w-1.5 h-1.5 rounded-full bg-oxblood"></span>
+              Unwatched
+            </span>
+<span class="px-2 py-0.5 rounded text-[11px] font-sans text-text-parchment bg-background/80 border border-border backdrop-blur-md">
+              2:41
+            </span>
+</div>
+<!-- Wax Seal / Oxblood Play Button -->
+<div class="self-center">
+<button aria-label="Play Tom's catchup" class="w-12 h-12 rounded-full bg-oxblood hover:bg-oxblood-dark text-seal-text flex items-center justify-center shadow-lg active:scale-90 transition-transform duration-150 border border-oxblood/60" type="button">
+<span class="material-symbols-outlined text-[24px]" data-icon="play_arrow" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</button>
+</div>
+<!-- Hairline Slate-Blue Track -->
+<div class="w-full bg-surface-elevated h-1 rounded-full overflow-hidden">
+<div class="bg-oxblood h-full w-0"></div>
+</div>
+</div>
+</div>
+<!-- Card Details & Personal Dispatch -->
+<div class="p-3.5 space-y-2">
+<div class="flex items-baseline justify-between">
+<h2 class="font-serif text-[1.2rem] text-text-parchment tracking-tight">Tom Higgins</h2>
+<span class="font-sans text-xs text-text-dim">45m ago • Melbourne</span>
+</div>
+<p class="font-serif italic text-[0.93rem] text-text-parchment/90 leading-snug">
+          “Kitchen renovation disaster and why I hate Bunnings paint swatches.”
+        </p>
+<div class="pt-2 flex items-center justify-between border-t border-border/60 text-xs">
+<span class="font-sans text-text-dim text-[11px]">Recorded on kettle boil</span>
+<button class="font-sans font-medium text-ink-blue hover:text-text-parchment transition-colors flex items-center gap-1" type="button">
+            Listen now
+            <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 2: Sarah Lin (Watched) -->
+<article class="bg-surface-card border border-border rounded-lg overflow-hidden transition-all duration-200 opacity-90">
+<div class="relative w-full aspect-[16/10] bg-surface-subtle overflow-hidden">
+<img class="w-full h-full object-cover opacity-70 grayscale-[25%] contrast-[1.05]" data-alt="Sarah sitting with a greyhound" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCoE7umG70lte8g7txOrlLHoxvXEwEm_vy8LZ7SNAJH033hGqztn5MFTgLQ1HuC3fOvlIkC7AG08EchBkFNKyUyvSkAAaZbPwyT5NKNx8kqvtbk-aqYsnwZmRQ1WFEpG3UBoJvQwCbDZA1uHo3RufHB_MmvBIQxtI6LvYARx-qsrbWRrQALhpYN1si5mexBT7YpmVvQxrTPTh1Dvab6gHTU_lv3cBGYrArXM9c7bBg78C5wVKq8h35dyw"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-black/40 p-3 flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-sans bg-surface-card/90 text-text-muted border border-border backdrop-blur-md">
+<span class="w-1.5 h-1.5 rounded-full border border-text-dim"></span>
+              Watched
+            </span>
+<span class="px-2 py-0.5 rounded text-[11px] font-sans text-text-muted bg-background/80 border border-border backdrop-blur-md">
+              1:58
+            </span>
+</div>
+<div class="self-center">
+<button aria-label="Replay Sarah's catchup" class="w-10 h-10 rounded-full bg-surface-elevated/90 text-text-parchment border border-border flex items-center justify-center backdrop-blur-md active:scale-90 transition-transform hover:border-ink-blue" type="button">
+<span class="material-symbols-outlined text-[19px]" data-icon="replay">replay</span>
+</button>
+</div>
+<div class="w-full bg-surface-elevated h-1 rounded-full overflow-hidden">
+<div class="bg-border h-full w-full"></div>
+</div>
+</div>
+</div>
+<div class="p-3.5 space-y-1.5">
+<div class="flex items-baseline justify-between">
+<h2 class="font-serif text-[1.15rem] text-text-parchment tracking-tight">Sarah Lin</h2>
+<span class="font-sans text-xs text-text-dim">2h ago • Hobart</span>
+</div>
+<p class="font-serif italic text-[0.92rem] text-text-muted leading-snug">
+          “Adopted a greyhound. He sleeps 20 hours a day.”
+        </p>
+</div>
+</article>
+<!-- Card 3: Marcus Bell (Watched) -->
+<article class="bg-surface-card border border-border rounded-lg overflow-hidden transition-all duration-200 opacity-90">
+<div class="relative w-full aspect-[16/10] bg-surface-subtle overflow-hidden">
+<img class="w-full h-full object-cover opacity-70 grayscale-[25%] contrast-[1.05]" data-alt="Marcus at study desk" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDe8_dY1D1E6swE3w88f0xpFeNvUqVArZPydXZE6SjyE2lvJX08Ssy1FSeYPQO_JAfyiCaxXd7qqDQW7_E8Ndmd23atMFoRxFVq9Q79Yr4jL4InOcJ-9HXvvVd-WzyBMP8IQLpF-jhK4FRRrjK9Ep6IPuEC9OUv3FBV119NEuFKIYAdGzBJznv0RG-tToSBWqsazp9bDm_rIViOwGrS5Q0rkTtKtQt4CDpQpRbs8nvijamgHDFoWB1J0A"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-black/40 p-3 flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-sans bg-surface-card/90 text-text-muted border border-border backdrop-blur-md">
+<span class="w-1.5 h-1.5 rounded-full border border-text-dim"></span>
+              Watched
+            </span>
+<span class="px-2 py-0.5 rounded text-[11px] font-sans text-text-muted bg-background/80 border border-border backdrop-blur-md">
+              3:00
+            </span>
+</div>
+<div class="self-center">
+<button aria-label="Replay Marcus's catchup" class="w-10 h-10 rounded-full bg-surface-elevated/90 text-text-parchment border border-border flex items-center justify-center backdrop-blur-md active:scale-90 transition-transform hover:border-ink-blue" type="button">
+<span class="material-symbols-outlined text-[19px]" data-icon="replay">replay</span>
+</button>
+</div>
+<div class="w-full bg-surface-elevated h-1 rounded-full overflow-hidden">
+<div class="bg-border h-full w-full"></div>
+</div>
+</div>
+</div>
+<div class="p-3.5 space-y-1.5">
+<div class="flex items-baseline justify-between">
+<h2 class="font-serif text-[1.15rem] text-text-parchment tracking-tight">Marcus Bell</h2>
+<span class="font-sans text-xs text-text-dim">4h ago • Sydney</span>
+</div>
+<p class="font-serif italic text-[0.92rem] text-text-muted leading-snug">
+          “Finally handed in the thesis draft. Need three pints.”
+        </p>
+</div>
+</article>
+<!-- Card 4: Dave O'Connor (Watched) -->
+<article class="bg-surface-card border border-border rounded-lg overflow-hidden transition-all duration-200 opacity-90">
+<div class="relative w-full aspect-[16/10] bg-surface-subtle overflow-hidden">
+<img class="w-full h-full object-cover opacity-70 grayscale-[25%] contrast-[1.05]" data-alt="Dave on Queenslander verandah" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAe_gSsATq6voblifO578zajEmhp5YboXhMlGdWEpXL_LVDd4XAYgeyVZ67o8GOhvE3WAHmAJTpYABrZGkA-ZYnLCHW6rMB4CZEFk5alQGtRJ1tCEPxWwOl7lL6DqwSfJJPgx7Gx7Zyqxv7y0_KjM9DpkL6Cc-rDlmHk26vCy3FwtxCh8ST3bg1X4gV27DUF3yETT6yfyZnYlQhfoEObdGcEfyqVAAtSL_6jHJO-vjIJBLfMwfJZSRlNA"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-black/40 p-3 flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-sans bg-surface-card/90 text-text-muted border border-border backdrop-blur-md">
+<span class="w-1.5 h-1.5 rounded-full border border-text-dim"></span>
+              Watched
+            </span>
+<span class="px-2 py-0.5 rounded text-[11px] font-sans text-text-muted bg-background/80 border border-border backdrop-blur-md">
+              2:15
+            </span>
+</div>
+<div class="self-center">
+<button aria-label="Replay Dave's catchup" class="w-10 h-10 rounded-full bg-surface-elevated/90 text-text-parchment border border-border flex items-center justify-center backdrop-blur-md active:scale-90 transition-transform hover:border-ink-blue" type="button">
+<span class="material-symbols-outlined text-[19px]" data-icon="replay">replay</span>
+</button>
+</div>
+<div class="w-full bg-surface-elevated h-1 rounded-full overflow-hidden">
+<div class="bg-border h-full w-full"></div>
+</div>
+</div>
+</div>
+<div class="p-3.5 space-y-1.5">
+<div class="flex items-baseline justify-between">
+<h2 class="font-serif text-[1.15rem] text-text-parchment tracking-tight">Dave O'Connor</h2>
+<span class="font-sans text-xs text-text-dim">5h ago • Brisbane</span>
+</div>
+<p class="font-serif italic text-[0.92rem] text-text-muted leading-snug">
+          “Humid as hell up here. Quick garden update.”
+        </p>
+</div>
+</article>
+</div>
+<!-- Sign-off Footnote -->
+<footer class="text-center py-6 px-4">
+<p class="font-serif italic text-text-dim text-sm tracking-wide">
+      That’s everyone for now. The kettle stays warm.
+    </p>
+</footer>
+</main>
+<!-- Floating Wax-Seal Action Button: Understated, Dignified Wax-Seal Red (#9c3b3b) -->
+<aside class="fixed bottom-20 left-0 right-0 z-40 max-w-[390px] mx-auto px-4 pointer-events-none flex justify-end">
+<button class="pointer-events-auto flex items-center gap-2.5 px-5 py-3 rounded-full bg-oxblood text-seal-text font-sans font-medium text-sm shadow-xl active:scale-[0.97] transition-all duration-150 border border-[#b24848]/40 hover:bg-oxblood-dark" type="button">
+<span class="material-symbols-outlined text-lg" data-icon="videocam" style="font-variation-settings: 'FILL' 1;">videocam</span>
+<span class="tracking-wide">Record your waffle</span>
+</button>
+</aside>
+<!-- Docked Bottom Navigation Anchor: Deep Slate & Inkwell -->
+<nav aria-label="Parlour Navigation" class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2.5 pb-6 max-w-xl mx-auto inset-x-0 bg-background/95 backdrop-blur-md border-t border-border shadow-none">
+<!-- Tab 1: This Week (Active) -->
+<a class="flex flex-col items-center justify-center text-text-parchment font-sans text-xs transition-colors duration-150 active:scale-95" href="#this-week">
+<span class="material-symbols-outlined text-xl text-seal-text" data-icon="local_cafe" style="font-variation-settings: 'FILL' 1;">local_cafe</span>
+<span class="mt-1 font-medium tracking-tight">This Week</span>
+</a>
+<!-- Tab 2: Record -->
+<a class="flex flex-col items-center justify-center text-text-muted hover:text-text-parchment font-sans text-xs transition-colors duration-150 active:scale-95" href="#record">
+<span class="material-symbols-outlined text-xl text-text-dim" data-icon="videocam">videocam</span>
+<span class="mt-1 tracking-tight">Record</span>
+</a>
+<!-- Tab 3: Archive -->
+<a class="flex flex-col items-center justify-center text-text-muted hover:text-text-parchment font-sans text-xs transition-colors duration-150 active:scale-95" href="#archive">
+<span class="material-symbols-outlined text-xl text-text-dim" data-icon="inventory_2">inventory_2</span>
+<span class="mt-1 tracking-tight">Archive</span>
+</a>
+</nav>
+</div>
+</body></html>

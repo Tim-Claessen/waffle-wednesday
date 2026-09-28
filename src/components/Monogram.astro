@@ -1,0 +1,36 @@
+---
+/**
+ * Initials in a circle.
+ *
+ * There is no photography anywhere in this interface — the videos are the images — so
+ * this is the avatar. A ring in ember says "there's a waffle here"; nothing in the whole
+ * app draws a seat for someone who hasn't posted.
+ */
+interface Props {
+  initials: string;
+  size?: 'sm' | 'md' | 'lg';
+  /** Warms the ring. Used for a waffle you haven't watched yet. */
+  glow?: boolean;
+  class?: string;
+}
+
+const { initials, size = 'md', glow = false, class: className = '' } = Astro.props;
+
+const sizes = {
+  sm: 'h-9 w-9 text-label-sm',
+  md: 'h-14 w-14 text-headline-sm',
+  lg: 'h-20 w-20 text-headline-md',
+} as const;
+---
+
+<span
+  aria-hidden="true"
+  class:list={[
+    'inline-flex shrink-0 items-center justify-center rounded-full bg-surface-container-high font-serif text-on-surface-variant',
+    sizes[size],
+    glow ? 'ghost-border-active shadow-ember' : 'ghost-border',
+    className,
+  ]}
+>
+  {initials}
+</span>

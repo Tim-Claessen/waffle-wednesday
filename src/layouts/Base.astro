@@ -1,0 +1,47 @@
+---
+/**
+ * The shell every page sits in.
+ *
+ * Dark always: this is an app used in the evening, mostly to watch video, and a light
+ * mode would be a second design nobody would ever see. The fonts are self-hosted from
+ * the build, so there is no third-party request on the critical path.
+ */
+import { Font } from 'astro:assets';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  /** Kept out of the markup on the player, which wants the full height for video. */
+  bodyClass?: string;
+}
+
+const { title, bodyClass = '' } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en-AU">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport" />
+    <title>{title} · Waffle Wednesday</title>
+
+    <Font cssVariable="--font-serif" preload />
+    <Font cssVariable="--font-sans" preload />
+
+    <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
+    <link href="/icon-180.png" rel="apple-touch-icon" />
+    <link href="/manifest.webmanifest" rel="manifest" />
+
+    <!-- Added to the home screen, this is what the status bar blends into. -->
+    <meta content="#151311" name="theme-color" />
+    <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="yes" name="mobile-web-app-capable" />
+    <meta content="Waffle" name="apple-mobile-web-app-title" />
+
+    <!-- Nine people, invitation only. Nothing here should ever be indexed. -->
+    <meta content="noindex, nofollow" name="robots" />
+  </head>
+  <body class={bodyClass}>
+    <slot />
+  </body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Waffle Wednesday — Sign In</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..700&amp;family=Manrope:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20;
+    }
+  </style>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "error": "#ffb4ab",
+            "secondary-container": "#3b4b3b",
+            "on-secondary-fixed-variant": "#3b4b3b",
+            "surface-container-high": "#2c2927",
+            "tertiary-fixed": "#eae1dd",
+            "surface-tint": "#ffb77e",
+            "on-secondary-container": "#a8baa5",
+            "primary-fixed-dim": "#ffb77e",
+            "on-tertiary-container": "#2d2927",
+            "inverse-on-surface": "#33302d",
+            "outline-variant": "#544438",
+            "outline": "#a28d7e",
+            "on-error": "#690005",
+            "surface-container-low": "#1d1b19",
+            "on-tertiary-fixed": "#1f1b19",
+            "on-primary-fixed-variant": "#6e3900",
+            "on-error-container": "#ffdad6",
+            "on-secondary-fixed": "#101f11",
+            "on-primary-container": "#442000",
+            "tertiary-fixed-dim": "#cdc5c1",
+            "on-primary": "#4d2600",
+            "on-surface-variant": "#dac2b2",
+            "secondary": "#bacbb6",
+            "on-tertiary": "#342f2d",
+            "surface-container-lowest": "#100e0c",
+            "on-secondary": "#253425",
+            "on-surface": "#e8e1dd",
+            "on-primary-fixed": "#2f1500",
+            "tertiary": "#cdc5c1",
+            "inverse-surface": "#e8e1dd",
+            "primary-fixed": "#ffdcc3",
+            "surface-variant": "#373432",
+            "tertiary-container": "#968f8c",
+            "surface-bright": "#3c3936",
+            "inverse-primary": "#914c00",
+            "on-background": "#e8e1dd",
+            "background": "#151311",
+            "surface-dim": "#151311",
+            "primary-container": "#d17c2f",
+            "error-container": "#93000a",
+            "secondary-fixed": "#d5e8d2",
+            "surface": "#151311",
+            "secondary-fixed-dim": "#bacbb6",
+            "surface-container-highest": "#373432",
+            "on-tertiary-fixed-variant": "#4b4643",
+            "primary": "#ffb77e",
+            "surface-container": "#211f1d"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin": "2rem",
+            "gutter": "1.5rem",
+            "margin-lg": "4rem",
+            "space-sm": "0.75rem",
+            "space-md": "1.25rem",
+            "space-xs": "0.375rem",
+            "space-lg": "2rem",
+            "space-xl": "3rem",
+            "gutter-sm": "1rem",
+            "margin-sm": "1.25rem",
+            "gutter-lg": "2.5rem"
+          },
+          "fontFamily": {
+            "headline-lg-mobile": ["EB Garamond"],
+            "headline-md": ["EB Garamond"],
+            "body-md": ["Manrope"],
+            "label-md": ["Manrope"],
+            "headline-lg": ["EB Garamond"],
+            "display-lg": ["EB Garamond"],
+            "body-lg": ["Manrope"],
+            "headline-sm": ["EB Garamond"],
+            "body-sm": ["Manrope"],
+            "label-sm": ["Manrope"]
+          },
+          "fontSize": {
+            "headline-lg-mobile": ["1.75rem", { "lineHeight": "2.25rem", "letterSpacing": "0em", "fontWeight": "400" }],
+            "headline-md": ["1.625rem", { "lineHeight": "2.125rem", "letterSpacing": "0em", "fontWeight": "500" }],
+            "body-md": ["0.9375rem", { "lineHeight": "1.6rem", "letterSpacing": "0.01em", "fontWeight": "400" }],
+            "label-md": ["0.8125rem", { "lineHeight": "1.25rem", "letterSpacing": "0.06em", "fontWeight": "600" }],
+            "headline-lg": ["2.25rem", { "lineHeight": "2.75rem", "letterSpacing": "-0.005em", "fontWeight": "400" }],
+            "display-lg": ["3rem", { "lineHeight": "3.5rem", "letterSpacing": "-0.01em", "fontWeight": "400" }],
+            "body-lg": ["1.125rem", { "lineHeight": "1.875rem", "letterSpacing": "0.01em", "fontWeight": "400" }],
+            "headline-sm": ["1.25rem", { "lineHeight": "1.75rem", "letterSpacing": "0em", "fontWeight": "500" }],
+            "body-sm": ["0.8125rem", { "lineHeight": "1.375rem", "letterSpacing": "0.02em", "fontWeight": "400" }],
+            "label-sm": ["0.6875rem", { "lineHeight": "1rem", "letterSpacing": "0.08em", "fontWeight": "600" }]
+          }
+        },
+      },
+    }
+  </script>
+</head>
+<body class="bg-background text-on-surface antialiased min-h-screen flex flex-col justify-between selection:bg-primary-container selection:text-on-primary-container relative overflow-x-hidden font-body-md text-body-md">
+<!-- Ambient Hearth Backlight Glow -->
+<div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[540px] h-[540px] pointer-events-none rounded-full bg-primary-container/5 blur-[120px] -z-10"></div>
+<!-- Top Doorstep Subtle Indicator -->
+<header class="w-full pt-space-lg px-gutter-sm flex justify-center items-center">
+<div class="flex items-center gap-2 text-on-surface-variant/40">
+<span class="material-symbols-outlined text-[16px] text-primary/60" data-icon="lock">lock</span>
+<span class="font-label-sm text-label-sm tracking-widest text-on-surface-variant/60">HEARTH SANCTUARY</span>
+</div>
+</header>
+<!-- Main Threshold / Doorstep Card -->
+<main class="w-full flex-1 flex flex-col justify-center items-center px-gutter-sm py-space-xl">
+<div class="w-full max-w-[420px] mx-auto">
+<!-- Central Emblem & Title Group -->
+<div class="text-center mb-space-xl">
+<!-- Quiet Hearth Flame Icon Token -->
+<div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-surface-container-low border border-outline-variant/20 mb-space-md shadow-[0_16px_48px_-12px_rgba(200,117,40,0.12)]">
+<span class="material-symbols-outlined text-primary text-[22px]" data-icon="fireplace">fireplace</span>
+</div>
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface tracking-tight mb-space-xs">
+          Waffle Wednesday
+        </h1>
+<p class="font-body-md text-body-md text-on-surface-variant/80 font-normal max-w-[280px] mx-auto">
+          Enter your email for a private sign-in link.
+        </p>
+</div>
+<!-- Doorstep Form Well -->
+<div class="bg-surface-container-low/70 backdrop-blur-md rounded-xl p-space-lg border border-outline-variant/20 shadow-[0_16px_48px_-12px_rgba(200,117,40,0.08)]">
+<form class="space-y-space-md" id="magic-link-form" onsubmit="event.preventDefault(); handleSend();">
+<div class="space-y-space-xs">
+<label class="block font-label-md text-label-md text-on-surface-variant/80 pl-0.5" for="email">
+              Email address
+            </label>
+<div class="relative">
+<input class="w-full bg-surface-container-lowest text-on-surface placeholder:text-outline/50 font-body-md text-body-md px-space-md py-space-sm rounded-lg border border-outline-variant/30 focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-all duration-200 shadow-[inset_0_2px_4px_rgba(0,0,0,0.6)]" id="email" name="email" placeholder="name@example.com" required="" type="email"/>
+<span class="material-symbols-outlined absolute right-space-md top-1/2 -translate-y-1/2 text-outline/40 pointer-events-none text-[18px]" data-icon="mail">mail</span>
+</div>
+</div>
+<!-- Single Restrained Button -->
+<button class="w-full mt-space-sm bg-primary-container hover:bg-surface-tint text-on-primary font-label-md text-label-md py-3.5 px-space-md rounded-lg flex items-center justify-center gap-2 transition-all duration-200 active:scale-[0.99] shadow-[0_12px_32px_-8px_rgba(200,117,40,0.24)] cursor-pointer" id="submit-btn" type="submit">
+<span>Send magic link</span>
+<span class="material-symbols-outlined text-[16px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</form>
+<!-- Subtle Feedback Container (Hidden Initially) -->
+<div class="hidden mt-space-md pt-space-sm border-t border-outline-variant/20 text-center animate-fade-in" id="confirmation-msg">
+<p class="font-body-sm text-body-sm text-secondary flex items-center justify-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]" data-icon="check_circle">check_circle</span>
+            Dispatch sent. Check your inbox to enter.
+          </p>
+</div>
+</div>
+<!-- Discreet Invitation Policy Note -->
+<div class="mt-space-lg text-center">
+<p class="font-body-sm text-body-sm text-on-surface-variant/60 font-light tracking-wide">
+          By invitation only for existing circles.
+        </p>
+</div>
+</div>
+</main>
+<!-- Quiet Footnote / Hearth Glow Edge -->
+<footer class="w-full py-space-md px-gutter-sm flex justify-center items-center">
+<div class="w-8 h-[1px] bg-outline-variant/30"></div>
+</footer>
+<script>
+    function handleSend() {
+      const emailInput = document.getElementById('email');
+      const submitBtn = document.getElementById('submit-btn');
+      const confirmationMsg = document.getElementById('confirmation-msg');
+
+      if (emailInput.checkValidity() && emailInput.value.trim() !== '') {
+        submitBtn.disabled = true;
+        submitBtn.classList.add('opacity-70', 'cursor-not-allowed');
+        submitBtn.innerHTML = `
+          <span class="font-label-md text-label-md">Sending...</span>
+        `;
+
+        setTimeout(() => {
+          confirmationMsg.classList.remove('hidden');
+          submitBtn.innerHTML = `
+            <span>Link Dispatched</span>
+            <span class="material-symbols-outlined text-[16px]" data-icon="mark_email_read">mark_email_read</span>
+          `;
+        }, 700);
+      }
+    }
+  </script>
+</body></html>

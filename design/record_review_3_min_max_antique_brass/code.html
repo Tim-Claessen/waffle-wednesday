@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Record &amp; Review - Waffle Wednesday</title>
+<!-- Google Fonts: Newsreader & Plus Jakarta Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..600&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-secondary-fixed": "#271900",
+            "error": "#ffb4ab",
+            "surface-container-highest": "#383432",
+            "inverse-on-surface": "#33302d",
+            "outline-variant": "#534437",
+            "surface-tint": "#ffb877",
+            "on-primary-fixed": "#2e1600",
+            "on-primary-fixed-variant": "#6c3a00",
+            "on-error-container": "#ffdad6",
+            "secondary-fixed-dim": "#f0bf65",
+            "surface-container-lowest": "#100e0c",
+            "on-primary-container": "#542c00",
+            "on-secondary-fixed-variant": "#5e4200",
+            "on-tertiary-fixed": "#062013",
+            "on-tertiary-fixed-variant": "#324c3d",
+            "surface-container": "#221f1d",
+            "on-error": "#690005",
+            "primary-fixed-dim": "#ffb877",
+            "secondary-fixed": "#ffdea7",
+            "on-tertiary": "#1c3627",
+            "on-tertiary-container": "#223c2d",
+            "surface-bright": "#3c3836",
+            "inverse-surface": "#e9e1dd",
+            "inverse-primary": "#8e4f00",
+            "primary": "#ffb877",
+            "surface-dim": "#161311",
+            "tertiary-fixed": "#ccead5",
+            "on-secondary": "#412d00",
+            "error-container": "#93000a",
+            "tertiary-fixed-dim": "#b0ceb9",
+            "surface-variant": "#383432",
+            "background": "#161311",
+            "surface-container-low": "#1e1b19",
+            "primary-fixed": "#ffdcc1",
+            "on-primary": "#4c2700",
+            "on-surface": "#e9e1dd",
+            "secondary-container": "#7c5800",
+            "secondary": "#f0bf65",
+            "primary-container": "#e08b34",
+            "outline": "#a18d7e",
+            "surface-container-high": "#2d2927",
+            "surface": "#161311",
+            "on-surface-variant": "#d9c2b1",
+            "on-background": "#e9e1dd",
+            "on-secondary-container": "#ffd281",
+            "tertiary": "#b0ceb9",
+            "tertiary-container": "#89a693"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "gutter": "1rem",
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "margin-tablet": "2rem",
+            "margin": "1.25rem",
+            "space-xl": "2.25rem",
+            "gutter-tablet": "1.5rem",
+            "space-lg": "1.5rem",
+            "space-md": "1rem"
+          },
+          "fontFamily": {
+            "label-md": ["Plus Jakarta Sans"],
+            "headline-md": ["Newsreader"],
+            "body-md": ["Plus Jakarta Sans"],
+            "body-sm": ["Plus Jakarta Sans"],
+            "headline-lg-mobile": ["Newsreader"],
+            "headline-lg": ["Newsreader"],
+            "label-sm": ["Plus Jakarta Sans"],
+            "title-quote": ["Newsreader"],
+            "headline-xl-mobile": ["Newsreader"],
+            "headline-xl": ["Newsreader"],
+            "body-lg": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "label-md": ["0.8125rem", { "lineHeight": "1.125rem", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "headline-md": ["1.25rem", { "lineHeight": "1.75rem", "fontWeight": "400" }],
+            "body-md": ["0.9375rem", { "lineHeight": "1.5rem", "fontWeight": "400" }],
+            "body-sm": ["0.8125rem", { "lineHeight": "1.25rem", "fontWeight": "400" }],
+            "headline-lg-mobile": ["1.5rem", { "lineHeight": "2rem", "letterSpacing": "-0.01em", "fontWeight": "400" }],
+            "headline-lg": ["1.75rem", { "lineHeight": "2.25rem", "letterSpacing": "-0.01em", "fontWeight": "400" }],
+            "label-sm": ["0.6875rem", { "lineHeight": "0.875rem", "letterSpacing": "0.04em", "fontWeight": "600" }],
+            "title-quote": ["1.125rem", { "lineHeight": "1.625rem", "letterSpacing": "0", "fontWeight": "400" }],
+            "headline-xl-mobile": ["1.75rem", { "lineHeight": "2.25rem", "letterSpacing": "-0.015em", "fontWeight": "400" }],
+            "headline-xl": ["2.25rem", { "lineHeight": "2.75rem", "letterSpacing": "-0.02em", "fontWeight": "400" }],
+            "body-lg": ["1rem", { "lineHeight": "1.6rem", "fontWeight": "400" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 350, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      line-height: 1;
+      text-transform: none;
+      letter-spacing: normal;
+      word-wrap: normal;
+      white-space: nowrap;
+      direction: ltr;
+    }
+    
+    /* Subtle Parlour room glow */
+    .ritual-amber-glow {
+      box-shadow: 0 10px 30px -4px rgba(224, 139, 52, 0.22);
+    }
+
+    /* Soft pulse for record indicator */
+    @keyframes gentleBreath {
+      0%, 100% { opacity: 0.9; transform: scale(1); }
+      50% { opacity: 0.55; transform: scale(0.97); }
+    }
+    .animate-gentle-breath {
+      animation: gentleBreath 3s ease-in-out infinite;
+    }
+
+    /* Mic dots pulsation */
+    @keyframes micBounce {
+      0%, 100% { height: 4px; }
+      50% { height: 14px; }
+    }
+    .mic-bar-1 { animation: micBounce 1.2s ease-in-out infinite; }
+    .mic-bar-2 { animation: micBounce 0.9s ease-in-out 0.2s infinite; }
+    .mic-bar-3 { animation: micBounce 1.4s ease-in-out 0.4s infinite; }
+    .mic-bar-4 { animation: micBounce 1.0s ease-in-out 0.1s infinite; }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-surface-container-lowest text-on-surface antialiased min-h-screen flex justify-center items-center font-body-md select-none">
+<!-- Mobile Shell Device Wrapper (390px viewport context) -->
+<div class="relative w-full max-w-[400px] h-[844px] max-h-[884px] bg-surface flex flex-col justify-between overflow-hidden shadow-2xl rounded-[2.5rem] border border-outline-variant/20">
+<!-- CAMERA VIEWFINDER CANVAS (Backdrop) -->
+<div class="absolute inset-0 z-0 overflow-hidden bg-surface-container-low">
+<!-- Simulated Raw Camera View (Cozy, authentic kitchen warm evening vibe) -->
+<div class="w-full h-full bg-cover bg-center opacity-85 transition-transform duration-700 scale-100" data-alt="An intimate, authentic selfie camera viewpoint of a relaxed person in a cosy domestic evening kitchen. Soft low-key amber lamplight casts warm tones against timber cupboards and tea mugs. Natural grain, casual loose clothes, unpolished real-life atmosphere without digital beauty filters, in a deep burnt umber and warm parchment parlour aesthetic." id="cameraViewfinder" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBu7CJGO8VSAb3Vx4x3h_pNJu1Ezx8hMrfNdcYnFhg98c6hLcITSmlRI8Xcs5lhCEREAWgstzw9viQo3VJqT_eaWSSEaLxt7SojmI6Vko3i60cW_AjPT5eiTr7BiyXtj2hhyfBCt0YZ5rZ0meb6oa1-lMGT9wtxTKMBDG4jGF41zpJ3SbECFeMGQ9v4ibSK9NS_HgITA6zyFDaeml7jclTEqf43j408NEti0k_RZFpgJ0MeI4QMoEb0dw')"></div>
+<!-- Subtle Vignette & Grain Layer -->
+<div class="absolute inset-0 bg-gradient-to-b from-surface/80 via-transparent to-surface/90 pointer-events-none"></div>
+</div>
+<!-- TOP BAR (Cancellation, Group Context, Camera Flip) -->
+<!-- Destination Rule: Focused task journey suppresses global TopAppBar / BottomNavBar -->
+<header class="relative z-20 flex items-center justify-between px-5 pt-7 pb-3 w-full">
+<!-- Cancel / Close action -->
+<button aria-label="Cancel recording" class="w-10 h-10 rounded-full bg-surface-container/70 backdrop-blur-md border border-outline-variant/30 flex items-center justify-center text-on-surface hover:text-primary active:scale-95 transition-all duration-150" onclick="window.history.back()" type="button">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+<!-- Group Indicator Pill -->
+<div class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-surface-container/85 backdrop-blur-md border border-outline-variant/25">
+<span class="w-2 h-2 rounded-full bg-primary-container animate-pulse" style="background-color: #C9973B;"></span>
+<span class="font-label-sm text-label-sm text-on-surface-variant tracking-wide">Posting to Old Grammarians</span>
+</div>
+<!-- Flip Camera Toggle -->
+<button aria-label="Flip camera" class="w-10 h-10 rounded-full bg-surface-container/70 backdrop-blur-md border border-outline-variant/30 flex items-center justify-center text-on-surface hover:text-primary active:scale-90 transition-all duration-200" id="flipCamBtn" type="button">
+<span class="material-symbols-outlined text-[20px]">flip_camera_ios</span>
+</button>
+</header>
+<!-- CENTER FLOATING HUD: Unhurried Timer & Reassuring Cadence -->
+<div class="relative z-10 flex flex-col items-center justify-start pt-2 px-6 pointer-events-none">
+<!-- Timer Glass Capsule -->
+<div class="flex items-center gap-2 px-4 py-1.5 rounded-full bg-surface-container-high/80 backdrop-blur-md border border-outline-variant/25 text-on-surface shadow-sm">
+<span class="material-symbols-outlined text-primary text-[17px]">schedule</span>
+<div class="flex items-baseline gap-1">
+<span class="font-headline-md text-headline-md font-medium text-primary tracking-tight" id="countdownDisplay">2:14</span>
+<span class="font-label-sm text-label-sm text-outline">/ 3:00 max</span>
+</div>
+</div>
+<!-- Gentle reassurance prompt: zero broadcast panic -->
+<p class="mt-2.5 font-headline-md text-headline-md italic text-on-surface-variant/90 text-center drop-shadow-sm">
+        Take your time. No need to be clever.
+      </p>
+<!-- Quiet Audio Activity Bar -->
+<div class="mt-3 flex items-center gap-1 px-3 py-1 rounded-full bg-surface-container-lowest/60 backdrop-blur-sm border border-outline-variant/15">
+<span class="material-symbols-outlined text-outline text-[14px]">mic</span>
+<div class="flex items-center gap-0.5 h-3 px-1">
+<span class="w-1 bg-primary rounded-full mic-bar-1"></span>
+<span class="w-1 bg-primary rounded-full mic-bar-2"></span>
+<span class="w-1 bg-primary rounded-full mic-bar-3"></span>
+<span class="w-1 bg-primary rounded-full mic-bar-4"></span>
+</div>
+</div>
+</div>
+<!-- LOWER THUMB CONTROLS (Recording Phase) -->
+<div class="relative z-20 flex flex-col items-center pb-10 px-6 w-full" id="recordingControls">
+<!-- Progress Bar Track -->
+<div class="w-full max-w-[280px] mb-6">
+<div class="w-full h-1 bg-surface-container-highest/80 rounded-full overflow-hidden p-0">
+<div class="h-full bg-primary-container rounded-full w-[26%] transition-all duration-300" style="background-color: #C9973B;"></div>
+</div>
+<div class="flex justify-between items-center mt-1 px-0.5">
+<span class="font-label-sm text-label-sm text-outline">0:46 in</span>
+<span class="font-label-sm text-label-sm text-outline">Wednesday dispatch</span>
+</div>
+</div>
+<!-- Thumb Zone Record Trigger Cluster -->
+<div class="flex items-center justify-around w-full max-w-[320px]">
+<!-- Pause / Resume Toggle -->
+<button class="flex flex-col items-center gap-1 text-on-surface-variant hover:text-primary active:scale-95 transition-all" type="button">
+<div class="w-11 h-11 rounded-full bg-surface-container-high/80 backdrop-blur-md border border-outline-variant/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">pause</span>
+</div>
+<span class="font-label-sm text-label-sm text-outline">Pause</span>
+</button>
+<!-- Big Tactile Record / Stop Trigger -->
+<div class="relative flex items-center justify-center p-2">
+<!-- Circular Timer Ring Graphic -->
+<svg class="w-24 h-24 transform -rotate-90 pointer-events-none" viewbox="0 0 100 100">
+<circle class="text-surface-container-highest/50" cx="50" cy="50" fill="transparent" r="44" stroke="currentColor" stroke-width="3"></circle>
+<circle class="text-primary-container" cx="50" cy="50" fill="transparent" r="44" stroke="currentColor" stroke-dasharray="276" stroke-dashoffset="72" stroke-linecap="round" stroke-width="3.5" style="stroke: #C9973B;"></circle>
+</svg>
+<!-- Core Button (Stop / Finish Recording) -->
+<button aria-label="Finish recording" class="absolute w-[68px] h-[68px] rounded-full bg-primary-container text-on-primary-container flex items-center justify-center ritual-amber-glow active:scale-95 transition-transform duration-150 group" id="stopRecordBtn" style="background-color: #C9973B; box-shadow: 0 10px 30px -4px rgba(201, 151, 59, 0.35);" type="button">
+<!-- Square stop token inside amber disc -->
+<div class="w-6 h-6 rounded-md bg-surface-container-lowest group-hover:scale-95 transition-transform"></div>
+</button>
+</div>
+<!-- Finish / Next Step Shortcut -->
+<button class="flex flex-col items-center gap-1 text-on-surface-variant hover:text-primary active:scale-95 transition-all" id="quickReviewBtn" type="button">
+<div class="w-11 h-11 rounded-full bg-surface-container-high/80 backdrop-blur-md border border-outline-variant/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">check</span>
+</div>
+<span class="font-label-sm text-label-sm text-outline">Done</span>
+</button>
+</div>
+<!-- Australian Parlour subtle note -->
+<span class="mt-4 font-label-sm text-label-sm text-outline/80 tracking-wide">
+        Tap the square when you've finished yarnin'
+      </span>
+</div>
+<!-- REVIEW & DISPATCH TRAY (Sliding Drawer Overlay) -->
+<!-- Defaults to hidden; toggled when user finishes recording -->
+<div class="hidden absolute inset-x-0 bottom-0 z-40 bg-surface-container/95 backdrop-blur-xl border-t border-outline-variant/25 rounded-t-[2rem] pt-3 pb-8 px-5 flex flex-col shadow-2xl transition-all duration-300" id="reviewDrawer">
+<!-- Sheet Pull Handle -->
+<div class="w-9 h-1 rounded-full bg-outline/40 mx-auto mb-4"></div>
+<!-- Headline & Reassurance -->
+<div class="flex items-center justify-between mb-3">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface font-normal">
+            Sounds good, or want another go?
+          </h2>
+<p class="font-body-sm text-body-sm text-outline mt-0.5">
+            Recorded just now • 0:46 catchup
+          </p>
+</div>
+<div class="px-2.5 py-1 rounded-full bg-tertiary/15 border border-tertiary-container/30">
+<span class="font-label-sm text-label-sm text-tertiary">Ready</span>
+</div>
+</div>
+<!-- Mini Inline Playback Scrubber Card -->
+<div class="p-3 rounded-xl bg-surface-container-low border border-outline-variant/20 mb-4 flex items-center gap-3">
+<button aria-label="Play preview" class="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center flex-shrink-0 active:scale-95 transition-transform" id="playPreviewBtn" style="background-color: #C9973B;" type="button">
+<span class="material-symbols-outlined text-[22px]">play_arrow</span>
+</button>
+<div class="flex-1">
+<!-- Timeline scrubber track -->
+<div class="w-full bg-surface-container-highest h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full w-1/3" style="background-color: #C9973B;"></div>
+</div>
+<div class="flex justify-between items-center mt-1.5">
+<span class="font-label-sm text-label-sm text-outline">0:15</span>
+<span class="font-label-sm text-label-sm text-outline">-0:31</span>
+</div>
+</div>
+<button aria-label="Audio mute/unmute" class="text-outline hover:text-on-surface p-1" type="button">
+<span class="material-symbols-outlined text-[18px]">volume_up</span>
+</button>
+</div>
+<!-- Optional 140-char Dispatch Caption Field -->
+<div class="mb-4">
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1.5" for="catchupCaption">
+          Add a quiet note for the lads (optional)
+        </label>
+<div class="relative">
+<input class="w-full bg-surface-container-lowest border border-outline-variant/30 rounded-xl px-3.5 py-2.5 text-on-surface placeholder:text-outline/60 font-body-md text-body-md focus:outline-none focus:border-primary-container transition-colors" id="catchupCaption" maxlength="140" placeholder="Boiled the kettle, kids finally asleep..." type="text"/>
+<span class="absolute right-3 top-3 font-label-sm text-label-sm text-outline/60">
+            140
+          </span>
+</div>
+</div>
+<!-- Action Decision: Redo vs Keep & Send -->
+<div class="flex items-center gap-3 pt-1">
+<!-- Redo (Quiet Button) -->
+<button class="flex-1 min-h-[50px] px-4 py-2.5 rounded-full bg-surface-container-high/60 border border-outline-variant/30 text-on-surface-variant font-label-md text-label-md flex items-center justify-center gap-1.5 hover:bg-surface-container-highest active:scale-98 transition-all" id="redoBtn" type="button">
+<span class="material-symbols-outlined text-[18px]">refresh</span>
+<span>Redo</span>
+</button>
+<!-- Primary Dispatch Button -->
+<button class="flex-[2] min-h-[50px] px-5 py-2.5 rounded-full bg-primary-container text-on-primary-container font-label-md text-label-md font-semibold flex items-center justify-center gap-2 ritual-amber-glow active:scale-98 transition-all" id="sendCatchupBtn" style="background-color: #C9973B; box-shadow: 0 10px 30px -4px rgba(201, 151, 59, 0.35);" type="button">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">send</span>
+<span>Send to Old Grammarians</span>
+</button>
+</div>
+</div>
+<!-- POST-SEND SUCCESS SHEET (Celebration Toast) -->
+<div class="hidden absolute inset-0 z-50 bg-surface-container-lowest/90 backdrop-blur-md flex flex-col items-center justify-center px-6 text-center" id="successState">
+<div class="w-16 h-16 rounded-full bg-tertiary-container/30 border border-tertiary flex items-center justify-center text-tertiary mb-4">
+<span class="material-symbols-outlined text-[32px]">check_circle</span>
+</div>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mb-2 font-normal">
+        Dispatched to the parlour.
+      </h3>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-[260px] mb-6">
+        The circle of 8 mates has your weekly catchup. The kettle's warm.
+      </p>
+<button class="min-h-[48px] px-6 py-2.5 rounded-full bg-surface-container-high border border-outline-variant/30 text-on-surface font-label-md text-label-md active:scale-95 transition-all" onclick="window.history.back()" type="button">
+        Back to This Week
+      </button>
+</div>
+</div>
+<!-- Micro-interactions & State Script -->
+<script>
+    const stopRecordBtn = document.getElementById('stopRecordBtn');
+    const quickReviewBtn = document.getElementById('quickReviewBtn');
+    const reviewDrawer = document.getElementById('reviewDrawer');
+    const recordingControls = document.getElementById('recordingControls');
+    const redoBtn = document.getElementById('redoBtn');
+    const sendCatchupBtn = document.getElementById('sendCatchupBtn');
+    const successState = document.getElementById('successState');
+    const flipCamBtn = document.getElementById('flipCamBtn');
+    const cameraViewfinder = document.getElementById('cameraViewfinder');
+    const playPreviewBtn = document.getElementById('playPreviewBtn');
+
+    function openReview() {
+      recordingControls.classList.add('opacity-0', 'pointer-events-none');
+      reviewDrawer.classList.remove('hidden');
+    }
+
+    function resetToRecording() {
+      reviewDrawer.classList.add('hidden');
+      recordingControls.classList.remove('opacity-0', 'pointer-events-none');
+    }
+
+    stopRecordBtn.addEventListener('click', openReview);
+    quickReviewBtn.addEventListener('click', openReview);
+    redoBtn.addEventListener('click', resetToRecording);
+
+    // Flip Camera Subtle Animation
+    let isFlipped = false;
+    flipCamBtn.addEventListener('click', () => {
+      isFlipped = !isFlipped;
+      cameraViewfinder.style.transform = isFlipped ? 'scaleX(-1)' : 'scaleX(1)';
+    });
+
+    // Playback Toggle
+    let isPlaying = false;
+    playPreviewBtn.addEventListener('click', () => {
+      isPlaying = !isPlaying;
+      playPreviewBtn.innerHTML = isPlaying 
+        ? '<span class="material-symbols-outlined text-[22px]">pause</span>' 
+        : '<span class="material-symbols-outlined text-[22px]">play_arrow</span>';
+    });
+
+    // Send catchup simulation
+    sendCatchupBtn.addEventListener('click', () => {
+      reviewDrawer.classList.add('hidden');
+      successState.classList.remove('hidden');
+    });
+  </script>
+</body></html>

@@ -1,0 +1,410 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Waffle Wednesday — The Hearth &amp; Table</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-tertiary-container": "#2d2927",
+            "on-background": "#e8e1dd",
+            "on-secondary-fixed": "#101f11",
+            "surface-dim": "#151311",
+            "inverse-on-surface": "#33302d",
+            "outline": "#a28d7e",
+            "on-surface-variant": "#dac2b2",
+            "surface-container-low": "#1d1b19",
+            "on-primary-fixed": "#2f1500",
+            "primary-fixed-dim": "#ffb77e",
+            "on-tertiary-fixed": "#1f1b19",
+            "surface-container-highest": "#373432",
+            "primary-container": "#d17c2f",
+            "error-container": "#93000a",
+            "tertiary-fixed": "#eae1dd",
+            "inverse-primary": "#914c00",
+            "surface": "#151311",
+            "error": "#ffb4ab",
+            "on-secondary": "#253425",
+            "tertiary-container": "#968f8c",
+            "surface-bright": "#3c3936",
+            "on-error-container": "#ffdad6",
+            "surface-container-high": "#2c2927",
+            "surface-variant": "#373432",
+            "background": "#151311",
+            "on-primary-container": "#442000",
+            "on-error": "#690005",
+            "surface-container-lowest": "#100e0c",
+            "on-secondary-fixed-variant": "#3b4b3b",
+            "on-tertiary-fixed-variant": "#4b4643",
+            "tertiary": "#cdc5c1",
+            "on-tertiary": "#342f2d",
+            "on-surface": "#e8e1dd",
+            "surface-tint": "#ffb77e",
+            "surface-container": "#211f1d",
+            "secondary": "#bacbb6",
+            "inverse-surface": "#e8e1dd",
+            "secondary-container": "#3b4b3b",
+            "on-primary-fixed-variant": "#6e3900",
+            "outline-variant": "#544438",
+            "primary-fixed": "#ffdcc3",
+            "tertiary-fixed-dim": "#cdc5c1",
+            "secondary-fixed-dim": "#bacbb6",
+            "on-primary": "#4d2600",
+            "secondary-fixed": "#d5e8d2",
+            "primary": "#ffb77e",
+            "on-secondary-container": "#a8baa5"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-md": "1.25rem",
+            "space-sm": "0.75rem",
+            "space-xl": "3rem",
+            "margin": "2rem",
+            "gutter-lg": "2.5rem",
+            "margin-sm": "1.25rem",
+            "gutter-sm": "1rem",
+            "space-xs": "0.375rem",
+            "margin-lg": "4rem",
+            "gutter": "1.5rem",
+            "space-lg": "2rem"
+          },
+          "fontFamily": {
+            "headline-sm": ["EB Garamond", "serif"],
+            "headline-lg-mobile": ["EB Garamond", "serif"],
+            "label-md": ["Manrope", "sans-serif"],
+            "body-lg": ["Manrope", "sans-serif"],
+            "body-md": ["Manrope", "sans-serif"],
+            "headline-lg": ["EB Garamond", "serif"],
+            "display-lg": ["EB Garamond", "serif"],
+            "body-sm": ["Manrope", "sans-serif"],
+            "headline-md": ["EB Garamond", "serif"],
+            "label-sm": ["Manrope", "sans-serif"]
+          },
+          "fontSize": {
+            "headline-sm": ["1.25rem", { lineHeight: "1.75rem", letterSpacing: "0em", fontWeight: "500" }],
+            "headline-lg-mobile": ["1.75rem", { lineHeight: "2.25rem", letterSpacing: "0em", fontWeight: "400" }],
+            "label-md": ["0.8125rem", { lineHeight: "1.25rem", letterSpacing: "0.06em", fontWeight: "600" }],
+            "body-lg": ["1.125rem", { lineHeight: "1.875rem", letterSpacing: "0.01em", fontWeight: "400" }],
+            "body-md": ["0.9375rem", { lineHeight: "1.6rem", letterSpacing: "0.01em", fontWeight: "400" }],
+            "headline-lg": ["2.25rem", { lineHeight: "2.75rem", letterSpacing: "-0.005em", fontWeight: "400" }],
+            "display-lg": ["3rem", { lineHeight: "3.5rem", letterSpacing: "-0.01em", fontWeight: "400" }],
+            "body-sm": ["0.8125rem", { lineHeight: "1.375rem", letterSpacing: "0.02em", fontWeight: "400" }],
+            "headline-md": ["1.625rem", { lineHeight: "2.125rem", letterSpacing: "0em", fontWeight: "500" }],
+            "label-sm": ["0.6875rem", { lineHeight: "1rem", letterSpacing: "0.08em", fontWeight: "600" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 20px;
+      line-height: 1;
+      display: inline-block;
+      text-transform: none;
+      letter-spacing: normal;
+      word-wrap: normal;
+      white-space: nowrap;
+      direction: ltr;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    /* Hearth Glow & Inset Well Tokens */
+    .ember-glow {
+      box-shadow: 0 16px 48px -12px rgba(200, 117, 40, 0.22);
+    }
+    .sunken-well {
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.7);
+    }
+    .ghost-border {
+      border: 1px solid rgba(221, 214, 206, 0.08);
+    }
+    .ghost-border-active {
+      border: 1px solid rgba(200, 117, 40, 0.4);
+    }
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background min-h-screen selection:bg-primary-container selection:text-on-primary-container font-body-md antialiased pb-32">
+<!-- Mobile Wrapper Container -->
+<div class="max-w-lg mx-auto relative min-h-screen bg-surface-container-lowest flex flex-col shadow-2xl">
+<!-- TopAppBar (from Shared Components) -->
+<header class="bg-surface dark:bg-surface border-b border-outline-variant/30 sticky top-0 z-40 transition-all duration-200">
+<div class="flex justify-between items-center w-full px-margin-sm py-space-sm max-w-lg mx-auto">
+<div class="flex items-center gap-2 text-primary dark:text-primary">
+<span class="material-symbols-outlined text-primary text-[22px]">local_cafe</span>
+<span class="text-headline-sm font-headline-sm font-semibold tracking-tight text-on-surface dark:text-on-surface">Old Grammarians</span>
+</div>
+<button class="flex items-center gap-1.5 px-space-xs py-1 rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary transition-colors duration-200 active:scale-95">
+<span class="text-label-sm font-label-sm font-medium">Circles</span>
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">unfold_more</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 px-margin-sm pt-space-md space-y-space-lg">
+<!-- Atmosphere & Master Ritual Banner -->
+<section class="space-y-space-sm">
+<div class="space-y-1"><div class="flex items-center justify-between"><h1 class="text-headline-lg-mobile font-headline-lg-mobile text-on-surface font-normal">Wednesday Evening</h1><span class="text-label-sm font-label-sm text-outline">Week 42 · 4 of 7</span></div></div>
+<!-- Master Sequence Action (Single prominent tap for unhurried flow) -->
+<div class="relative overflow-hidden rounded-xl bg-surface-container border border-outline-variant/40 p-space-md ember-glow group">
+<div class="absolute -right-6 -bottom-6 w-28 h-28 bg-primary/10 rounded-full blur-xl pointer-events-none"></div>
+<div class="relative z-10 flex items-center justify-between gap-4"><div><h2 class="text-headline-sm font-headline-sm text-on-surface font-medium">Play all</h2><p class="text-body-sm font-body-sm text-on-surface-variant">10m 40s</p></div><button aria-label="Play all" class="shrink-0 w-12 h-12 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center shadow-lg transition-transform duration-200 group-hover:scale-105 active:scale-95 hover:bg-primary"><span class="material-symbols-outlined text-[28px] pl-0.5" style="font-variation-settings: 'FILL' 1;">play_arrow</span></button></div>
+</div>
+</section>
+<!-- 'At a Glance' Hearth Table Row (Round Table of Mates) -->
+<section class="space-y-2.5">
+<div class="flex items-center justify-between">
+<span class="text-label-md font-label-md tracking-wider text-tertiary uppercase">The Round Table</span>
+
+</div>
+<!-- Horizontal Scrollable Seats -->
+<div class="flex items-start gap-3 overflow-x-auto hide-scrollbar -mx-margin-sm px-margin-sm py-1">
+<!-- Seat 1: Tom (Active) -->
+<div class="flex flex-col items-center gap-1.5 shrink-0 w-18">
+<div class="relative p-0.5 rounded-full ghost-border-active bg-surface-container-high ember-glow">
+<div class="w-14 h-14 rounded-full overflow-hidden sunken-well">
+<img class="w-full h-full object-cover" data-alt="A warm candid portrait of a 30-year-old Australian man in a cozy dimly lit home kitchen with wooden cabinets and warm pendant amber lighting in an intimate heirloom style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSv8fqeNGEhFKprbhJtUJ4eIp6dRS5_6G1anHIh4OLOv_9ISQAEPrlrnVVb79ErXFX4ITlty8H34hai-_nzPZtNQMBFpjcuoTmFmB4joYS-Z-qjAMl9PpcGahjCtTfBWP_J8TYT9W2RGtdZpt_JfQZd4d61byrloWC6lWIVqY-Y-iW2Ijcau-E7_e7TS-tzaqenJXpXphmtuxoQ1SiG7wj7P7hTsZObBQmJ3sk8zVvUhjIowOVFJt1Zw">
+</div>
+<span class="absolute -bottom-1 -right-0.5 bg-surface-container-highest text-primary text-[10px] font-label-sm font-semibold px-1.5 py-0.5 rounded-full border border-outline-variant/60 shadow">
+                2:41
+              </span>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface font-medium truncate w-full text-center">Tom</span>
+</div>
+<!-- Seat 2: Sarah (Active) -->
+<div class="flex flex-col items-center gap-1.5 shrink-0 w-18">
+<div class="relative p-0.5 rounded-full ghost-border-active bg-surface-container-high ember-glow">
+<div class="w-14 h-14 rounded-full overflow-hidden sunken-well">
+<img class="w-full h-full object-cover" data-alt="Warm intimate candid portrait of a woman in an oversized woolen sweater sitting beside a soft glowing brick hearth in Hobart with evening shadows and deep espresso peat tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnzxet-DmpgQt43qvWbZ1cNFekPEBR3A_PI8HxJ8kHoDEIV6jsNIbweg0J12SEOaQbwdomIHzU54nAbmipYRuFhBe8OX99LRFXmRhH5KXQMsLbRfkkcvu-3sODgYi1h95nVlwqtcdwLV3_8olUEK3bjyBv9KVeWm84fF8_8EBXsneofu5ZRUsKVdSPA5cCUxMzSxXe3IzgnFMzTb775Kks5YFDmZBs5blunjFyatzy-LO2b6z9Y-oJFA">
+</div>
+<span class="absolute -bottom-1 -right-0.5 bg-surface-container-highest text-primary text-[10px] font-label-sm font-semibold px-1.5 py-0.5 rounded-full border border-outline-variant/60 shadow">
+                1:58
+              </span>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface font-medium truncate w-full text-center">Sarah</span>
+</div>
+<!-- Seat 3: Marcus (Active) -->
+<div class="flex flex-col items-center gap-1.5 shrink-0 w-18">
+<div class="relative p-0.5 rounded-full ghost-border-active bg-surface-container-high ember-glow">
+<div class="w-14 h-14 rounded-full overflow-hidden sunken-well">
+<img class="w-full h-full object-cover" data-alt="Candid side-profile of a young academic man sitting at an oak library desk cluttered with manuscripts illuminated by a brass green banker lamp with warm nostalgic dusk lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDegccZYQSEZbAqxBkU_fqQFSUOVAGzZVZQedAxA3VU_4ftSJ1glL_H9vXOS_2_QsfgL-U0QnrTKYNsGXDeQbrHRAQZqRGizdK9WZ7neh_lmwr0xuWk8ndajq8jgHyWaSSR2qIBcdWq_2EMcMsB-LS1y_1vFb2ysFxM5yVu7BWkCXVCxrmG7o936j47poG6ildlkIbbE-nYA1fh97baC6If0nDJQ_2tJzjkyqkOYf7f4wmPu-rYjX4GQw">
+</div>
+<span class="absolute -bottom-1 -right-0.5 bg-surface-container-highest text-primary text-[10px] font-label-sm font-semibold px-1.5 py-0.5 rounded-full border border-outline-variant/60 shadow">
+                3:00
+              </span>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface font-medium truncate w-full text-center">Marcus</span>
+</div>
+<!-- Seat 4: Dave (Active) -->
+<div class="flex flex-col items-center gap-1.5 shrink-0 w-18">
+<div class="relative p-0.5 rounded-full ghost-border-active bg-surface-container-high ember-glow">
+<div class="w-14 h-14 rounded-full overflow-hidden sunken-well">
+<img class="w-full h-full object-cover" data-alt="Candid relaxed close-up of a smiling man on a tropical Queensland wooden verandah at blue hour with string lights reflecting warm ember tones on dark timber" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDd1y3shbBq7yYp9Q4gyKjBC2uvQKOlX7e7hj3RzRHssQ-sNj8HZHnN6t6HO8R3-To_twZGJQh-swo9PsQUcdx2SWEoCIkZR2UnAv2EqoZ0GEBjd9IloCB8PWTfRKFfYQAfI9wwGvkHBE0oY9bTKhDCqUt3hiJYkjly7B7U04rgaljvsKCXVH_CRX7kYQkDDrcC1kpvfj2o3pjFZ5kTurcV1b9hxKaTXHvwmIbtwuwrDsE_7cgNDAz7iA">
+</div>
+<span class="absolute -bottom-1 -right-0.5 bg-surface-container-highest text-primary text-[10px] font-label-sm font-semibold px-1.5 py-0.5 rounded-full border border-outline-variant/60 shadow">
+                2:15
+              </span>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface font-medium truncate w-full text-center">Dave</span>
+</div>
+<!-- Seat 5: Liam (Gentle Empty Seat - No guilt/shame) -->
+<div class="flex flex-col items-center gap-1.5 shrink-0 w-18 opacity-75">
+<div class="relative p-0.5 rounded-full border border-dashed border-outline-variant/50 bg-surface-container-low/60">
+<div class="w-14 h-14 rounded-full flex items-center justify-center text-outline">
+<span class="material-symbols-outlined text-[22px]">nest_heat_link_gen_3</span>
+</div>
+</div>
+<span class="text-label-sm font-label-sm text-outline truncate w-full text-center">Liam</span>
+</div>
+<!-- Seat 6: Hugh (Quiet / Saving a seat) -->
+<div class="flex flex-col items-center gap-1.5 shrink-0 w-18 opacity-70">
+<div class="relative p-0.5 rounded-full border border-dashed border-outline-variant/50 bg-surface-container-low/60">
+<div class="w-14 h-14 rounded-full flex items-center justify-center text-outline">
+<span class="material-symbols-outlined text-[20px]">chair</span>
+</div>
+</div>
+<span class="text-label-sm font-label-sm text-outline truncate w-full text-center">Hugh</span>
+</div>
+<!-- Seat 7: Cam (Quiet tonight) -->
+<div class="flex flex-col items-center gap-1.5 shrink-0 w-18 opacity-65">
+<div class="relative p-0.5 rounded-full border border-dashed border-outline-variant/40 bg-surface-container-low/40">
+<div class="w-14 h-14 rounded-full flex items-center justify-center text-outline/80">
+<span class="material-symbols-outlined text-[20px]">nightlight</span>
+</div>
+</div>
+<span class="text-label-sm font-label-sm text-outline/80 truncate w-full text-center">Cam</span>
+</div>
+</div>
+</section>
+<!-- The Dispatches: Organic Varied Dispatch Cards -->
+<section class="space-y-space-md pt-1">
+<div class="flex items-baseline justify-between"><h2 class="text-headline-sm font-headline-sm text-on-surface">Dispatches</h2></div>
+<div class="space-y-space-md">
+<!-- Card 1: Featured Dispatch (Tom Higgins) -->
+<article class="bg-surface-container rounded-xl ghost-border overflow-hidden ember-glow transition-all duration-200 hover:border-outline-variant">
+<div class="p-space-md space-y-space-sm">
+<!-- Friend Meta Header -->
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<div class="w-9 h-9 rounded-full overflow-hidden sunken-well border border-outline-variant/60">
+<img class="w-full h-full object-cover" data-alt="A portrait photograph of a 30s man smiling in a rustic workshop setting bathed in soft warm golden light and deep smoked peat tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4D1sHSkzbRYRw7UnLg73vOmYo6vMx_TWR7J1Js37Ohl4bhnCuMXMFIJiW9bdFVYfltnsv5Ids1k91E2uK_PRcDnV_x-p7Nci8b47mTMzelY1q4d9RrXxiX_HhvgVhvJ9JmaJxHwPmSd2cy_MRsmWLSBCwV7RGVO2Ar4lBGdFhx_xmDFBsNPaQarfkzgytV_-ma_7jWUZamO0-Tj8dvlTJ0enGf8jzy-gEkK9-YZ7YMQu4EkyvX8bnSQ">
+</div>
+<div>
+<h3 class="text-body-md font-body-md font-semibold text-on-surface">Tom Higgins</h3>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Melbourne · 45m ago</p>
+</div>
+</div>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-primary-container/20 text-primary text-label-sm font-label-sm font-medium">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">graphic_eq</span>
+                  2:41
+                </span>
+</div>
+<!-- Media Preview Well -->
+<div class="relative w-full h-44 rounded-lg overflow-hidden sunken-well group cursor-pointer">
+<img class="w-full h-full object-cover brightness-90 group-hover:scale-102 transition-transform duration-300" data-alt="Warm atmospheric candid video still frame of a messy kitchen under renovation with unpainted plasterboards, exposed wooden beams, and a steamy mug of tea on a sawhorse in soft evening amber chiaroscuro light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD21IfkD0DDGyh0nWoCU6oA1v3yNWSgOlhk1X9yp57OkWByV082N4zXVs4vUX0bb15efrR6834BuifDOcy_jyYOw40LUguWt-wEXVPIRg5dbF5SEa1kF3gUgfacHTR301TfNRpavL1H8j3rPQzCP0VwRLCbcluBK_vnLvK3tCHiztkn1ltmKnJfTVGsQCwX9D6BPohHJ5y7fbHaRGvgX9_aT5IftBRJ8pfbZHnhbYV5VmBz3be-eV_SYg">
+<div class="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent"></div>
+<!-- Play Trigger Pill Overlay -->
+<div class="absolute bottom-3 left-3 flex items-center justify-center w-9 h-9 rounded-full bg-surface-container-lowest/80 backdrop-blur-md border border-outline-variant/30 text-primary shadow"><span class="material-symbols-outlined text-[20px] pl-0.5" style="font-variation-settings: 'FILL' 1;">play_arrow</span></div>
+</div>
+<!-- Quote Snippet / Note -->
+<blockquote class="italic font-headline-sm text-headline-sm text-on-surface/90 leading-relaxed pl-3 border-l-2 border-primary-container/70">
+                “Kitchen renovation disaster and why I hate Bunnings paint swatches.”
+              </blockquote>
+<!-- Flow Context Prompt -->
+
+</div>
+</article>
+<!-- Card 2: Sarah Lin -->
+<article class="bg-surface-container rounded-xl ghost-border p-space-md space-y-space-sm transition-all duration-200 hover:border-outline-variant">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<div class="w-9 h-9 rounded-full overflow-hidden sunken-well border border-outline-variant/50">
+<img class="w-full h-full object-cover" data-alt="An intimate candid portrait of a young woman with a cup of coffee sitting in front of a warm fireplace in Tasmania in warm cozy cinematic light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD59dQReQHmqKqonXYX-EHzQBQ1KpxVv3t79Be-jAI6XK2nXsjSYyjWQV0sSgSA-VDYx8ef2iTUvjDusQKf4FlmE3gAuxtMBfq3qQ8aF-Xpgxs8imQ0F1-UxPwnIwRWvNbqKTlKeOBw1iQWwn19zIICTAQnE0elCZiQeUNQ63YShiIoMY1AfAYE0MgbMvjihg4huQ2JzimA2I1VDbwOMNGXazBnXSQvSx9YihjVmm3AnvFzq1xpt3vcig">
+</div>
+<div>
+<h3 class="text-body-md font-body-md font-semibold text-on-surface">Sarah Lin</h3>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Hobart · 2h ago</p>
+</div>
+</div>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container-high text-primary text-label-sm font-label-sm font-medium">
+<span class="material-symbols-outlined text-[14px]">graphic_eq</span>
+                1:58
+              </span>
+</div>
+<!-- Inset Snapshot & Audio Bar -->
+<div class="flex gap-3 items-center">
+<div class="w-20 h-20 rounded-lg overflow-hidden shrink-0 sunken-well border border-outline-variant/30">
+<img class="w-full h-full object-cover" data-alt="A gentle brindle greyhound curled up fast asleep on a worn leather armchair by a fireplace with glowing amber embers and warm atmospheric lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBfCHv0pDcZHJ0ALSO_BJY6rxfQaXHJraW-qE0cc6jG-4qbPnTCF5XoYff-m1fi7TA59iDf_Uo75jmGD65rXlqKxM8l3mWXNTuullG52hzryBPNEgE4p5rgp8msX98RaW8VetitQvUrHcHRDq4Me-H6pxvnbs9tbFyAHLDQzBjncSDqienkbOuJwWbRHE83XTVI2xRCcMw94OGLbQmBTQ0LHNRjz8Q8chImtrXkYezpN6yj557OObvujQ">
+</div>
+<div class="flex-1 space-y-2">
+<blockquote class="italic font-headline-sm text-body-lg text-on-surface leading-snug">
+                  “Adopted a greyhound. He sleeps 20 hours a day.”
+                </blockquote>
+
+</div>
+</div>
+<!-- Subtle Flow Reminder -->
+
+</article>
+<!-- Card 3: Marcus Bell -->
+<article class="bg-surface-container rounded-xl ghost-border p-space-md space-y-space-sm transition-all duration-200 hover:border-outline-variant">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<div class="w-9 h-9 rounded-full overflow-hidden sunken-well border border-outline-variant/50">
+<img class="w-full h-full object-cover" data-alt="Candid photograph of a young man with wire-rimmed glasses in an old university bookshop reading room surrounded by rich peat wood and amber glow" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5S0PaA93s5DJ2XOzCaYplxcuDIzeZsEA7ac2qcuxsPUWUGyMajQCT5JjMoCDGjF9jI3C3vT7BNyBClaIEVm-L3RMt9DTr8hVuYYsQFGg5kha2ffyFh4bCpmW6sVIeezvqIjaWsbFoe8q8ldbyvJXlYZH3udIZY5OSC3OTGOHchkdOT1_3rPzAvNijD2wQjN9ZT8HjLAvZJwhPbowW-v17H9mZwatpEuj1KmVqH5hRydoj4cXh8JLjMw">
+</div>
+<div>
+<h3 class="text-body-md font-body-md font-semibold text-on-surface">Marcus Bell</h3>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Sydney · 4h ago</p>
+</div>
+</div>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container-high text-primary text-label-sm font-label-sm font-medium">
+<span class="material-symbols-outlined text-[14px]">graphic_eq</span>
+                3:00
+              </span>
+</div>
+<div class="flex gap-3 items-center">
+<div class="w-20 h-20 rounded-lg overflow-hidden shrink-0 sunken-well border border-outline-variant/30">
+<img class="w-full h-full object-cover" data-alt="A rustic wooden desk with a stack of thesis papers, an empty fountain pen, and a cold pint glass with condensation under moody library lamp lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGq6X8IKuzjlY0fIAxSt8_IF1NhRBtp2tV3SuChyiYmlh2Z9opOWhZMf6S-WXOtAT3pckysuM_JRywc3xlYv2_I2MwudnKr4y6Eytq2vPUMR7bi1gDhYGXsPZbM8OfT1vwv57eWx6yetVkUdlz5HQx0iJ6lHvM2bGX_QxAkf7FfD28EfEcCkDz-IaQ_CWNvYITsf4qTxriMGXApdeNLLHZWfwpfUB9fpGoonFo6qMvrmqllXkF8DsfTQ">
+</div>
+<div class="flex-1 space-y-1.5">
+<blockquote class="italic font-headline-sm text-body-lg text-on-surface leading-snug">
+                  “Finally handed in the thesis draft. Need three pints.”
+                </blockquote>
+
+</div>
+</div>
+
+</article>
+<!-- Card 4: Dave O'Connor -->
+<article class="bg-surface-container rounded-xl ghost-border p-space-md space-y-space-sm transition-all duration-200 hover:border-outline-variant">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<div class="w-9 h-9 rounded-full overflow-hidden sunken-well border border-outline-variant/50">
+<img class="w-full h-full object-cover" data-alt="Warm candid portrait of a 30s bearded man smiling on an open Queensland wooden patio with lush tropical ferns at dusk in soft amber illumination" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAIY2FUuJl1y4my9_1YVlDbvHSt5v6K-psZTK4jRIu0KtbPzWwBzNu7cCGKuh9EgwfbxWDQFmU3VLc9dRd69Z8cc55_llCUxW-UTZ7r32x2PzmAQtSAL3gr3OUchOVc30gVIUU6o0ETphkOKidY5wbwBxa04lHBtdyJ1m18TR_C54J3rzRKI-SEtKhnye3_GF8ATeymFwIE4PBjVf9-69BWzqO7Aolm0VKF7tYAD2lc3G6n07LLlsM_ag">
+</div>
+<div>
+<h3 class="text-body-md font-body-md font-semibold text-on-surface">Dave O'Connor</h3>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Brisbane · 5h ago</p>
+</div>
+</div>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container-high text-primary text-label-sm font-label-sm font-medium">
+<span class="material-symbols-outlined text-[14px]">graphic_eq</span>
+                2:15
+              </span>
+</div>
+<div class="flex gap-3 items-center">
+<div class="w-20 h-20 rounded-lg overflow-hidden shrink-0 sunken-well border border-outline-variant/30">
+<img class="w-full h-full object-cover" data-alt="A lush dimly lit subtropical balcony garden with monsteras and terracotta pots during a quiet warm summer evening drizzle with soft outdoor lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCqua07HCWcR_pUmxRIx2NKGsY2DWEE1xx22Ou9rR103XYywR0SIKrcAlm_tOmAo1PtPLc5auzPozrt_NLxyWK2MX_fHvL9gmrWdK0qiT8R3sf6Z25k5EY4KAkZGaDYcez9y2PPSFnN5gMQ7MRSH3djZyD6DfbR9edgK9cHH0aPLxqqdBOgAkTxsXo8QknAOw7_BiVONPWq_fDinC-3rLk93dek7nig3Hum2HvH13XJOQor2q-svAwDhA">
+</div>
+<div class="flex-1 space-y-1.5">
+<blockquote class="italic font-headline-sm text-body-lg text-on-surface leading-snug">
+                  “Humid as hell up here. Quick garden update.”
+                </blockquote>
+
+</div>
+</div>
+
+</article>
+<!-- Quiet Empty Seats Hearth Note (Gentle, warm, non-transactional) -->
+
+</div>
+</section>
+</main>
+<!-- Warm Tactile Floating Dock / Thumb Bar -->
+<div class="fixed bottom-0 left-0 w-full z-50 pointer-events-none pb-2">
+<div class="max-w-lg mx-auto px-margin-sm pointer-events-auto">
+<!-- Tactile Pill Dock -->
+<div class="bg-surface-container-high/95 backdrop-blur-xl border border-outline-variant/40 rounded-2xl shadow-2xl p-2 flex items-center justify-between gap-2 ember-glow"><button class="flex-1 flex items-center justify-center gap-2 bg-surface-container py-3 px-3 rounded-xl border border-outline-variant/30 text-on-surface hover:text-primary transition-all active:scale-97"><span class="material-symbols-outlined text-primary text-[20px]" style="font-variation-settings: 'FILL' 1;">play_arrow</span><span class="text-label-sm font-label-sm font-semibold">Play All</span></button><button class="flex-1 flex items-center justify-center gap-2 bg-primary-container text-on-primary-container py-3 px-3 rounded-xl shadow-lg transition-all hover:bg-primary active:scale-97 font-medium"><span class="material-symbols-outlined text-[20px]">videocam</span><span class="text-label-sm font-label-sm font-bold">Record</span></button><div class="flex items-center border-l border-outline-variant/30 pl-2 space-x-1"><button aria-label="This Week" class="flex flex-col items-center justify-center bg-primary-container/20 dark:bg-primary-container/20 text-primary dark:text-primary rounded-xl px-space-sm py-1.5 active:scale-96 transition-transform"><span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">fireplace</span><span class="text-[10px] font-label-sm font-medium mt-0.5">This Week</span></button><button aria-label="Archive" class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-space-sm py-1.5 hover:text-primary dark:hover:text-primary transition-colors active:scale-96"><span class="material-symbols-outlined text-[20px]">auto_stories</span><span class="text-[10px] font-label-sm mt-0.5">Archive</span></button></div></div>
+</div>
+</div>
+</div>
+
+
+</body></html>

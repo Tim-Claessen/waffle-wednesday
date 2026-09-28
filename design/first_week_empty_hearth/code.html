@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Waffle Wednesday — First Week Empty State</title>
+<!-- Google Fonts: EB Garamond & Manrope -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..700&amp;family=Manrope:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "error": "#ffb4ab",
+            "secondary-container": "#3b4b3b",
+            "on-secondary-fixed-variant": "#3b4b3b",
+            "surface-container-high": "#2c2927",
+            "tertiary-fixed": "#eae1dd",
+            "surface-tint": "#ffb77e",
+            "on-secondary-container": "#a8baa5",
+            "primary-fixed-dim": "#ffb77e",
+            "on-tertiary-container": "#2d2927",
+            "inverse-on-surface": "#33302d",
+            "outline-variant": "#544438",
+            "outline": "#a28d7e",
+            "on-error": "#690005",
+            "surface-container-low": "#1d1b19",
+            "on-tertiary-fixed": "#1f1b19",
+            "on-primary-fixed-variant": "#6e3900",
+            "on-error-container": "#ffdad6",
+            "on-secondary-fixed": "#101f11",
+            "on-primary-container": "#442000",
+            "tertiary-fixed-dim": "#cdc5c1",
+            "on-primary": "#4d2600",
+            "on-surface-variant": "#dac2b2",
+            "secondary": "#bacbb6",
+            "on-tertiary": "#342f2d",
+            "surface-container-lowest": "#100e0c",
+            "on-secondary": "#253425",
+            "on-surface": "#e8e1dd",
+            "on-primary-fixed": "#2f1500",
+            "tertiary": "#cdc5c1",
+            "inverse-surface": "#e8e1dd",
+            "primary-fixed": "#ffdcc3",
+            "surface-variant": "#373432",
+            "tertiary-container": "#968f8c",
+            "surface-bright": "#3c3936",
+            "inverse-primary": "#914c00",
+            "on-background": "#e8e1dd",
+            "background": "#151311",
+            "surface-dim": "#151311",
+            "primary-container": "#d17c2f",
+            "error-container": "#93000a",
+            "secondary-fixed": "#d5e8d2",
+            "surface": "#151311",
+            "secondary-fixed-dim": "#bacbb6",
+            "surface-container-highest": "#373432",
+            "on-tertiary-fixed-variant": "#4b4643",
+            "primary": "#ffb77e",
+            "surface-container": "#211f1d"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin": "2rem",
+            "gutter": "1.5rem",
+            "margin-lg": "4rem",
+            "space-sm": "0.75rem",
+            "space-md": "1.25rem",
+            "space-xs": "0.375rem",
+            "space-lg": "2rem",
+            "space-xl": "3rem",
+            "gutter-sm": "1rem",
+            "margin-sm": "1.25rem",
+            "gutter-lg": "2.5rem"
+          },
+          "fontFamily": {
+            "headline-lg-mobile": ["EB Garamond"],
+            "headline-md": ["EB Garamond"],
+            "body-md": ["Manrope"],
+            "label-md": ["Manrope"],
+            "headline-lg": ["EB Garamond"],
+            "display-lg": ["EB Garamond"],
+            "body-lg": ["Manrope"],
+            "headline-sm": ["EB Garamond"],
+            "body-sm": ["Manrope"],
+            "label-sm": ["Manrope"]
+          },
+          "fontSize": {
+            "headline-lg-mobile": ["1.75rem", { lineHeight: "2.25rem", letterSpacing: "0em", fontWeight: "400" }],
+            "headline-md": ["1.625rem", { lineHeight: "2.125rem", letterSpacing: "0em", fontWeight: "500" }],
+            "body-md": ["0.9375rem", { lineHeight: "1.6rem", letterSpacing: "0.01em", fontWeight: "400" }],
+            "label-md": ["0.8125rem", { lineHeight: "1.25rem", letterSpacing: "0.06em", fontWeight: "600" }],
+            "headline-lg": ["2.25rem", { lineHeight: "2.75rem", letterSpacing: "-0.005em", fontWeight: "400" }],
+            "display-lg": ["3rem", { lineHeight: "3.5rem", letterSpacing: "-0.01em", fontWeight: "400" }],
+            "body-lg": ["1.125rem", { lineHeight: "1.875rem", letterSpacing: "0.01em", fontWeight: "400" }],
+            "headline-sm": ["1.25rem", { lineHeight: "1.75rem", letterSpacing: "0em", fontWeight: "500" }],
+            "body-sm": ["0.8125rem", { lineHeight: "1.375rem", letterSpacing: "0.02em", fontWeight: "400" }],
+            "label-sm": ["0.6875rem", { lineHeight: "1rem", letterSpacing: "0.08em", fontWeight: "600" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 350, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      line-height: 1;
+    }
+    .ambient-glow {
+      box-shadow: 0 16px 48px -12px rgba(200, 117, 40, 0.12);
+    }
+    .sunken-well {
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.65);
+    }
+    .whisper-border {
+      border: 1px solid rgba(221, 214, 206, 0.07);
+    }
+    .whisper-border:hover {
+      border: 1px solid rgba(200, 117, 40, 0.28);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface antialiased selection:bg-primary-container selection:text-on-primary-container min-h-screen flex flex-col justify-between">
+<!-- Top Navigation Shell (Shared Components JSON execution) -->
+<header class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-gutter-sm py-space-xs w-full max-w-[390px] md:max-w-2xl mx-auto bg-surface/80 dark:bg-surface/80 backdrop-blur-md">
+<div class="flex items-center gap-3">
+<button aria-label="Go back" class="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary transition-all duration-200 active:scale-95">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface dark:text-on-surface tracking-wide">Waffle Wednesday</span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-primary/40 animate-pulse"></div>
+<button aria-label="Circle options" class="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary transition-all duration-200 active:scale-95">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+</header>
+<!-- Main Canvas Canvas: The Quiet Room -->
+<main class="w-full max-w-[390px] md:max-w-2xl mx-auto pt-16 pb-28 px-gutter-sm flex flex-col flex-1">
+<!-- Circle Identification Context -->
+<div class="pt-6 pb-4 border-b border-surface-container-high/40 flex items-baseline justify-between">
+<div>
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">Old Grammarians</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant/80 tracking-wide mt-0.5">Week 1 · Wednesday</p>
+</div>
+<span class="font-label-sm text-label-sm text-outline tracking-wider font-semibold">EST. 2011</span>
+</div>
+<!-- Central Hearth / Empty State Card -->
+<section class="mt-6 rounded-xl bg-surface-container-low sunken-well p-6 whisper-border relative overflow-hidden transition-all duration-300">
+<!-- Subtle Ash/Hearth Topography Pattern Visual -->
+<div class="w-full h-36 rounded-lg bg-surface-container-lowest relative flex items-center justify-center overflow-hidden border border-surface-container-high/60">
+<!-- Concentric Warm Peat Rings denoting an unlit central hearth -->
+<div class="absolute w-44 h-44 rounded-full border border-primary/10"></div>
+<div class="absolute w-28 h-28 rounded-full border border-primary/15"></div>
+<div class="absolute w-14 h-14 rounded-full border border-primary/25 bg-surface-container/60 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary/60 text-lg" data-icon="fireplace">fireplace</span>
+</div>
+<div class="absolute bottom-2.5 left-3">
+<span class="font-label-sm text-label-sm text-outline tracking-widest uppercase">The Hearth</span>
+</div>
+</div>
+<!-- Understated Editorial Copy -->
+<div class="mt-5 text-center px-2">
+<h2 class="font-headline-md text-headline-md text-on-surface">No dispatches yet today.</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1.5 max-w-xs mx-auto">
+          The table is set for Wednesday morning. Be the first to pull up a chair.
+        </p>
+</div>
+<!-- Primary Action: Warm Kettle Ember Record Button -->
+<div class="mt-6 flex flex-col items-center">
+<button class="w-full max-w-xs py-3.5 px-6 rounded-full bg-primary-container text-on-primary-container font-label-md text-label-md font-semibold tracking-wide flex items-center justify-center gap-2.5 ambient-glow hover:bg-primary transition-all duration-200 active:scale-95">
+<span class="material-symbols-outlined text-lg" data-icon="videocam">videocam</span>
+<span>Record your dispatch</span>
+</button>
+<span class="font-label-sm text-label-sm text-outline mt-2 tracking-wide">3 min max · resets midnight</span>
+</div>
+</section>
+<!-- The Circle Roster (7 Places at the Table) -->
+<section class="mt-8">
+<div class="flex items-center justify-between pb-2 mb-3">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">The Circle</h3>
+<span class="font-label-sm text-label-sm text-on-surface-variant/70">0 of 7 checked in</span>
+</div>
+<div class="space-y-2">
+<!-- Member 1: Tom -->
+<div class="whisper-border rounded-lg p-3 bg-surface-container-low flex items-center justify-between hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-surface-container-highest border border-surface-variant flex items-center justify-center">
+<span class="font-headline-sm text-sm text-tertiary">T</span>
+</div>
+<div>
+<p class="font-body-md text-body-md text-on-surface leading-tight">Tom</p>
+<p class="font-body-sm text-xs text-outline italic">Seat reserved — kettle's on</p>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-outline/80 px-2.5 py-1 rounded bg-surface-container-lowest border border-surface-variant/40">Unrecorded</span>
+</div>
+<!-- Member 2: Marcus -->
+<div class="whisper-border rounded-lg p-3 bg-surface-container-low flex items-center justify-between hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-surface-container-highest border border-surface-variant flex items-center justify-center">
+<span class="font-headline-sm text-sm text-tertiary">M</span>
+</div>
+<div>
+<p class="font-body-md text-body-md text-on-surface leading-tight">Marcus</p>
+<p class="font-body-sm text-xs text-outline italic">Seat reserved — kettle's on</p>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-outline/80 px-2.5 py-1 rounded bg-surface-container-lowest border border-surface-variant/40">Unrecorded</span>
+</div>
+<!-- Member 3: Dave -->
+<div class="whisper-border rounded-lg p-3 bg-surface-container-low flex items-center justify-between hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-surface-container-highest border border-surface-variant flex items-center justify-center">
+<span class="font-headline-sm text-sm text-tertiary">D</span>
+</div>
+<div>
+<p class="font-body-md text-body-md text-on-surface leading-tight">Dave</p>
+<p class="font-body-sm text-xs text-outline italic">Seat reserved — kettle's on</p>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-outline/80 px-2.5 py-1 rounded bg-surface-container-lowest border border-surface-variant/40">Unrecorded</span>
+</div>
+<!-- Member 4: Sarah -->
+<div class="whisper-border rounded-lg p-3 bg-surface-container-low flex items-center justify-between hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-surface-container-highest border border-surface-variant flex items-center justify-center">
+<span class="font-headline-sm text-sm text-tertiary">S</span>
+</div>
+<div>
+<p class="font-body-md text-body-md text-on-surface leading-tight">Sarah</p>
+<p class="font-body-sm text-xs text-outline italic">Seat reserved — kettle's on</p>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-outline/80 px-2.5 py-1 rounded bg-surface-container-lowest border border-surface-variant/40">Unrecorded</span>
+</div>
+<!-- Member 5: Liam -->
+<div class="whisper-border rounded-lg p-3 bg-surface-container-low flex items-center justify-between hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-surface-container-highest border border-surface-variant flex items-center justify-center">
+<span class="font-headline-sm text-sm text-tertiary">L</span>
+</div>
+<div>
+<p class="font-body-md text-body-md text-on-surface leading-tight">Liam</p>
+<p class="font-body-sm text-xs text-outline italic">Seat reserved — kettle's on</p>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-outline/80 px-2.5 py-1 rounded bg-surface-container-lowest border border-surface-variant/40">Unrecorded</span>
+</div>
+<!-- Member 6: Hugh -->
+<div class="whisper-border rounded-lg p-3 bg-surface-container-low flex items-center justify-between hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-surface-container-highest border border-surface-variant flex items-center justify-center">
+<span class="font-headline-sm text-sm text-tertiary">H</span>
+</div>
+<div>
+<p class="font-body-md text-body-md text-on-surface leading-tight">Hugh</p>
+<p class="font-body-sm text-xs text-outline italic">Seat reserved — kettle's on</p>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-outline/80 px-2.5 py-1 rounded bg-surface-container-lowest border border-surface-variant/40">Unrecorded</span>
+</div>
+<!-- Member 7: Cam -->
+<div class="whisper-border rounded-lg p-3 bg-surface-container-low flex items-center justify-between hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-surface-container-highest border border-surface-variant flex items-center justify-center">
+<span class="font-headline-sm text-sm text-tertiary">C</span>
+</div>
+<div>
+<p class="font-body-md text-body-md text-on-surface leading-tight">Cam</p>
+<p class="font-body-sm text-xs text-outline italic">Seat reserved — kettle's on</p>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-outline/80 px-2.5 py-1 rounded bg-surface-container-lowest border border-surface-variant/40">Unrecorded</span>
+</div>
+</div>
+</section>
+<!-- Intimate Footnote -->
+<div class="mt-8 mb-4 text-center">
+<p class="font-body-sm text-body-sm text-outline/60 italic">Weekly cycle closes at midnight. Next circle starts next Wednesday.</p>
+</div>
+</main>
+<!-- Bottom Navigation Dock (Shared Components JSON execution) -->
+<nav class="fixed bottom-0 left-0 right-0 z-50 flex justify-around items-center px-gutter-sm py-space-xs w-full max-w-[390px] md:max-w-2xl mx-auto pb-safe bg-surface/90 dark:bg-surface/90 backdrop-blur-md ambient-glow">
+<!-- Tab 1: Hearth (Active Match for Current Empty State Room) -->
+<button aria-current="page" class="flex flex-col items-center justify-center text-primary dark:text-primary font-label-sm text-label-sm transition-all duration-300 ease-out active:scale-95">
+<span class="material-symbols-outlined text-2xl" data-icon="fireplace" data-weight="fill" style="font-variation-settings: 'FILL' 1;">fireplace</span>
+<span class="mt-1">Hearth</span>
+</button>
+<!-- Tab 2: Dispatches -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant/70 dark:text-on-surface-variant/70 font-label-sm text-label-sm hover:text-primary dark:hover:text-primary transition-all duration-300 ease-out active:scale-95">
+<span class="material-symbols-outlined text-2xl" data-icon="videocam">videocam</span>
+<span class="mt-1">Dispatches</span>
+</button>
+<!-- Tab 3: Parlor -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant/70 dark:text-on-surface-variant/70 font-label-sm text-label-sm hover:text-primary dark:hover:text-primary transition-all duration-300 ease-out active:scale-95">
+<span class="material-symbols-outlined text-2xl" data-icon="groups">groups</span>
+<span class="mt-1">Parlor</span>
+</button>
+</nav>
+</body></html>

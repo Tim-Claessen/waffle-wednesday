@@ -1,0 +1,56 @@
+---
+/**
+ * The group switcher.
+ *
+ * Here from the first version because people belong to several groups, and retrofitting
+ * a switcher into a single-group interface means rewriting every screen. A plain
+ * `<details>` element: no framework, works before any JavaScript has run, and closes on
+ * Escape by itself.
+ */
+import Icon from './Icon.astro';
+import type { GroupSummary } from '../lib/db.ts';
+
+interface Props {
+  groups: GroupSummary[];
+  current: GroupSummary;
+}
+
+const { groups, current } = Astro.props;
+const hasOthers = groups.length > 1;
+---
+
+{
+  hasOthers ? (
+    <details class="group relative">
+      <summary
+        class="flex cursor-pointer list-none items-center gap-1.5 rounded-lg px-space-xs py-1 text-label-sm text-on-surface-variant transition-colors hover:text-primary"
+      >
+        <span>{current.name}</span>
+        <Icon class="transition-transform group-open:rotate-180" name="chevronDown" size={16} />
+      </summary>
+      <div
+        class="ghost-border absolute right-0 top-full z-50 mt-1 min-w-52 overflow-hidden rounded-md bg-surface-container-high shadow-ember"
+      >
+        <ul>
+          {groups.map((group) => (
+            <li>
+              <a
+                aria-current={group.id === current.id ? 'true' : undefined}
+                class:list={[
+                  'flex items-center justify-between gap-3 px-space-md py-space-sm text-body-md transition-colors hover:bg-surface-container-highest',
+                  group.id === current.id ? 'text-primary' : 'text-on-surface',
+                ]}
+                href={`/g/${group.slug}`}
+              >
+                <span>{group.name}</span>
+                {group.id === current.id && <Icon name="check" size={16} />}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </details>
+  ) : (
+    <span class="text-label-sm text-outline">{current.name}</span>
+  )
+}
