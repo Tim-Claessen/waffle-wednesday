@@ -43,9 +43,9 @@ export const CAPTURE_WIDTH = 720;
  * What we ask `MediaRecorder` for, best first.
  *
  * H.264 in MP4 is the only combination that plays everywhere without transcoding, so
- * it is asked for first and in a couple of spellings. WebM is the fallback, and its
- * presence at the end of this list is exactly what makes a transcoding provider worth
- * a dollar a month.
+ * it is asked for first and in a couple of spellings. Safari and Chrome both give it.
+ * WebM is the fallback for a browser that can't (Firefox), and on R2 the upload barrier
+ * turns that file away with a message rather than storing something an iPhone can't play.
  */
 export const RECORDER_MIME_CANDIDATES = [
   'video/mp4;codecs=avc1.42E01E,mp4a.40.2',
@@ -197,15 +197,19 @@ export function probeIso(bytes: Uint8Array): Omit<ProbeResult, 'container'> {
       if (ISO_CONTAINER_BOXES.has(type)) {
         walk(bodyStart, bodyEnd, depth + 1);
       } else if (type === 'mvhd' && durationSeconds === null) {
+        // A zero is not a length. A fragmented MP4, which is what `MediaRecorder` writes
+        // in both Safari and Chrome, declares zero here and indexes its samples in the
+        // fragments instead. Reading it as null lets the caller fall back to the
+        // recorder's own measurement rather than storing a waffle as 0:00.
         const version = bytes[bodyStart]!;
         if (version === 1 && bodyStart + 32 <= bodyEnd) {
           const timescale = readU32(bytes, bodyStart + 20);
           const duration = readU64(bytes, bodyStart + 24);
-          if (timescale > 0) durationSeconds = duration / timescale;
+          if (timescale > 0 && duration > 0) durationSeconds = duration / timescale;
         } else if (version === 0 && bodyStart + 20 <= bodyEnd) {
           const timescale = readU32(bytes, bodyStart + 12);
           const duration = readU32(bytes, bodyStart + 16);
-          if (timescale > 0) durationSeconds = duration / timescale;
+          if (timescale > 0 && duration > 0) durationSeconds = duration / timescale;
         }
       } else if (type === 'stsd' && bodyStart + 8 <= bodyEnd) {
         // version and flags, then the entry count, then entries of size + format.

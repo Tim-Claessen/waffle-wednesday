@@ -6,34 +6,50 @@ to have a real consequence, and the two places where the plan was wrong.
 
 ---
 
-## Still open
+## Decided from research, not a probe
 
-### The video provider
+### The video provider: R2, with a remux in the browser
 
-The one question Phase 0 exists to answer. Nothing else in the build is blocked on it,
-because [storage.ts](../src/lib/storage.ts) is the only file that knows which provider is
-in use.
+Phase 0 was meant to settle this by recording on an iPhone and an Android. There was no
+iPhone to hand, so it was settled from published browser support instead (September 2026).
 
-The app currently runs on **R2**, with `CODEC_POLICY = 'passthrough'` — meaning a file in a
-codec that not every phone can decode is rejected at the door with a message pointing at
-the in-app recorder, because nothing downstream will re-encode it.
-
-Fill this in from the probe:
-
-| | iPhone | Android |
+| | iPhone (Safari) | Android (Chrome) |
 | --- | --- | --- |
-| `video/mp4;codecs=avc1` supported | | |
-| What `MediaRecorder` actually produced | | |
-| 3-minute file size | | |
-| Measured bitrate | | |
-| Plays the other phone's file | | |
+| Records H.264 + AAC in MP4 | Yes, since iOS 14.5. Until 18.3 it was the *only* format | Yes, since Chrome 126 (June 2024), using the phone's H.264 encoder |
+| Plays the other's file | Yes | Yes. H.264 MP4 is the one format every phone decodes |
+| The catch | The MP4 is **fragmented**, with a zero duration in its header | Same |
 
-**If both are yes**: stay on R2. One fewer vendor, one fewer bill, one fewer dashboard.
+The codec question came out the way R2 needed. The catch is new: both browsers write
+fragmented MP4 whose `mvhd` duration is zero. A browser then has to download much of the
+file before it knows the length or can seek, other players don't show a length at all,
+and [media.ts](../src/lib/media.ts) reads the zero as a real duration, so the card would
+say 0:00.
 
-**If either is no**: switch to Bunny Stream. Implement the same four functions in
-`storage.ts`, set `ACTIVE_PROVIDER = 'bunny'`, and `CODEC_POLICY` becomes `'transcoding'`
-by itself — at which point the codec rejection disappears and the file picker starts
-accepting whatever anyone's camera roll hands it.
+The fix is a **remux, not a re-encode**: rewrite the same H.264 and AAC samples into an
+ordinary MP4 with the index at the front and a real duration. It takes about a second on
+the phone, before upload, using [Mediabunny](https://mediabunny.dev). No quality loss, no
+server work, and the Worker still receives a file it can probe properly.
+
+Why not Bunny Stream: it would fix this too, and it would accept iPhone camera-roll HEVC.
+But the camera-roll path already gets a rejection that points at the recorder, and a
+dependency in the browser is cheaper than a second vendor with its own dashboard, key and
+bill for a problem one library solves. If the camera-roll rejection proves a real nuisance
+once people use it, that's the moment to revisit. [storage.ts](../src/lib/storage.ts)
+still keeps the swap to one file.
+
+Checked on the laptop with a real Chrome 153 recording of three minutes: the original
+came out as 54 fragments with no readable length; the remux gave one index, a length of
+179.98 seconds, the same codecs, and took 0.4 seconds. Both pass the upload barrier.
+
+What stays unverified until it's tried: an actual iPhone recording played on an actual
+Android and back. That gets done on a rented real iPhone before anyone is invited
+([setup.md](setup.md#the-iphone-check-without-an-iphone)), never by asking a friend to
+test.
+
+Sources: [WebKit's MediaRecorder notes](https://webkit.org/blog/11353/mediarecorder-api/),
+[Chrome's intent to ship MP4 in MediaRecorder](https://groups.google.com/a/chromium.org/g/blink-dev/c/p1OMVj1FrMI),
+[addpipe on duration in Chrome and Safari MP4s](https://blog.addpipe.com/duration-in-mp4-files-produced-by-chrome-safari/),
+[Mediabunny's conversion guide](https://mediabunny.dev/guide/converting-media-files).
 
 ---
 

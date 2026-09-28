@@ -4,11 +4,6 @@
  * It does two things: binds a Supabase client to the request's cookies so that row-level
  * security applies as the signed-in member, and keeps unauthenticated people out of
  * everything except the doorstep. The app is invite-only; there is no public page.
- *
- * The client is built lazily, on first use. That is not an optimisation — it is what lets
- * Phase 0 run with no Supabase project at all, which is the whole premise of "one page, no
- * auth, no database". A middleware that eagerly constructed a client would make the probe
- * depend on the very thing it is meant to run without.
  */
 import { defineMiddleware } from 'astro:middleware';
 
@@ -21,16 +16,9 @@ const PUBLIC_PATHS = new Set(['/login', '/logout', '/api/auth/callback']);
 /** Called by the cron worker with a shared secret, not by a member with a session. */
 const UNAUTHENTICATED_API_PREFIXES = ['/api/cron/'];
 
-/** Phase 0 only. These and the probe page are deleted once the provider is settled. */
-const PHASE_ZERO_PREFIXES = ['/probe', '/api/probe/'];
-
 function isPublic(pathname: string): boolean {
   if (PUBLIC_PATHS.has(pathname)) return true;
   return UNAUTHENTICATED_API_PREFIXES.some((prefix) => pathname.startsWith(prefix));
-}
-
-function isPhaseZero(pathname: string): boolean {
-  return PHASE_ZERO_PREFIXES.some((prefix) => pathname === prefix || pathname.startsWith(prefix));
 }
 
 export const onRequest = defineMiddleware(async (context, next) => {
@@ -47,12 +35,6 @@ export const onRequest = defineMiddleware(async (context, next) => {
   });
 
   const { pathname } = context.url;
-
-  // The probe runs before there is anything to sign in to.
-  if (isPhaseZero(pathname)) {
-    context.locals.user = null;
-    return next();
-  }
 
   context.locals.user = await getSessionUser(supabase().supabase);
 

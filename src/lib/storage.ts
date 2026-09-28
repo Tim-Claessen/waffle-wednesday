@@ -6,18 +6,17 @@
  * only place that knows what an asset id means, and the only place that turns one back
  * into bytes.
  *
- * R2 is implemented because Phase 0 is testing whether it is enough on its own: with the
- * encode fixed at the source there is nothing left to transcode, so "put a file
- * somewhere and serve it" may be the whole video layer. Bunny Stream is the fallback if
- * in-app H.264 recording turns out not to be available on every phone in the group, and
- * it plugs in here without touching anything above.
+ * R2 is the whole video layer: with the encode fixed at the source there is nothing left
+ * to transcode, so "put a file somewhere and serve it" is enough. Bunny Stream would plug
+ * in here without touching anything above, if accepting camera-roll HEVC ever becomes
+ * worth a second vendor. See docs/decisions.md.
  */
 import { config } from './config.ts';
 import type { ByteRange } from './assets.ts';
 import { contentTypeFor, type Container } from './media.ts';
 import type { Provider } from './database.types.ts';
 
-/** Which provider new uploads go to. Phase 0 settles this on evidence. */
+/** Which provider new uploads go to. */
 export const ACTIVE_PROVIDER: Provider = 'r2';
 
 /**

@@ -194,6 +194,7 @@ const replacing = feed.mine !== null;
     formatBytes,
     validateVideo,
   } from '../../../lib/media.ts';
+  import { remuxToPlainMp4 } from '../../../lib/remux.ts';
 
   const el = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 
@@ -336,8 +337,10 @@ const replacing = feed.mine !== null;
   }
 
   async function finish(mimeType: string) {
-    const blob = new Blob(chunks, { type: mimeType || 'video/mp4' });
     const durationSeconds = Math.min(MAX_DURATION_SECONDS, (Date.now() - startedAt) / 1000);
+    readout.textContent = 'Preparing…';
+    // Before review, so the clip played back here is the one that gets posted.
+    const blob = await remuxToPlainMp4(new Blob(chunks, { type: mimeType || 'video/mp4' }));
 
     playback.src = URL.createObjectURL(blob);
     playback.muted = false;

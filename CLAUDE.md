@@ -57,8 +57,6 @@ These are decisions already taken, not open questions. Each one has its reasonin
 - **`Astro.locals.runtime.env` no longer exists** (removed in Astro 6). Bindings and vars
   come from `import { env } from 'cloudflare:workers'`, which is wrapped in `src/lib/config.ts`.
   That module only resolves inside the Worker runtime, so nothing unit-tested may import it.
-- **The middleware builds its Supabase client lazily.** That is what lets the Phase 0 probe
-  run with no Supabase project at all. Don't make it eager.
 - **Range requests are not optional.** iOS Safari won't play a video it can't seek in, so
   `/api/video/[id]` has to answer 206s or the player shows a black frame.
 - **Astro rejects cross-site form posts.** A `curl` test of any route taking `multipart/form-data`

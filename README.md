@@ -35,10 +35,11 @@ Pages can't run cron). Supabase for auth and Postgres with row-level security, R
 Resend for email, and a second small Worker that does nothing but ring the reminder
 endpoint on a schedule.
 
-The video provider is still deliberately open between plain R2 and Bunny Stream. The app
-runs on R2 today; [Phase 0](docs/setup.md#6-phase-0--the-thing-to-actually-do-first) settles
-it with two phones rather than an argument, and
-[src/lib/storage.ts](src/lib/storage.ts) is the only file that would change.
+Video lives in plain R2, with no transcoding provider. Both Safari and Chrome record H.264
+MP4 in the browser; the recorder remuxes each file into an ordinary MP4 before upload so it
+plays and seeks everywhere. The reasoning is in
+[docs/decisions.md](docs/decisions.md#the-video-provider-r2-with-a-remux-in-the-browser), and
+[src/lib/storage.ts](src/lib/storage.ts) is still the only file a provider change touches.
 
 ## Layout
 
@@ -62,9 +63,8 @@ npm run build    # what Cloudflare runs
 
 ## Phases
 
-0. **Prove the recording path** — record in-browser at a fixed bitrate on iOS and Android,
-   check the file size, play it back on the other device, pick the provider. *The page for
-   this is built and runs with no accounts and no database: [/probe](src/pages/probe.astro).*
+0. **Prove the recording path** — pick the provider. *Settled from published browser
+   support rather than two phones: R2, with a remux in the browser. The probe page is gone.*
 1. **The full first draft**, solo — auth, groups, post, feed, archive, reactions, reminders,
    design. *Written; needs a real Supabase project and a real phone.*
 2. **The real group** — invites, welcome email, reminders widened beyond Tim.

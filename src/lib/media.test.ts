@@ -223,6 +223,12 @@ describe('probeVideo on ISO base media files', () => {
     expect(result.durationSeconds).toBeCloseTo(175, 3);
   });
 
+  it('reads the zero a fragmented MP4 declares as no duration at all', () => {
+    // What MediaRecorder writes in Safari and Chrome: a real header, a zero length.
+    expect(probeVideo(mp4({ duration: 0 })).durationSeconds).toBe(null);
+    expect(probeVideo(mp4({ duration: 0, version1: true })).durationSeconds).toBe(null);
+  });
+
   it('returns nulls rather than throwing on a truncated file', () => {
     const truncated = mp4().slice(0, 30);
     expect(() => probeVideo(truncated)).not.toThrow();
@@ -295,6 +301,11 @@ describe('validateVideo', () => {
     // Nothing declared and nothing in the container: the recorder's own hard stop is
     // the only control left, so this passes rather than rejecting a valid waffle.
     expect(validateVideo(live).ok).toBe(true);
+  });
+
+  it('checks a fragmented MP4 against the declared duration, not its zero', () => {
+    const fragmented = mp4({ duration: 0 });
+    expect(ok(validateVideo(fragmented, { declaredDurationSeconds: 600 }))).toContain('too-long');
   });
 
   it('tolerates any codec when the provider transcodes', () => {
