@@ -6,7 +6,9 @@ and why every decision was taken the way it was — read it before proposing any
 ## What this is
 
 A private weekly video check-in for a group of 8–9 old friends. One waffle of up to three minutes per
-person per week, visible to the group for that week, retained forever. Status: nothing built yet.
+person per week, visible to the group for that week, retained forever. Status: Phase 1 built and
+deployed at `https://waffle.timclaessen.com`; setup steps 1–5 done, the step 6 first run on a real
+phone is next (see [docs/setup.md](docs/setup.md)).
 
 ## Golden rules
 

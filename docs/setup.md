@@ -6,6 +6,9 @@ and deploys from GitHub.
 
 About an hour, most of it waiting for DNS.
 
+**Progress (2026-09-29):** steps 1–5 are done and sign-in works at
+`https://waffle.timclaessen.com`. Next is step 6.
+
 ## What you hand back
 
 Three steps produce a value that has to be committed to the repo. Send them to Claude
@@ -63,6 +66,9 @@ Your Worker → Settings → Domains & Routes → Add → Custom domain. Somethi
 **Hand back** the URL (no trailing slash). The reminder emails build their links from it,
 so it has to be exact.
 
+The Worker's `workers.dev` address is switched off in `wrangler.jsonc`, so after the next
+deploy the custom domain is the only address the app answers on.
+
 ---
 
 ## 2. Supabase: accounts and the database
@@ -90,6 +96,7 @@ Authentication → Sign In / Providers:
 
 - **Allow new users to sign up**: **off**. This is the one that matters: it makes the app
   invite-only by construction rather than by a check somebody could forget to write.
+  The Phase 2 invite link doesn't need it on: it creates accounts with the service key.
 - Email provider → **Confirm email**: off. You create the accounts, so there's nobody to
   confirm.
 
@@ -121,8 +128,8 @@ from public.groups g, public.profiles p
 where g.slug = 'fwsh' and p.email = 'you@example.com';
 ```
 
-Adding a friend later is the same two steps minus the group, with `'member'`. Not yet,
-though. See the end of this page.
+Adding a friend by hand is the same two steps minus the group, with `'member'`. Phase 2
+replaces that with an invite link in the app. Not yet, though. See the end of this page.
 
 ### 2.6 Collect the keys
 
@@ -138,6 +145,7 @@ The service key bypasses every access rule in the database. It only ever goes in
 Cloudflare dashboard.
 
 **Hand back** the Project URL (Project Settings → Data API, `https://<ref>.supabase.co`).
+Just the base. If what you copy ends in `/rest/v1/`, drop that part.
 
 ---
 
@@ -154,7 +162,9 @@ Cloudflare dashboard.
 
 ## 4. Secrets
 
-The app Worker → Settings → Variables and Secrets → Add, type **Secret**, four times:
+The app Worker → Settings → Variables and Secrets. Use the **runtime** section, not the build
+one: build variables only exist while Cloudflare builds, and the app reads these while it
+runs. Add, with type **Secret**, four times:
 
 | Name | Value |
 | --- | --- |
@@ -166,6 +176,18 @@ The app Worker → Settings → Variables and Secrets → Add, type **Secret**, 
 Secrets survive deploys. The plain variables in `wrangler.jsonc` don't: each deploy resets
 them to what's committed, which is why those three values are handed back rather than
 typed into the dashboard.
+
+Two traps:
+
+- **Check the type column says Secret.** Add one as a Variable and it works until the next
+  deploy, which removes it, and meanwhile it's readable by anyone with dashboard access.
+- **Ignore the "Update your Wrangler configuration" banner.** It offers to copy every
+  variable into `wrangler.jsonc`, which would put the keys in the repo.
+
+If a key ever does end up somewhere it shouldn't (a chat, a screenshot, a commit), replace
+it: create a new Supabase secret key and delete the old one, delete and recreate the Resend
+key, and generate a new `CRON_SECRET` for both Workers. The publishable key is public by
+design and doesn't need replacing.
 
 Once the handed-back values are committed and deployed, `https://<your URL>/login` should
 let you sign in.
@@ -262,7 +284,8 @@ npm run build     # what Cloudflare will run
 ```
 
 It needs `.dev.vars`: copy [.dev.vars.example](../.dev.vars.example) and fill in the same
-four secrets. It's gitignored and must stay that way. There's no local Postgres, so you're
+four secrets. It also sets `PUBLIC_SITE_URL` back to localhost, so sign-in links come back
+to your machine. It's gitignored and must stay that way. There's no local Postgres, so you're
 editing live data.
 
 **On Windows**, `npm install` can silently drop optional dependency entries from

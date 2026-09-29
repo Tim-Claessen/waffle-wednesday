@@ -171,6 +171,25 @@ but never to an interface. Declaring the rows as interfaces makes every query in
 silently resolve to `never` — it type-checks as long as you never touch a property, and
 then fails everywhere at once.
 
+### Accounts come from invites, never from the login form
+
+Supabase's public sign-ups are off, and the "send me a sign-in link" button passes
+`shouldCreateUser: false` ([login.astro](../src/pages/login.astro)), so typing an unknown
+address there sends nothing and creates nothing. Either one alone leaves a gap: the
+setting stops the API, the flag stops the form.
+
+Tim wants friends to join with no dashboard work. That doesn't need sign-ups on: the Phase 2
+invite link creates accounts on the server with the service key, which the setting doesn't
+restrict. The design is in [PLAN.md](../PLAN.md#phase-2-joining-without-the-supabase-dashboard).
+
+### Its own Supabase project
+
+The free plan allows two active projects per person, and both were taken. Sharing one with
+another app was ruled out because Auth is per project: the other app's "any signed-in user"
+policies would have covered this group's accounts too. Instead yumlog moved into wrapt's
+project (2026-09), which freed a slot. Waffle Wednesday holds other people's videos and
+accounts, so it's the one that gets a project to itself.
+
 ---
 
 ## Where the design files disagree with PLAN.md
