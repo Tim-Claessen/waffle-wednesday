@@ -243,6 +243,28 @@ are solo; nobody outside is invited until the whole loop runs.
 | **2 · The real group** | Invites, welcome email with the iOS install screenshot, admin member management, reminder recipients widened from Tim to everyone | 8–9 people complete a week without a single question about how to use it |
 | **3 · The vault** | Year in review, this week last year, per-member retrospectives | The first year-in-review generates from the archive with no manual assembly |
 
+### Phase 2: joining without the Supabase dashboard
+
+Tim wants friends to join with no dashboard work at all, and anything he does have to do to live in
+the app. The design keeps Supabase's public sign-ups **off** anyway: the server creates accounts with
+the service key, which that setting doesn't restrict, so "easy to join" never has to mean "anyone can
+make an account".
+
+- **An invite link per group.** Admins see it in group settings, can copy and share it anywhere
+  (the group chat), and can revoke and regenerate it. It's a long random token, not the slug.
+- **Joining.** The link opens a page naming the group and asking for a name and an email. The server
+  checks the token, creates the account if there isn't one, adds the membership as `member`, and
+  sends a sign-in link. An existing account (someone already in another group) just gains the
+  membership.
+- **Guards.** Tokens are stored hashed. Joins are rate-limited per token. The group has a member cap
+  (twelve is plenty for this), after which the link stops working. Optionally, admins approve joins;
+  the default is that a live link is trust enough for a group of old friends.
+- **Leaving and removal.** A member can leave a group; an admin can remove one. Both end the
+  membership, never the account or the waffles (nothing is deleted by the system).
+- The login form never creates accounts (`shouldCreateUser: false`), so the invite is the only way in.
+
+Group renaming already exists for admins in group settings.
+
 Design lands at the **start of Phase 1**, before the feed exists. Retrofitting a design onto a working
 feed costs more than building the feed inside a design.
 

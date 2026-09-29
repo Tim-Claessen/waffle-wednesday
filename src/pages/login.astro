@@ -36,7 +36,9 @@ if (Astro.request.method === 'POST') {
     // The recovery path: a one-time link, rather than a reset form nobody can find.
     const { error } = await supabase.auth.signInWithOtp({
       email,
-      options: { emailRedirectTo: `${config.siteUrl}/api/auth/callback?next=${encodeURIComponent(next)}` },
+      // Never mint an account from the login form. Accounts come from an invite, not
+      // from whoever types an address here.
+      options: { shouldCreateUser: false, emailRedirectTo: `${config.siteUrl}/api/auth/callback?next=${encodeURIComponent(next)}` },
     });
     if (error) problem = "That didn't send. Try again in a minute.";
     else sentLinkTo = email;

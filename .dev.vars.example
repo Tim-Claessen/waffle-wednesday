@@ -11,3 +11,6 @@ RESEND_API_KEY=
 
 # Any long random string. The same value goes on the reminders Worker.
 CRON_SECRET=
+
+# Overrides the production value in wrangler.jsonc so sign-in links come back here.
+PUBLIC_SITE_URL=http://localhost:4321

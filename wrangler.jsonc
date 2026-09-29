@@ -12,6 +12,11 @@
 		"enabled": true
 	},
 
+	// Served only at the custom domain. A second origin on workers.dev would be one that
+	// sign-in links, the site-URL checks and form posts all reject anyway.
+	"workers_dev": false,
+	"preview_urls": false,
+
 	// Video storage. Originals live here forever; nothing is ever deleted by a
 	// schedule, only by a member deliberately deleting their own waffle.
 	"r2_buckets": [
@@ -25,9 +30,9 @@
 	// Non-secret configuration. Secrets are set with `wrangler secret put` or in the
 	// dashboard, and locally in `.dev.vars` — never in this file.
 	"vars": {
-		"PUBLIC_SUPABASE_URL": "",
-		"PUBLIC_SITE_URL": "http://localhost:4321",
+		"PUBLIC_SUPABASE_URL": "https://ttglrhqfgvflcapihask.supabase.co",
+		"PUBLIC_SITE_URL": "https://waffle.timclaessen.com",
 		"WEEK_TIMEZONE": "Australia/Perth",
-		"EMAIL_FROM": "Waffle Wednesday <waffle@example.com>"
+		"EMAIL_FROM": "Waffle Wednesday <waffle@timclaessen.com>"
 	}
 }

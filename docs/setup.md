@@ -33,7 +33,7 @@ R2 → Create bucket, twice:
 | `waffle-wednesday-video` | The real thing. Every waffle ever posted lives here. |
 | `waffle-wednesday-video-dev` | Local development only. Harmless if never used. |
 
-Location: **Asia-Pacific (APAC)**. Leave public access **off**. The app signs every read
+Location: **Oceania (OC)**, the closest to Perth. Leave public access **off**. The app signs every read
 through its own route, and a public bucket would make an asset id enough to watch
 somebody's week.
 
@@ -45,7 +45,7 @@ Workers & Pages → Create → **Workers** → Import a repository →
 | Setting | Value |
 | --- | --- |
 | Production branch | `main` |
-| Build command | `npm ci && npm run build` |
+| Build command | `npm run build` (Cloudflare runs `npm ci` itself first) |
 | Deploy command | `npx wrangler deploy` |
 | Path | `/` (repository root) |
 
@@ -111,14 +111,14 @@ Then SQL Editor, with your email in both places:
 
 ```sql
 insert into public.groups (name, slug, created_by)
-select 'The Old Crew', 'old-crew', p.id
+select 'FWSH', 'fwsh', p.id
 from public.profiles p where p.email = 'you@example.com'
 returning id;
 
 insert into public.memberships (group_id, profile_id, role)
 select g.id, p.id, 'admin'
 from public.groups g, public.profiles p
-where g.slug = 'old-crew' and p.email = 'you@example.com';
+where g.slug = 'fwsh' and p.email = 'you@example.com';
 ```
 
 Adding a friend later is the same two steps minus the group, with `'member'`. Not yet,

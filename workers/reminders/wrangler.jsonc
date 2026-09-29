@@ -13,8 +13,8 @@
 	},
 
 	"vars": {
-		// Set to the deployed app's origin before the first deploy.
-		"APP_URL": "http://localhost:4321"
+		// The deployed app's origin, no trailing slash.
+		"APP_URL": "https://waffle.timclaessen.com"
 	}
 	// CRON_SECRET is a secret: `wrangler secret put CRON_SECRET` in this directory, and the
 	// same value on the app Worker.
