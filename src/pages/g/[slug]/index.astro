@@ -9,16 +9,9 @@
  */
 import App from '../../../layouts/App.astro';
 import Icon from '../../../components/Icon.astro';
-import Monogram from '../../../components/Monogram.astro';
 import WaffleCard from '../../../components/WaffleCard.astro';
 import { listGroups, loadWeekFeed, ownStreak } from '../../../lib/db.ts';
-import {
-  formatTotalDuration,
-  formatWeekStart,
-  hoursUntilWeekCloses,
-  perthMoment,
-  perthWeekdayName,
-} from '../../../lib/week.ts';
+import { formatTotalDuration, perthMoment } from '../../../lib/week.ts';
 
 const { supabase, user } = Astro.locals;
 const { slug } = Astro.params;
@@ -30,29 +23,27 @@ if (!group) return Astro.redirect('/', 302);
 const feed = await loadWeekFeed(supabase, group, user!.id);
 const streak = feed.mine ? await ownStreak(supabase, user!.id, group.id, feed.weekStart) : 0;
 
-const isRitualDay = perthWeekdayName() === 'Wednesday';
-const hoursLeft = hoursUntilWeekCloses(feed.weekStart);
 const unwatched = feed.waffles.filter((waffle) => !waffle.isMine && !waffle.watched);
 const playlist = feed.waffles.filter((waffle) => !waffle.isMine).map((waffle) => waffle.id);
 const firstUnplayed = unwatched[0] ?? feed.waffles.find((waffle) => !waffle.isMine);
 ---
 
 <App group={group} groups={groups} tab="week" title="This week">
-  <section class="space-y-space-sm">
-    <div class="flex items-baseline justify-between gap-space-sm">
-      <h1 class="font-serif text-headline text-on-surface">{perthMoment()}</h1>
-      <span class="shrink-0 text-label-sm text-outline">
-        Week {feed.weekNumber}
-      </span>
-    </div>
-    <p class="text-body-sm text-on-surface-variant">
-      {
-        isRitualDay
-          ? 'The kettle is on. Three minutes, no edits.'
-          : `This week opened ${formatWeekStart(feed.weekStart, { year: false })}.`
-      }
-    </p>
+  <section class="flex items-baseline justify-between gap-space-sm">
+    <h1 class="font-serif text-headline text-on-surface">{perthMoment()}</h1>
+    <span class="shrink-0 text-label-sm text-outline">Week {feed.weekNumber}</span>
   </section>
+
+  {/* Shown by the script below when a recording is still waiting on the phone. */}
+  <a
+    class="ghost-border-active mt-space-md flex items-center justify-between gap-space-sm rounded-xl bg-surface-container-low p-space-md text-body-md text-on-surface"
+    hidden
+    href={`/g/${group.slug}/record`}
+    id="unsent"
+  >
+    Your recording hasn't sent yet
+    <Icon class="shrink-0 text-primary" name="upload" size={18} />
+  </a>
 
   {
     feed.waffles.length > 0 ? (
@@ -63,7 +54,7 @@ const firstUnplayed = unwatched[0] ?? feed.waffles.find((waffle) => !waffle.isMi
         */}
         {firstUnplayed && (
           <a
-            class="ghost-border group relative mt-space-lg flex items-center justify-between gap-4 overflow-hidden rounded-xl bg-surface-container p-space-md shadow-ember"
+            class="ghost-border group relative mt-space-md flex items-center justify-between gap-4 overflow-hidden rounded-xl bg-surface-container p-space-md shadow-ember"
             href={`/g/${group.slug}/watch/${firstUnplayed.id}?from=${playlist.join(',')}`}
           >
             <span
@@ -92,30 +83,10 @@ const firstUnplayed = unwatched[0] ?? feed.waffles.find((waffle) => !waffle.isMi
         )}
 
         {/*
-          Who's at the table. Only people who have posted appear here — there is no
-          branch in this loop for anybody else, and there is no data available to write
-          one with.
+          Only people who have posted appear here — there is no branch in this loop for
+          anybody else, and there is no data available to write one with.
         */}
-        <section class="mt-space-lg space-y-2.5">
-          <h2 class="text-label-md uppercase tracking-wider text-tertiary">Round the table</h2>
-          <ul class="-mx-margin-sm flex items-start gap-3 overflow-x-auto px-margin-sm py-1 hide-scrollbar">
-            {feed.waffles.map((waffle) => (
-              <li class="flex w-18 shrink-0 flex-col items-center gap-1.5">
-                <a
-                  class="flex flex-col items-center gap-1.5"
-                  href={`/g/${group.slug}/watch/${waffle.id}?from=${playlist.join(',')}`}
-                >
-                  <Monogram glow={!waffle.watched && !waffle.isMine} initials={waffle.initials} />
-                  <span class="w-full truncate text-center text-label-sm text-on-surface">
-                    {waffle.isMine ? 'You' : waffle.displayName.split(' ')[0]}
-                  </span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </section>
-
-        <section class="mt-space-lg space-y-space-md">
+        <section class="mt-space-md space-y-space-sm">
           {feed.waffles.map((waffle) => (
             <WaffleCard groupSlug={group.slug} playlist={playlist} waffle={waffle} />
           ))}
@@ -128,38 +99,28 @@ const firstUnplayed = unwatched[0] ?? feed.waffles.find((waffle) => !waffle.isMi
       */
       <section class="mt-space-xl text-center">
         <p aria-hidden="true" class="text-[40px]">🧇</p>
-        <h2 class="mt-space-md font-serif text-headline text-on-surface">
-          Nothing here yet this week
-        </h2>
-        <p class="mx-auto mt-space-sm max-w-xs text-body-md text-on-surface-variant">
-          Somebody has to go first. Three minutes about your week, however it's been — bad hair
-          and all.
-        </p>
+        <h2 class="mt-space-md font-serif text-headline-sm text-on-surface">Nothing yet this week</h2>
       </section>
     )
   }
 
   {/* The primary action, last in the document and in the thumb zone. */}
-  <section class="mt-space-xl">
+  <section class="mt-space-lg">
     {
       feed.mine ? (
-        <div class="ghost-border rounded-xl bg-surface-container-low p-space-md">
+        <div class="ghost-border flex items-center justify-between gap-space-sm rounded-xl bg-surface-container-low p-space-md">
           <p class="flex items-center gap-2 text-body-md text-on-surface">
             <Icon class="text-secondary" name="check" size={18} />
-            Yours is in for this week.
+            Yours is in
+            {/* Private, on your own screen. The group never sees this. */}
+            {streak > 1 && <span class="text-label-sm text-outline">· {streak} weeks running</span>}
           </p>
-          {streak > 1 && (
-            <p class="mt-space-xs text-label-sm text-outline">
-              {/* Private, on your own screen. The group never sees this. */}
-              {streak} weeks running, just between us.
-            </p>
-          )}
           <a
-            class="mt-space-md inline-flex items-center gap-2 text-label-md text-primary hover:underline"
+            class="inline-flex shrink-0 items-center gap-1.5 text-label-md text-primary hover:underline"
             href={`/g/${group.slug}/record`}
           >
             <Icon name="retake" size={16} />
-            Record a different one
+            Replace
           </a>
         </div>
       ) : (
@@ -172,13 +133,16 @@ const firstUnplayed = unwatched[0] ?? feed.waffles.find((waffle) => !waffle.isMi
         </a>
       )
     }
-    {
-      !feed.mine && hoursLeft < 48 && hoursLeft > 0 && (
-        <p class="mt-space-sm text-center text-label-sm text-outline">
-          {/* Softening copy, never a countdown. There is nothing to be late for. */}
-          This week's feed is open for another {hoursLeft < 24 ? 'day' : 'two days'} or so.
-        </p>
-      )
-    }
   </section>
 </App>
+
+<script>
+  import { loadPending } from '../../../lib/pending.ts';
+
+  void loadPending().then((pending) => {
+    const banner = document.getElementById('unsent') as HTMLAnchorElement;
+    if (!pending) return;
+    banner.href = `/g/${pending.groupSlug}/record`;
+    banner.hidden = false;
+  });
+</script>

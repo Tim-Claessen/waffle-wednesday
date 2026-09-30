@@ -13,8 +13,11 @@ import { createRequestClient, type RequestClientResult } from './lib/supabase.ts
 /** Reachable without signing in. Everything else redirects to the doorstep. */
 const PUBLIC_PATHS = new Set(['/login', '/logout', '/api/auth/callback']);
 
-/** Called by the cron worker with a shared secret, not by a member with a session. */
-const UNAUTHENTICATED_API_PREFIXES = ['/api/cron/'];
+/**
+ * Called by the cron worker with a shared secret, or opened from an invite link by
+ * someone who has no account yet.
+ */
+const UNAUTHENTICATED_API_PREFIXES = ['/api/cron/', '/join/'];
 
 function isPublic(pathname: string): boolean {
   if (PUBLIC_PATHS.has(pathname)) return true;

@@ -50,6 +50,10 @@ export const config = {
   get siteUrl(): string {
     return required('PUBLIC_SITE_URL').replace(/\/$/, '');
   },
+  /** Rate limiter for invite joins. Absent under a local dev server without the binding. */
+  get joinLimiter(): RateLimit | null {
+    return (env as Partial<Env>).JOIN_LIMITER ?? null;
+  },
   /** The video bucket. Originals live here forever. */
   get bucket(): R2Bucket {
     return env.WAFFLES;

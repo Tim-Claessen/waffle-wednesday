@@ -105,7 +105,8 @@ Authentication → Sign In / Providers:
 Authentication → URL Configuration:
 
 - Site URL: the URL from 1.3
-- Redirect URLs: add that URL followed by `/api/auth/callback`
+- Redirect URLs: add that URL followed by `/**` (the sign-in link carries a `next` path
+  in its query string, which an exact entry may not match)
 
 Without this the "send me a sign-in link" path fails silently.
 
@@ -128,8 +129,15 @@ from public.groups g, public.profiles p
 where g.slug = 'fwsh' and p.email = 'you@example.com';
 ```
 
-Adding a friend by hand is the same two steps minus the group, with `'member'`. Phase 2
-replaces that with an invite link in the app. Not yet, though. See the end of this page.
+### 2.5a Run the second migration
+
+SQL Editor → New query → paste
+[supabase/migrations/0002_invites.sql](../supabase/migrations/0002_invites.sql) → Run.
+It adds the invite link and lets members leave a group. Nothing else to configure: the
+rate limiter comes with the deploy.
+
+After this, friends join from an invite link in the app, not from here. See the end of
+this page.
 
 ### 2.6 Collect the keys
 
@@ -265,8 +273,9 @@ involved.
 ## Then, and only then, invite people
 
 The golden rule is *solo until it works*. Once all of step 6 has passed, the iPhone check
-included, and the reminders have run for a full week, add the others (2.5, with
-`'member'`). Nothing in this guide asks anything of them.
+included, and the reminders have run for a full week: Settings → Invite → Make a link,
+and share it in the group chat. Switch reminders to **Everyone** at the same time.
+Nothing in this guide asks anything of them.
 
 ---
 

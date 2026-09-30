@@ -4,6 +4,9 @@
  *
  * Three tabs is the whole navigation. Posting has to feel like almost nothing, so the
  * recorder is one tap from anywhere in the app rather than a screen you navigate to.
+ *
+ * `fill` pins the shell to the screen height so the page can lay itself out without
+ * scrolling — the recorder uses it so the shutter is never under the dock.
  */
 import Base from './Base.astro';
 import GroupSwitcher from '../components/GroupSwitcher.astro';
@@ -15,10 +18,11 @@ interface Props {
   groups: GroupSummary[];
   group: GroupSummary;
   /** Which dock tab reads as current. */
-  tab: 'week' | 'record' | 'archive';
+  tab: 'week' | 'record' | 'archive' | 'settings';
+  fill?: boolean;
 }
 
-const { title, groups, group, tab } = Astro.props;
+const { title, groups, group, tab, fill = false } = Astro.props;
 
 const tabs = [
   { id: 'week', label: 'This week', href: `/g/${group.slug}`, icon: 'home' },
@@ -27,29 +31,37 @@ const tabs = [
 ] as const;
 ---
 
-<Base bodyClass="min-h-dvh" title={title}>
-  <div class="mx-auto flex min-h-dvh max-w-lg flex-col bg-surface-container-lowest">
-    <header class="sticky top-0 z-40 border-b border-outline-variant/30 bg-surface">
-      <div class="flex items-center justify-between px-margin-sm py-space-sm">
-        <a class="flex items-center gap-2 text-on-surface" href={`/g/${group.slug}`}>
-          <span aria-hidden="true" class="text-[20px]">🧇</span>
-          <span class="font-serif text-headline-sm">{group.name}</span>
+<Base bodyClass={fill ? 'h-dvh overflow-hidden' : 'min-h-dvh'} title={title}>
+  <div
+    class:list={[
+      'mx-auto flex max-w-lg flex-col bg-surface-container-lowest',
+      fill ? 'h-dvh' : 'min-h-dvh',
+    ]}
+  >
+    <header class="sticky top-0 z-40 border-b border-outline-variant/30 bg-surface pt-[env(safe-area-inset-top)]">
+      <div class="flex items-center justify-between gap-space-sm px-margin-sm py-space-sm">
+        <GroupSwitcher current={group} groups={groups} />
+        <a
+          aria-current={tab === 'settings' ? 'page' : undefined}
+          aria-label="Settings"
+          class:list={[
+            'flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-colors hover:text-primary',
+            tab === 'settings' ? 'text-primary' : 'text-on-surface-variant',
+          ]}
+          data-dock
+          href={`/g/${group.slug}/settings`}
+        >
+          <Icon name="settings" size={20} />
         </a>
-        <div class="flex items-center gap-space-sm">
-          {group.role === 'admin' && (
-            <a
-              class="text-label-sm text-on-surface-variant transition-colors hover:text-primary"
-              href={`/g/${group.slug}/settings`}
-            >
-              Settings
-            </a>
-          )}
-          <GroupSwitcher current={group} groups={groups} />
-        </div>
       </div>
     </header>
 
-    <main class="flex-1 px-margin-sm pb-space-xl pt-space-md">
+    <main
+      class:list={[
+        'flex-1 px-margin-sm',
+        fill ? 'flex min-h-0 flex-col py-space-sm' : 'pb-space-xl pt-space-md',
+      ]}
+    >
       <slot />
     </main>
 
@@ -67,6 +79,7 @@ const tabs = [
                   'flex flex-col items-center gap-1 py-space-sm text-label-sm transition-colors',
                   item.id === tab ? 'text-primary' : 'text-on-surface-variant hover:text-on-surface',
                 ]}
+                data-dock
                 href={item.href}
               >
                 <Icon filled={item.id === tab} name={item.icon} size={22} />
@@ -79,3 +92,12 @@ const tabs = [
     </nav>
   </div>
 </Base>
+
+<style is:global>
+  /* While an upload is in flight the dock and header links stop working, so a stray tap
+     can't leave the page. The recorder sets this. */
+  body[data-busy] [data-dock] {
+    pointer-events: none;
+    opacity: 0.35;
+  }
+</style>

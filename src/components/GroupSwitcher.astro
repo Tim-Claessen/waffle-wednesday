@@ -1,11 +1,11 @@
 ---
 /**
- * The group switcher.
+ * The group name in the header, which is also the switcher.
  *
  * Here from the first version because people belong to several groups, and retrofitting
  * a switcher into a single-group interface means rewriting every screen. A plain
- * `<details>` element: no framework, works before any JavaScript has run, and closes on
- * Escape by itself.
+ * `<details>` element: no framework, works before any JavaScript has run. With one group
+ * it is just the name.
  */
 import Icon from './Icon.astro';
 import type { GroupSummary } from '../lib/db.ts';
@@ -21,15 +21,14 @@ const hasOthers = groups.length > 1;
 
 {
   hasOthers ? (
-    <details class="group relative">
-      <summary
-        class="flex cursor-pointer list-none items-center gap-1.5 rounded-lg px-space-xs py-1 text-label-sm text-on-surface-variant transition-colors hover:text-primary"
-      >
-        <span>{current.name}</span>
-        <Icon class="transition-transform group-open:rotate-180" name="chevronDown" size={16} />
+    <details class="group relative min-w-0">
+      <summary data-dock class="flex cursor-pointer list-none items-center gap-1.5 text-on-surface">
+        <span aria-hidden="true" class="text-[20px]">🧇</span>
+        <span class="truncate font-serif text-headline-sm">{current.name}</span>
+        <Icon class="shrink-0 text-outline transition-transform group-open:rotate-180" name="chevronDown" size={16} />
       </summary>
       <div
-        class="ghost-border absolute right-0 top-full z-50 mt-1 min-w-52 overflow-hidden rounded-md bg-surface-container-high shadow-ember"
+        class="ghost-border absolute left-0 top-full z-50 mt-1 min-w-52 overflow-hidden rounded-md bg-surface-container-high shadow-ember"
       >
         <ul>
           {groups.map((group) => (
@@ -51,6 +50,9 @@ const hasOthers = groups.length > 1;
       </div>
     </details>
   ) : (
-    <span class="text-label-sm text-outline">{current.name}</span>
+    <a class="flex min-w-0 items-center gap-2 text-on-surface" data-dock href={`/g/${current.slug}`}>
+      <span aria-hidden="true" class="text-[20px]">🧇</span>
+      <span class="truncate font-serif text-headline-sm">{current.name}</span>
+    </a>
   )
 }

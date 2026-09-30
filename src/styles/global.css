@@ -213,3 +213,8 @@
     display: none;
   }
 }
+
+/* `hidden` always wins over a display utility, so scripts can toggle it on anything. */
+[hidden] {
+  display: none !important;
+}

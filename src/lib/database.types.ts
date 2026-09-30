@@ -9,7 +9,7 @@
  * Normally this file is generated with `supabase gen types typescript`, and once the
  * project exists it should be — see docs/setup.md. It is written out here so the app
  * type-checks before the Supabase project is created, and it matches
- * supabase/migrations/0001_init.sql exactly. If you change the migration, change this.
+ * supabase/migrations/ exactly. If you change the migration, change this.
  */
 
 export type Provider = 'r2' | 'bunny';
@@ -54,6 +54,8 @@ export type GroupRow = {
   first_week_start: string;
   created_by: string | null;
   created_at: string;
+  invite_token_hash: string | null;
+  invite_created_at: string | null;
 }
 
 export type MembershipRow = {

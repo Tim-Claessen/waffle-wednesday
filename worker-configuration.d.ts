@@ -4,6 +4,7 @@
 interface __BaseEnv_Env {
 	WAFFLES: R2Bucket;
 	ASSETS: Fetcher;
+	JOIN_LIMITER: RateLimit;
 	PUBLIC_SUPABASE_URL: "";
 	PUBLIC_SITE_URL: "http://localhost:4321";
 	WEEK_TIMEZONE: "Australia/Perth";

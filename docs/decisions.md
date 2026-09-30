@@ -192,6 +192,67 @@ accounts, so it's the one that gets a project to itself.
 
 ---
 
+## Decided after the first run on a real phone (2026-09-30)
+
+### The front camera is recorded mirrored
+
+Snapchat and Instagram both save a front-camera video the way the preview showed it,
+mirrored, rather than the way the phone's own camera app does. A group of friends talking
+to their phones expects the first, so the recorder draws each camera frame flipped onto a
+canvas and records the canvas, with the microphone track alongside. Same bitrate, same
+size. A browser without `canvas.captureStream` records the camera directly, unmirrored.
+
+The canvas takes the camera's own shape, capped at 1280 on the long edge. The camera is
+asked for 1280×720 in its native landscape terms with `resizeMode: 'none'`, and a phone held
+upright rotates that to portrait itself. The first version asked for 720×1280 directly,
+which let Chrome crop a landscape frame to fit: that was the "too zoomed in". The preview
+now shows the whole frame (`object-contain`), so what you see is exactly what's recorded.
+
+Unverified on iOS Safari until the iPhone check: MediaRecorder on a canvas stream is
+supported there, but it's the path most likely to misbehave.
+
+### Thumbnails come from the live picture
+
+The first version grabbed a frame from the review player after `loadeddata`, which on
+Android gave nothing usable. The thumbnail is now drawn from the recording canvas 1.5
+seconds in, when the camera has definitely settled, and a picked file is seeked to one
+second first.
+
+### A recording is never lost to leaving the page
+
+A recording is written to IndexedDB ([pending.ts](../src/lib/pending.ts)) as soon as it
+stops, and removed only once the server confirms the post. What that covers, and what it
+honestly can't:
+
+- **Covered:** switching tabs, following a link, the browser discarding a background tab,
+  closing the app, a dropped connection. The record page restores the clip, and if Post had
+  been pressed it resumes sending by itself. The feed shows a nudge while one is waiting.
+- **Covered:** switching away mid-recording. Recording can't carry on in the background, so
+  it stops and keeps what was said.
+- **Not possible:** a guarantee that the upload itself keeps going while the app is
+  minimised. iOS suspends a background page within seconds. What happens instead is the
+  retry when you come back.
+
+On top of that: the dock is disabled while recording or sending, leaving mid-upload asks
+first, and a wake lock keeps the screen on so the phone doesn't sleep half way through.
+
+### Invites, as designed in PLAN.md Phase 2
+
+Built as planned, with these specifics:
+
+- The invite hash is a column on `groups` ([0002_invites.sql](../supabase/migrations/0002_invites.sql)),
+  not a seventh table. The link is shown once, when made; a new one replaces the old.
+- The sign-in link in the welcome email is minted with the service key
+  (`generateLink`) and verified by our own callback with `verifyOtp`, so it doesn't depend
+  on Supabase's email templates or redirect list at all.
+- Rate limiting uses Cloudflare's rate-limit binding, five joins a minute per address.
+- Known gap: someone holding a live link can type an *existing* member's email and add
+  them to the group. They can't sign in as them — the link goes to that person's inbox —
+  and the admin can remove them. Acceptable for a link shared in a friends' group chat.
+- Settings is now every member's page (leave, password, sign out). The rest stays admin-only.
+
+---
+
 ## Where the design files disagree with PLAN.md
 
 `design/claude_code_implementation_prd_design_tokens.md` is a generated PRD that came back

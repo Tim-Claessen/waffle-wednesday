@@ -1,0 +1,120 @@
+---
+/**
+ * The invite link's landing page. Public: the person opening it may have no account.
+ *
+ * Signed in already (someone in another group), following the link just adds the
+ * membership. Otherwise it asks for a name and an email and sends a sign-in link — the
+ * email is what proves the address, so nobody is signed in from this form directly.
+ *
+ * The page says the same thing whether the address was new or already had an account,
+ * so it can't be used to find out who is a member of anything.
+ */
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import { config } from '../../lib/config.ts';
+import { addMember, findGroupByInvite, joinByEmail } from '../../lib/join.ts';
+
+const { token } = Astro.params;
+const { user } = Astro.locals;
+
+const group = await findGroupByInvite(token ?? '');
+
+let problem: string | null = null;
+let sentTo: string | null = null;
+
+if (group && user) {
+  const outcome = await addMember(group.id, user.id);
+  if (outcome === 'added') return Astro.redirect(`/g/${group.slug}`, 303);
+  problem = outcome === 'full' ? 'This group is full.' : "That didn't work. Try again.";
+}
+
+if (group && !user && Astro.request.method === 'POST') {
+  const form = await Astro.request.formData();
+  const name = String(form.get('name') ?? '').trim().slice(0, 60);
+  const email = String(form.get('email') ?? '').trim();
+
+  const limiter = config.joinLimiter;
+  const address = Astro.request.headers.get('cf-connecting-ip') ?? 'unknown';
+  const allowed = limiter ? (await limiter.limit({ key: `join:${address}` })).success : true;
+
+  if (!allowed) {
+    problem = 'Too many tries. Wait a minute.';
+  } else if (!name || !email.includes('@')) {
+    problem = 'Name and email, please.';
+  } else {
+    const outcome = await joinByEmail({ group, email, displayName: name });
+    if (outcome === 'sent') sentTo = email;
+    else problem = outcome === 'full' ? 'This group is full.' : "That didn't work. Try again.";
+  }
+}
+---
+
+<Base title={group ? `Join ${group.name}` : 'Invite'}>
+  <main class="mx-auto flex min-h-dvh max-w-sm flex-col justify-center px-margin-sm">
+    <div class="text-center">
+      <p aria-hidden="true" class="text-[40px]">🧇</p>
+      <h1 class="mt-space-sm font-serif text-headline text-on-surface">
+        {group ? group.name : 'This link has expired'}
+      </h1>
+      {!group && <p class="mt-space-xs text-body-sm text-on-surface-variant">Ask for a new one.</p>}
+    </div>
+
+    {
+      group && sentTo && (
+        <div class="ghost-border mt-space-lg rounded-xl bg-surface-container-low p-space-md text-center">
+          <p class="flex items-center justify-center gap-2 text-body-md text-on-surface">
+            <Icon name="mail" size={18} />
+            Check {sentTo}
+          </p>
+        </div>
+      )
+    }
+
+    {
+      group && !sentTo && (
+        <form class="mt-space-lg space-y-space-md" method="post">
+          {problem && (
+            <p
+              class="rounded-lg border border-error/40 bg-error-container/20 p-space-sm text-body-sm text-on-error-container"
+              role="alert"
+            >
+              {problem}
+            </p>
+          )}
+          {!user && (
+            <>
+              <label class="block">
+                <span class="text-label-md text-on-surface-variant">Name</span>
+                <input
+                  autocomplete="name"
+                  class="mt-space-xs w-full rounded-lg bg-surface-container-low px-space-md py-space-sm text-body-md text-on-surface ghost-border focus:outline-none"
+                  maxlength="60"
+                  name="name"
+                  required
+                  type="text"
+                />
+              </label>
+              <label class="block">
+                <span class="text-label-md text-on-surface-variant">Email</span>
+                <input
+                  autocomplete="email"
+                  class="mt-space-xs w-full rounded-lg bg-surface-container-low px-space-md py-space-sm text-body-md text-on-surface ghost-border focus:outline-none"
+                  inputmode="email"
+                  name="email"
+                  required
+                  type="email"
+                />
+              </label>
+              <button
+                class="w-full rounded-lg bg-primary px-space-md py-space-md text-label-md text-on-primary shadow-ember"
+                type="submit"
+              >
+                Join
+              </button>
+            </>
+          )}
+        </form>
+      )
+    }
+  </main>
+</Base>

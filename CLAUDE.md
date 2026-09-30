@@ -7,8 +7,12 @@ and why every decision was taken the way it was — read it before proposing any
 
 A private weekly video check-in for a group of 8–9 old friends. One waffle of up to three minutes per
 person per week, visible to the group for that week, retained forever. Status: Phase 1 built and
-deployed at `https://waffle.timclaessen.com`; setup steps 1–5 done, the step 6 first run on a real
-phone is next (see [docs/setup.md](docs/setup.md)).
+deployed at `https://waffle.timclaessen.com`; setup steps 1–5 done, first run on Tim's Android done
+and fixed up (2026-09-30), invite links built. Next: re-test on the phone, run migration 0002, the
+iPhone check (see [docs/setup.md](docs/setup.md)).
+
+**Copy is minimal.** Tim wants as little text in the UI as possible: labels and buttons, not
+explanations. Don't add explanatory sentences to screens.
 
 ## Golden rules
 
@@ -45,8 +49,10 @@ These are decisions already taken, not open questions. Each one has its reasonin
 | `src/lib/media.ts` | The upload barriers, and a small ISO-BMFF/EBML probe that reads duration and codec out of the file rather than the form |
 | `src/lib/storage.ts` | The only file that knows which video provider is in use. Swapping providers means changing this and nothing else |
 | `src/lib/db.ts` | Every query. Note what it deliberately doesn't offer |
+| `src/lib/pending.ts` | The unsent recording, kept on the phone in IndexedDB until the server confirms it |
+| `src/lib/join.ts` | Invite-link joining, with the service key. The most trusted code in the app |
 | `src/lib/reminders.ts` | The only place that computes who hasn't posted, to address an envelope |
-| `supabase/migrations/0001_init.sql` | The schema, and the row-level security that is the whole access model |
+| `supabase/migrations/` | The schema, and the row-level security that is the whole access model. Run in order in the SQL editor |
 | `docs/setup.md` | Everything that can't be done from this repo |
 | `docs/decisions.md` | What was decided while building, and where the design files disagree with PLAN.md |
 

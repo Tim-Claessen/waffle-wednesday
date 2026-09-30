@@ -1,6 +1,7 @@
 ---
 /**
- * One waffle in the week's feed.
+ * One waffle in the week's feed: a short row with a portrait thumbnail, so a full table
+ * of nine still fits on a couple of screens.
  *
  * Shows whose it is, how long it runs, whether you've watched it, and the caption if
  * there is one. It never shows a play count, a "new" badge in red, or anything that
@@ -22,96 +23,69 @@ interface Props {
 const { waffle, playlist, groupSlug } = Astro.props;
 
 const href = `/g/${groupSlug}/watch/${waffle.id}?from=${playlist.join(',')}`;
-const totalReactions = waffle.reactions.reduce((total, tally) => total + tally.count, 0);
 ---
 
 <a
-  class="ghost-border group block overflow-hidden rounded-xl bg-surface-container-low transition-colors hover:ghost-border-active"
+  class:list={[
+    'group flex items-center gap-space-sm overflow-hidden rounded-xl bg-surface-container-low p-space-xs pr-space-md transition-colors',
+    !waffle.watched && !waffle.isMine ? 'ghost-border-active' : 'ghost-border',
+  ]}
   href={href}
 >
-  <div class="sunken-well relative aspect-[4/3] bg-surface-container-lowest">
+  <span class="sunken-well relative block h-24 w-18 shrink-0 overflow-hidden rounded-lg bg-surface-container-lowest">
     {
       waffle.thumbnailPath ? (
         <img
           alt=""
-          class="h-full w-full object-cover opacity-90 transition-opacity group-hover:opacity-100"
-          height="480"
+          class="h-full w-full object-cover"
+          height="96"
           loading="lazy"
           src={waffle.thumbnailPath}
-          width="640"
+          width="72"
         />
       ) : (
         <span class="flex h-full w-full items-center justify-center">
-          <Monogram glow={!waffle.watched} initials={waffle.initials} size="lg" />
+          <Monogram initials={waffle.initials} size="sm" />
         </span>
       )
     }
-
     <span
-      class="absolute bottom-space-sm right-space-sm flex items-center gap-1 rounded-full bg-surface-container-lowest/85 px-2 py-0.5 text-label-sm text-on-surface"
+      class="absolute bottom-1 right-1 rounded-full bg-surface-container-lowest/85 px-1.5 text-label-sm text-on-surface"
     >
       {formatDuration(waffle.durationSeconds)}
     </span>
+  </span>
 
-    {
-      waffle.watched && (
-        <span
-          class="absolute left-space-sm top-space-sm flex items-center gap-1 rounded-full bg-secondary-container/80 px-2 py-0.5 text-label-sm text-on-secondary-container"
-        >
-          <Icon name="check" size={12} />
-          Watched
-        </span>
-      )
-    }
-
-    <span
-      class="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity group-hover:opacity-100"
-    >
-      <span
-        class="flex h-14 w-14 items-center justify-center rounded-full bg-primary-container text-on-primary-container shadow-ember"
-      >
-        <Icon filled name="play" size={26} />
-      </span>
-    </span>
-  </div>
-
-  <div class="flex items-start justify-between gap-space-sm p-space-md">
-    <div class="min-w-0">
-      <p class="font-serif text-headline-sm text-on-surface">
+  <span class="min-w-0 flex-1">
+    <span class="flex items-center gap-1.5">
+      <span class="truncate font-serif text-headline-sm text-on-surface">
         {waffle.isMine ? 'Yours' : waffle.displayName}
-      </p>
-      {
-        waffle.caption ? (
-          <p class="mt-0.5 line-clamp-2 text-body-sm text-on-surface-variant">{waffle.caption}</p>
-        ) : null
-      }
+      </span>
+      {waffle.watched && !waffle.isMine && <Icon class="shrink-0 text-outline" name="check" size={14} />}
+    </span>
+    {waffle.caption && (
+      <span class="mt-0.5 block line-clamp-2 text-body-sm text-on-surface-variant">{waffle.caption}</span>
+    )}
+    <span class="mt-0.5 flex items-center gap-space-sm text-label-sm text-outline">
       {
         /*
-          Only ever on your own waffle, and only ever a count. "Four of the group have
-          watched yours" is encouraging; naming who hasn't is the thing this app exists
-          not to do, so there is no branch here that could.
+          Only ever on your own waffle, and only ever a count. Naming who hasn't watched
+          is the thing this app exists not to do, so there is no branch here that could.
         */
-        waffle.isMine && waffle.watchedByCount > 0 ? (
-          <p class="mt-space-xs flex items-center gap-1 text-label-sm text-outline">
+        waffle.isMine && waffle.watchedByCount > 0 && (
+          <span class="flex items-center gap-1">
             <Icon name="eye" size={13} />
-            {waffle.watchedByCount === 1
-              ? 'One of the group has watched yours'
-              : `${waffle.watchedByCount} of the group have watched yours`}
-          </p>
-        ) : null
+            {waffle.watchedByCount}
+          </span>
+        )
       }
-    </div>
+      {waffle.reactions
+        .filter((tally) => tally.count > 0)
+        .map((tally) => (
+          <span aria-hidden="true" class="text-[14px]">{REACTION_GLYPHS[tally.emoji].glyph}</span>
+        ))}
+    </span>
+  </span>
 
-    {
-      totalReactions > 0 && (
-        <span class="flex shrink-0 items-center gap-0.5 pt-1 text-body-sm">
-          {waffle.reactions
-            .filter((tally) => tally.count > 0)
-            .map((tally) => (
-              <span aria-hidden="true" class="text-[15px]">{REACTION_GLYPHS[tally.emoji].glyph}</span>
-            ))}
-        </span>
-      )
-    }
-  </div>
+  <Icon class="shrink-0 text-primary" filled name="play" size={20} />
 </a>

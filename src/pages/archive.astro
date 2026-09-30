@@ -14,7 +14,6 @@ import Icon from '../components/Icon.astro';
 import Monogram from '../components/Monogram.astro';
 import { REACTION_GLYPHS } from '../lib/database.types.ts';
 import { listGroups, loadArchive, type ArchiveEntry } from '../lib/db.ts';
-import { formatBytes } from '../lib/media.ts';
 import { formatDuration, formatMonth, formatWeekStart, weekYear } from '../lib/week.ts';
 
 const { supabase, user } = Astro.locals;
@@ -35,8 +34,6 @@ for (const entry of entries) {
 }
 
 const totalSeconds = entries.reduce((total, entry) => total + entry.durationSeconds, 0);
-const totalBytes = entries.reduce((total, entry) => total + entry.sizeBytes, 0);
-const since = entries.length > 0 ? entries[entries.length - 1]!.weekStart : null;
 ---
 
 <App group={groups[0]!} groups={groups} tab="archive" title="My waffles">
@@ -46,12 +43,8 @@ const since = entries.length > 0 ? entries[entries.length - 1]!.weekStart : null
     entries.length > 0 ? (
       <>
         <p class="mt-space-xs text-body-sm text-on-surface-variant">
-          {entries.length === 1 ? 'One waffle' : `${entries.length} waffles`} · since{' '}
-          {formatMonth(since!)} · {Math.round(totalSeconds / 60)} minutes of you ·{' '}
-          {formatBytes(totalBytes)}
-        </p>
-        <p class="mt-space-xs text-label-sm text-outline">
-          Yours to keep. Nothing here ever leaves unless you remove it.
+          {entries.length === 1 ? 'One waffle' : `${entries.length} waffles`} ·{' '}
+          {Math.round(totalSeconds / 60)} min
         </p>
 
         {[...years.entries()].map(([year, months]) => (
@@ -65,17 +58,17 @@ const since = entries.length > 0 ? entries[entries.length - 1]!.weekStart : null
                     <li class="ghost-border overflow-hidden rounded-xl bg-surface-container-low">
                       <div class="flex items-start gap-space-sm p-space-sm">
                         <a
-                          class="sunken-well relative block h-20 w-28 shrink-0 overflow-hidden rounded-md bg-surface-container-lowest"
+                          class="sunken-well relative block h-24 w-18 shrink-0 overflow-hidden rounded-md bg-surface-container-lowest"
                           href={`/g/${groups.find((g) => g.name === entry.groupName)?.slug ?? groups[0]!.slug}/watch/${entry.id}`}
                         >
                           {entry.thumbnailPath ? (
                             <img
                               alt=""
                               class="h-full w-full object-cover"
-                              height="160"
+                              height="96"
                               loading="lazy"
                               src={entry.thumbnailPath}
-                              width="224"
+                              width="72"
                             />
                           ) : (
                             <span class="flex h-full w-full items-center justify-center">
@@ -123,7 +116,7 @@ const since = entries.length > 0 ? entries[entries.length - 1]!.weekStart : null
                           class="flex cursor-pointer list-none items-center gap-1.5 px-space-sm py-2 text-label-sm text-outline transition-colors hover:text-error"
                         >
                           <Icon name="trash" size={13} />
-                          Remove this one
+                          Delete
                         </summary>
                         <form
                           action={`/api/waffles/${entry.id}`}
@@ -131,10 +124,7 @@ const since = entries.length > 0 ? entries[entries.length - 1]!.weekStart : null
                           method="post"
                         >
                           <input name="_method" type="hidden" value="delete" />
-                          <p class="text-body-sm text-on-surface-variant">
-                            This deletes the video for good — yours and the group's copy. There is
-                            no undo.
-                          </p>
+                          <p class="text-body-sm text-on-surface-variant">Gone for good. No undo.</p>
                           <button
                             class="rounded-lg bg-error-container/40 px-space-md py-space-sm text-label-md text-on-error-container"
                             type="submit"
@@ -154,11 +144,7 @@ const since = entries.length > 0 ? entries[entries.length - 1]!.weekStart : null
     ) : (
       <section class="mt-space-xl text-center">
         <p aria-hidden="true" class="text-[40px]">📼</p>
-        <h2 class="mt-space-md font-serif text-headline-sm text-on-surface">Nothing in here yet</h2>
-        <p class="mx-auto mt-space-sm max-w-xs text-body-md text-on-surface-variant">
-          Every waffle you post stays here for good, long after it has left the group's feed.
-          In a year this page is the point of the whole thing.
-        </p>
+        <h2 class="mt-space-md font-serif text-headline-sm text-on-surface">Nothing here yet</h2>
         <a
           class="mt-space-lg inline-flex items-center gap-2 rounded-lg bg-primary px-space-md py-space-sm text-label-md text-on-primary"
           href={`/g/${groups[0]!.slug}/record`}

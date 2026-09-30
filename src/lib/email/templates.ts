@@ -210,8 +210,11 @@ export function welcome(options: {
   groupName: string;
   siteUrl: string;
   signInUrl: string;
+  /** False for someone already in another group, who has a password already. */
+  newAccount: boolean;
 }): EmailContent {
-  const { firstName, groupName, siteUrl, signInUrl } = options;
+  const { firstName, groupName, siteUrl, signInUrl, newAccount } = options;
+  const action = newAccount ? 'Sign in and set a password' : 'Open it';
 
   return {
     subject: `You're in — ${groupName}`,
@@ -220,7 +223,7 @@ export function welcome(options: {
       '',
       `You're in ${groupName} on Waffle Wednesday. Every Wednesday you record up to three minutes about your week; everyone in the group can watch it that week, and it's kept for you forever.`,
       '',
-      `Sign in and set a password: ${signInUrl}`,
+      `${action}: ${signInUrl}`,
       '',
       'On an iPhone, open it in Safari, tap Share, then Add to Home Screen — that gives you the icon and makes it feel like an app.',
       '',
@@ -233,7 +236,7 @@ export function welcome(options: {
         paragraph(
           `${escapeHtml(groupName)} does one thing: every Wednesday, everyone records up to three minutes about their week. You watch the others' that week, and yours is kept for you forever.`,
         ),
-        button('Sign in and set a password', signInUrl),
+        button(action, signInUrl),
         card(
           `<div style="font-family:${SANS};font-size:13px;letter-spacing:0.06em;text-transform:uppercase;color:${EMBER};padding-bottom:8px;">On an iPhone</div>
            <div style="font-family:${SANS};font-size:15px;line-height:26px;color:${INK_SOFT};">

@@ -14,7 +14,8 @@ import Icon from '../components/Icon.astro';
 import { createRequestClient } from '../lib/supabase.ts';
 import { config } from '../lib/config.ts';
 
-let problem: string | null = null;
+let problem: string | null =
+  Astro.url.searchParams.get('expired') === '1' ? 'That link has expired. Send yourself another.' : null;
 let sentLinkTo: string | null = null;
 
 /** Where they were headed before middleware sent them here. */
@@ -31,22 +32,26 @@ if (Astro.request.method === 'POST') {
   const { supabase } = createRequestClient(Astro.request, Astro.cookies);
 
   if (!email) {
-    problem = 'Pop your email address in first.';
+    problem = 'Email first.';
   } else if (wantsLink) {
     // The recovery path: a one-time link, rather than a reset form nobody can find.
     const { error } = await supabase.auth.signInWithOtp({
       email,
       // Never mint an account from the login form. Accounts come from an invite, not
       // from whoever types an address here.
-      options: { shouldCreateUser: false, emailRedirectTo: `${config.siteUrl}/api/auth/callback?next=${encodeURIComponent(next)}` },
+      // Lands on the password page, since forgetting it is why they're here.
+      options: {
+        shouldCreateUser: false,
+        emailRedirectTo: `${config.siteUrl}/api/auth/callback?next=${encodeURIComponent(`/password?next=${encodeURIComponent(next)}`)}`,
+      },
     });
-    if (error) problem = "That didn't send. Try again in a minute.";
+    if (error) problem = "That didn't send. Try again shortly.";
     else sentLinkTo = email;
   } else {
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) {
       // Deliberately vague: which half was wrong is not information worth giving out.
-      problem = "That email and password don't match. Try again, or send yourself a link.";
+      problem = "That email and password don't match.";
     } else {
       return Astro.redirect(next, 303);
     }
@@ -59,9 +64,6 @@ if (Astro.request.method === 'POST') {
     <div class="text-center">
       <p aria-hidden="true" class="text-[40px]">🧇</p>
       <h1 class="mt-space-sm font-serif text-headline text-on-surface">Waffle Wednesday</h1>
-      <p class="mt-space-xs text-body-sm text-on-surface-variant">
-        Private, and by invitation. Nothing here is public.
-      </p>
     </div>
 
     {
@@ -73,9 +75,7 @@ if (Astro.request.method === 'POST') {
             <Icon name="mail" size={18} />
             Link sent
           </p>
-          <p class="mt-space-xs text-body-sm text-on-surface-variant">
-            Check {sentLinkTo}. The link signs you straight in and lets you set a new password.
-          </p>
+          <p class="mt-space-xs text-body-sm text-on-surface-variant">Check {sentLinkTo}.</p>
         </div>
       ) : (
         <form class="mt-space-lg space-y-space-md" method="post">
@@ -123,7 +123,7 @@ if (Astro.request.method === 'POST') {
             type="submit"
             value="link"
           >
-            Forgotten it? Send me a sign-in link instead
+            Email me a sign-in link
           </button>
         </form>
       )
