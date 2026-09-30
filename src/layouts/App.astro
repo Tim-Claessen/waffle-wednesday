@@ -6,7 +6,9 @@
  * recorder is one tap from anywhere in the app rather than a screen you navigate to.
  *
  * `fill` pins the shell to the screen height so the page can lay itself out without
- * scrolling — the recorder uses it so the shutter is never under the dock.
+ * scrolling — the recorder uses it so the shutter is never under the dock. The height is
+ * measured (`innerHeight`) rather than trusted to `100dvh`, which on Android came out
+ * taller than the visible screen and let the sticky dock ride up over the buttons.
  */
 import Base from './Base.astro';
 import GroupSwitcher from '../components/GroupSwitcher.astro';
@@ -31,11 +33,11 @@ const tabs = [
 ] as const;
 ---
 
-<Base bodyClass={fill ? 'h-dvh overflow-hidden' : 'min-h-dvh'} title={title}>
+<Base bodyClass={fill ? 'overflow-hidden' : 'min-h-dvh'} title={title}>
   <div
     class:list={[
       'mx-auto flex max-w-lg flex-col bg-surface-container-lowest',
-      fill ? 'h-dvh' : 'min-h-dvh',
+      fill ? 'h-[var(--app-height,100dvh)] overflow-hidden' : 'min-h-dvh',
     ]}
   >
     <header class="sticky top-0 z-40 border-b border-outline-variant/30 bg-surface pt-[env(safe-area-inset-top)]">
@@ -67,7 +69,7 @@ const tabs = [
 
     <!-- The dock sits above the iOS home indicator rather than under it. -->
     <nav
-      class="sticky bottom-0 z-40 border-t border-outline-variant/30 bg-surface/95 pb-[env(safe-area-inset-bottom)] backdrop-blur"
+      class:list={[fill ? 'shrink-0' : 'sticky bottom-0', 'z-40 border-t border-outline-variant/30 bg-surface/95 pb-[env(safe-area-inset-bottom)] backdrop-blur']}
     >
       <ul class="flex items-stretch">
         {
@@ -91,6 +93,19 @@ const tabs = [
       </ul>
     </nav>
   </div>
+
+  {
+    fill && (
+      <script is:inline>
+        (() => {
+          const set = () =>
+            document.documentElement.style.setProperty('--app-height', `${window.innerHeight}px`);
+          set();
+          addEventListener('resize', set);
+        })();
+      </script>
+    )
+  }
 </Base>
 
 <style is:global>

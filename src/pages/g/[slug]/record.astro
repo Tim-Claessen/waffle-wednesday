@@ -46,8 +46,11 @@ const replacing = feed.mine !== null;
       playsinline
     ></video>
 
-    <!-- The recorded clip, already mirrored in the file, played back for review. -->
-    <video class="absolute inset-0 h-full w-full object-contain" controls hidden id="playback" playsinline
+    <!--
+      The recorded clip, already mirrored in the file, looping for review the way Instagram
+      and Snapchat do it. Tap to pause. No native controls: they'd sit under the buttons.
+    -->
+    <video class="absolute inset-0 h-full w-full object-contain" hidden id="playback" loop playsinline
     ></video>
 
     <div class="absolute inset-0 flex items-center justify-center" hidden id="gate">
@@ -95,52 +98,72 @@ const replacing = feed.mine !== null;
         <span class="h-7 w-7 rounded-full bg-on-primary" id="shutter-inner"></span>
       </button>
     </div>
-  </div>
 
-  <div
-    class="mt-space-sm shrink-0 rounded-lg border border-error/40 bg-error-container/20 p-space-sm text-body-sm text-on-error-container"
-    hidden
-    id="problem"
-    role="alert"
-  >
-  </div>
-
-  <!-- Review: keep it, or go again. -->
-  <div class="mt-space-sm shrink-0 space-y-space-sm" hidden id="review">
-    <input
-      aria-label="Caption"
-      class="w-full rounded-lg bg-surface-container-low px-space-md py-space-sm text-body-md text-on-surface placeholder:text-outline focus:outline-none"
-      id="caption"
-      maxlength="140"
-      placeholder="Caption (optional)"
-      type="text"
-    />
-    <div class="flex gap-space-sm">
-      <button
-        aria-label="Go again"
-        class="flex items-center justify-center rounded-lg bg-surface-container-low px-space-md text-on-surface ghost-border"
-        id="retake"
-        type="button"
-      >
-        <Icon name="retake" size={18} />
-      </button>
-      <button
-        class="flex flex-1 items-center justify-center gap-2 rounded-lg bg-primary px-space-md py-space-sm text-label-md text-on-primary shadow-ember disabled:opacity-50"
-        id="post"
-        type="button"
-      >
-        <Icon name="upload" size={18} />
-        {replacing ? 'Replace this week’s' : 'Post'}
-      </button>
+    <!-- Whatever went wrong, in plain words, over the top of the picture. -->
+    <div
+      class="absolute inset-x-space-sm top-space-sm rounded-lg border border-error/40 bg-surface-container-lowest/90 p-space-sm text-body-sm text-on-error-container"
+      hidden
+      id="problem"
+      role="alert"
+    >
     </div>
-  </div>
 
-  <!-- Uploading. -->
-  <div class="mt-space-sm shrink-0 space-y-space-xs" hidden id="uploading">
-    <div class="h-1.5 w-full overflow-hidden rounded-full bg-surface-container-high">
-      <div class="h-full w-0 bg-primary transition-[width]" id="progress"></div>
+    <!--
+      Review and sending sit on the picture, where the shutter was, rather than below it:
+      below the picture is exactly where a phone's odd viewport maths can push things
+      under the dock.
+    -->
+    <div
+      class="absolute inset-x-0 bottom-0 space-y-space-sm bg-gradient-to-t from-black/85 via-black/60 to-transparent p-space-sm pt-space-xl"
+      hidden
+      id="review"
+    >
+      <input
+        aria-label="Caption"
+        class="w-full rounded-lg bg-surface-container-lowest/80 px-space-md py-space-sm text-body-md text-on-surface placeholder:text-outline focus:outline-none"
+        id="caption"
+        maxlength="140"
+        placeholder="Caption (optional)"
+        type="text"
+      />
+      <div class="flex gap-space-sm">
+        <button
+          aria-label="Go again"
+          class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-surface-container-lowest/80 text-on-surface"
+          id="retake"
+          type="button"
+        >
+          <Icon name="retake" size={20} />
+        </button>
+        <button
+          aria-label="Save to phone"
+          class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-surface-container-lowest/80 text-on-surface"
+          id="save"
+          type="button"
+        >
+          <Icon name="download" size={20} />
+        </button>
+        <button
+          class="flex h-12 flex-1 items-center justify-center gap-2 rounded-lg bg-primary px-space-md text-label-md text-on-primary shadow-ember disabled:opacity-50"
+          id="post"
+          type="button"
+        >
+          <Icon name="upload" size={18} />
+          {replacing ? 'Replace this week’s' : 'Post'}
+        </button>
+      </div>
     </div>
-    <p class="text-center text-label-sm text-on-surface-variant" id="progress-text">Sending…</p>
+
+    <div
+      class="absolute inset-x-0 bottom-0 space-y-space-xs bg-gradient-to-t from-black/85 to-transparent p-space-md pt-space-xl"
+      hidden
+      id="uploading"
+    >
+      <div class="h-1.5 w-full overflow-hidden rounded-full bg-surface-container-high">
+        <div class="h-full w-0 bg-primary transition-[width]" id="progress"></div>
+      </div>
+      <p class="text-center text-label-sm text-on-surface" id="progress-text">Sending…</p>
+    </div>
   </div>
 </App>
 
@@ -423,6 +446,11 @@ const replacing = feed.mine !== null;
     playback.src = URL.createObjectURL(value.blob);
     playback.muted = false;
     setStage('review');
+    // With sound if the browser allows it; a page restored with no tap yet starts muted.
+    void playback.play().catch(() => {
+      playback.muted = true;
+      void playback.play().catch(() => undefined);
+    });
   }
 
   /**
@@ -456,6 +484,7 @@ const replacing = feed.mine !== null;
     body.set('groupSlug', groupSlug);
     if (recorded.thumbnail) body.set('thumbnail', recorded.thumbnail);
 
+    playback.pause();
     setStage('uploading');
     say(null);
     progress.style.width = '0%';
@@ -529,6 +558,15 @@ const replacing = feed.mine !== null;
 
   el('start-camera').addEventListener('click', () => void turnCameraOn());
 
+  // Tap the clip: sound on if it started muted, otherwise pause and play.
+  playback.addEventListener('click', () => {
+    if (playback.muted) {
+      playback.muted = false;
+      void playback.play().catch(() => undefined);
+    } else if (playback.paused) void playback.play().catch(() => undefined);
+    else playback.pause();
+  });
+
   shutter.addEventListener('click', () => {
     if (stage.dataset.stage === 'recording') stop();
     else start();
@@ -544,6 +582,21 @@ const replacing = feed.mine !== null;
     void upload().finally(() => {
       postButton.disabled = false;
     });
+  });
+
+  /** A copy on the phone, whatever happens to the upload. */
+  el('save').addEventListener('click', () => {
+    if (!recorded) return;
+    const extension = recorded.blob.type.includes('webm') ? 'webm' : recorded.blob.type.includes('quicktime') ? 'mov' : 'mp4';
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(recorded.blob);
+    link.download = `waffle-${new Date().toISOString().slice(0, 10)}.${extension}`;
+    leaving = true;
+    link.click();
+    window.setTimeout(() => {
+      leaving = false;
+      URL.revokeObjectURL(link.href);
+    }, 1000);
   });
 
   caption.addEventListener('change', () => void updatePending({ caption: caption.value.trim() }));

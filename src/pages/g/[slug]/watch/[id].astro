@@ -96,7 +96,7 @@ const nextHref = next
     )}
 
     <!-- Reactions: five, fixed. Tapping toggles. -->
-    <div class="px-margin-sm pt-space-md">
+    <div class="flex items-center justify-between gap-space-sm px-margin-sm pt-space-md">
       <ul class="flex items-center gap-space-xs" id="reactions">
         {
           REACTIONS.map((emoji) => {
@@ -125,6 +125,17 @@ const nextHref = next
           })
         }
       </ul>
+      {/* Your own, to keep a copy. Same route and same policies as playing it. */}
+      {waffle.isMine && (
+        <a
+          aria-label="Save to phone"
+          class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-surface-container-low text-on-surface-variant ghost-border"
+          download={`waffle-${waffle.weekStart}.mp4`}
+          href={waffle.playbackPath}
+        >
+          <Icon name="download" size={18} />
+        </a>
+      )}
     </div>
 
     <!-- Up next, in the thumb zone. Tapping it, or the video ending, moves on. -->
