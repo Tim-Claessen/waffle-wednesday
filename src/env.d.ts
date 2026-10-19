@@ -19,6 +19,8 @@ declare global {
     RESEND_API_KEY: string;
     /** Shared secret the cron worker presents to the reminder endpoint. */
     CRON_SECRET: string;
+    /** Comma-separated emails allowed to start groups. Unset means nobody can. */
+    GROUP_CREATORS?: string;
   }
 
   namespace App {

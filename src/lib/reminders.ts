@@ -10,6 +10,7 @@ import { createAdminClient } from './supabase.ts';
 import { absoluteUrl } from './config.ts';
 import { sendEmail, type SendResult } from './email/send.ts';
 import { eveningReminder, morningReminder } from './email/templates.ts';
+import { bundleReminders, type DueReminder } from './reminder-bundle.ts';
 import { firstNameFor } from './auth.ts';
 import { weekStartFor } from './week.ts';
 import type { GroupRow, ProfileRow } from './database.types.ts';
@@ -66,7 +67,8 @@ function localWeekday(at: Date, timezone: string): number {
 }
 
 /**
- * Works out what is due and sends it.
+ * Works out what is due and sends it: first every group's due reminders, then one email
+ * per person per kind, so someone in several groups gets one email listing them.
  *
  * Uses the service role: a cron job has no session to act as, and it needs to read across
  * every group. That is precisely why it lives here rather than anywhere a request can
@@ -81,6 +83,8 @@ export async function runReminders(at: Date = new Date()): Promise<ReminderRun> 
     .select('*')
     .eq('reminders_enabled', true);
   if (error) throw error;
+
+  const due: DueReminder[] = [];
 
   for (const group of (groups ?? []) as GroupRow[]) {
     const isRitualDay = localWeekday(at, group.timezone) === group.week_start_day;
@@ -115,8 +119,6 @@ export async function runReminders(at: Date = new Date()): Promise<ReminderRun> 
         audience.map((member) => member.profile_id),
       );
 
-    const recordUrl = absoluteUrl(`/g/${group.slug}/record`);
-    const feedUrl = absoluteUrl(`/g/${group.slug}`);
     let recipients = (profiles ?? []) as ProfileRow[];
 
     if (eveningDue) {
@@ -137,11 +139,13 @@ export async function runReminders(at: Date = new Date()): Promise<ReminderRun> 
     }
 
     for (const profile of recipients) {
-      const firstName = firstNameFor(profile.display_name);
-      const content = morningDue
-        ? morningReminder({ firstName, groupName: group.name, recordUrl })
-        : eveningReminder({ firstName, groupName: group.name, recordUrl, feedUrl });
-      run.sent.push(await sendEmail(profile.email, content));
+      due.push({
+        kind: morningDue ? 'morning' : 'evening',
+        profileId: profile.id,
+        email: profile.email,
+        displayName: profile.display_name,
+        group: { name: group.name, slug: group.slug },
+      });
     }
 
     run.decisions.push({
@@ -149,6 +153,20 @@ export async function runReminders(at: Date = new Date()): Promise<ReminderRun> 
       kind: morningDue ? 'morning' : 'evening',
       recipients: recipients.length,
     });
+  }
+
+  for (const envelope of bundleReminders(due)) {
+    const firstName = firstNameFor(envelope.displayName);
+    const groups = envelope.groups.map((group) => ({
+      name: group.name,
+      recordUrl: absoluteUrl(`/g/${group.slug}/record`),
+      feedUrl: absoluteUrl(`/g/${group.slug}`),
+    }));
+    const content =
+      envelope.kind === 'morning'
+        ? morningReminder({ firstName, groups })
+        : eveningReminder({ firstName, groups });
+    run.sent.push(await sendEmail(envelope.email, content));
   }
 
   return run;

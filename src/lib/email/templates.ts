@@ -108,28 +108,52 @@ function card(inner: string): string {
   <tr><td style="height:16px;"></td></tr>`;
 }
 
+/** A group as a reminder sees it: its name and where its buttons go. */
+export interface ReminderGroup {
+  name: string;
+  recordUrl: string;
+  feedUrl: string;
+}
+
+/** "FWSH", "FWSH and Tim & Zoe", "A, B and C". */
+function joinNames(names: string[]): string {
+  if (names.length <= 1) return names[0] ?? '';
+  return `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`;
+}
+
+function plainNamesOf(groups: Array<{ name: string }>): string {
+  return joinNames(groups.map((group) => group.name));
+}
+
+/** The same, escaped for HTML. */
+function namesOf(groups: Array<{ name: string }>): string {
+  return joinNames(groups.map((group) => escapeHtml(group.name)));
+}
+
 /**
  * The 07:30 email, to everybody in the group.
  *
  * Warm and short. It says nothing about who has already posted, because at half past
  * seven on a Wednesday nobody has, and because the answer is never any of anyone's
  * business.
+ *
+ * One email however many of your groups are due: each gets its own record button, since
+ * a waffle belongs to one group.
  */
-export function morningReminder(options: {
-  firstName: string;
-  groupName: string;
-  recordUrl: string;
-}): EmailContent {
-  const { firstName, groupName, recordUrl } = options;
+export function morningReminder(options: { firstName: string; groups: ReminderGroup[] }): EmailContent {
+  const { firstName, groups } = options;
+  const several = groups.length > 1;
 
   return {
     subject: 'Wednesday. The kettle is on.',
     text: [
       `Morning ${firstName},`,
       '',
-      `It's Wednesday, which means ${groupName} is listening. Three minutes about your week — in the car, in the kitchen, whenever suits.`,
+      `It's Wednesday, which means ${plainNamesOf(groups)} ${several ? 'are' : 'is'} listening. Three minutes about your week — in the car, in the kitchen, whenever suits.`,
       '',
-      `Record it here: ${recordUrl}`,
+      ...(several
+        ? groups.map((group) => `Record for ${group.name}: ${group.recordUrl}`)
+        : [`Record it here: ${groups[0]!.recordUrl}`]),
       '',
       'No edits needed. Bad hair is traditional.',
     ].join('\n'),
@@ -138,9 +162,11 @@ export function morningReminder(options: {
       body: [
         heading('Morning, it’s Wednesday'),
         paragraph(
-          `${escapeHtml(groupName)} is listening. Three minutes about your week — in the car, in the kitchen, at the end of a long day. No edits, no tidying up first.`,
+          `${namesOf(groups)} ${several ? 'are' : 'is'} listening. Three minutes about your week — in the car, in the kitchen, at the end of a long day. No edits, no tidying up first.`,
         ),
-        button('Record today’s waffle', recordUrl),
+        ...(several
+          ? groups.map((group) => button(`Record for ${group.name}`, group.recordUrl))
+          : [button('Record today’s waffle', groups[0]!.recordUrl)]),
         paragraph(
           `<span style="color:#8a8079;">It'll take about as long as making a cup of tea, and the file is small enough not to bother your data.</span>`,
         ),
@@ -154,26 +180,27 @@ export function morningReminder(options: {
  *
  * Note what this function cannot do. It takes no list of who has posted, no count and no
  * denominator, so there is no way to write a version of this email that mentions anybody
- * else. It also offers watching as an equal option, because watching without posting is
- * explicitly allowed.
+ * else. The groups it lists are only this person's own, and only the ones they haven't
+ * posted in. It also offers watching as an equal option, because watching without posting
+ * is explicitly allowed.
  */
-export function eveningReminder(options: {
-  firstName: string;
-  groupName: string;
-  recordUrl: string;
-  feedUrl: string;
-}): EmailContent {
-  const { firstName, groupName, recordUrl, feedUrl } = options;
+export function eveningReminder(options: { firstName: string; groups: ReminderGroup[] }): EmailContent {
+  const { firstName, groups } = options;
+  const several = groups.length > 1;
+  const first = groups[0]!;
 
   return {
     subject: 'There’s still tonight, if you fancy it',
     text: [
       `Evening ${firstName},`,
       '',
-      `The week's still open over at ${groupName} — it runs until Tuesday night, so there's no hurry.`,
+      `The week's still open over at ${plainNamesOf(groups)} — it runs until Tuesday night, so there's no hurry.`,
       '',
-      `Record yours: ${recordUrl}`,
-      `Or just watch: ${feedUrl}`,
+      ...groups.flatMap((group) =>
+        several
+          ? [`${group.name} — record: ${group.recordUrl} · watch: ${group.feedUrl}`]
+          : [`Record yours: ${group.recordUrl}`, `Or just watch: ${group.feedUrl}`],
+      ),
       '',
       "If it's been that sort of week, watching is completely fine.",
     ].join('\n'),
@@ -182,13 +209,20 @@ export function eveningReminder(options: {
       body: [
         heading('There’s still tonight'),
         paragraph(
-          `The week's open at ${escapeHtml(groupName)} until Tuesday night, so there's genuinely no hurry.`,
+          `The week's open at ${namesOf(groups)} until Tuesday night, so there's genuinely no hurry.`,
         ),
-        button('Record yours', recordUrl),
+        ...(several
+          ? groups.map((group) => button(`Record for ${group.name}`, group.recordUrl))
+          : [button('Record yours', first.recordUrl)]),
         card(
           `<div style="font-family:${SANS};font-size:15px;line-height:26px;color:${INK_SOFT};">
             Or just put the kettle on and watch.
-            <a href="${feedUrl}" style="color:${EMBER};text-decoration:none;">See this week’s &rarr;</a>
+            ${groups
+              .map(
+                (group) =>
+                  `<br /><a href="${group.feedUrl}" style="color:${EMBER};text-decoration:none;">${several ? escapeHtml(group.name) : 'See this week’s'} &rarr;</a>`,
+              )
+              .join('')}
           </div>`,
         ),
         paragraph(

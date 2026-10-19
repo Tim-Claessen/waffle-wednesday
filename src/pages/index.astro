@@ -7,6 +7,7 @@
  */
 import Base from '../layouts/Base.astro';
 import { listGroups } from '../lib/db.ts';
+import { canCreateGroups } from '../lib/groups.ts';
 
 const { supabase, user } = Astro.locals;
 const groups = await listGroups(supabase, user!.id);
@@ -23,6 +24,16 @@ if (groups.length > 0) {
     <p class="mx-auto mt-space-sm max-w-xs text-body-md text-on-surface-variant">
       You'll need an invite link.
     </p>
+    {
+      canCreateGroups(user?.email) && (
+        <a
+          class="mx-auto mt-space-lg inline-flex rounded-lg bg-primary px-space-md py-space-sm text-label-md text-on-primary"
+          href="/groups/new"
+        >
+          Start a group
+        </a>
+      )
+    }
     <p class="mt-space-lg text-label-sm text-outline">
       <a class="underline decoration-outline-variant hover:text-primary" href="/logout">Sign out</a>
     </p>

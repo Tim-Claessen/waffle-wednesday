@@ -1,0 +1,67 @@
+---
+/**
+ * Starting a group. One field: the name. Everything else has a default (Wednesdays,
+ * Perth, the usual reminder times) and can be changed in the group's settings.
+ */
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import { canCreateGroups, createGroup } from '../../lib/groups.ts';
+
+const { user } = Astro.locals;
+if (!canCreateGroups(user?.email)) return Astro.redirect('/', 302);
+
+let problem: string | null = null;
+
+if (Astro.request.method === 'POST') {
+  const form = await Astro.request.formData();
+  const name = String(form.get('name') ?? '').trim().slice(0, 60);
+
+  if (!name) {
+    problem = 'It needs a name.';
+  } else {
+    const slug = await createGroup({ name, creatorId: user!.id });
+    if (slug) return Astro.redirect(`/g/${slug}/settings`, 303);
+    problem = "That didn't work. Try again.";
+  }
+}
+---
+
+<Base title="New group">
+  <main class="mx-auto flex min-h-dvh max-w-sm flex-col justify-center px-margin-sm">
+    <a
+      aria-label="Back"
+      class="mb-space-lg flex h-10 w-10 items-center justify-center rounded-full bg-surface-container-high text-on-surface"
+      href="/"
+    >
+      <Icon name="chevronLeft" size={20} />
+    </a>
+    <h1 class="font-serif text-headline text-on-surface">New group</h1>
+
+    <form class="mt-space-lg space-y-space-md" method="post">
+      {problem && (
+        <p
+          class="rounded-lg border border-error/40 bg-error-container/20 p-space-sm text-body-sm text-on-error-container"
+          role="alert"
+        >
+          {problem}
+        </p>
+      )}
+      <input
+        aria-label="Group name"
+        autofocus
+        class="w-full rounded-lg bg-surface-container-low px-space-md py-space-sm text-body-md text-on-surface ghost-border placeholder:text-outline focus:outline-none"
+        maxlength="60"
+        name="name"
+        placeholder="Name"
+        required
+        type="text"
+      />
+      <button
+        class="w-full rounded-lg bg-primary px-space-md py-space-md text-label-md text-on-primary shadow-ember"
+        type="submit"
+      >
+        Create
+      </button>
+    </form>
+  </main>
+</Base>

@@ -23,46 +23,72 @@ interface Props {
 const { waffle, playlist, groupSlug } = Astro.props;
 
 const href = `/g/${groupSlug}/watch/${waffle.id}?from=${playlist.join(',')}`;
+/** Instagram stories: a bright ring means new to you, a grey one means seen. */
+const fresh = !waffle.isMine && !waffle.watched;
+const seen = !waffle.isMine && waffle.watched;
 ---
 
 <a
-  class:list={[
-    'group flex items-center gap-space-sm overflow-hidden rounded-xl bg-surface-container-low p-space-xs pr-space-md transition-colors',
-    !waffle.watched && !waffle.isMine ? 'ghost-border-active' : 'ghost-border',
-  ]}
+  class="ghost-border group flex items-center gap-space-sm overflow-hidden rounded-xl bg-surface-container-low p-space-xs pr-space-md transition-colors"
   href={href}
 >
-  <span class="sunken-well relative block h-24 w-18 shrink-0 overflow-hidden rounded-lg bg-surface-container-lowest">
-    {
-      waffle.thumbnailPath ? (
-        <img
-          alt=""
-          class="h-full w-full object-cover"
-          height="96"
-          loading="lazy"
-          src={waffle.thumbnailPath}
-          width="72"
-        />
-      ) : (
-        <span class="flex h-full w-full items-center justify-center">
-          <Monogram initials={waffle.initials} size="sm" />
-        </span>
-      )
-    }
+  <span
+    class:list={[
+      'block shrink-0 rounded-[0.7rem]',
+      fresh && 'bg-linear-to-tr from-primary via-primary-fixed to-error p-[3px]',
+      seen && 'bg-outline-variant p-px',
+    ]}
+  >
     <span
-      class="absolute bottom-1 right-1 rounded-full bg-surface-container-lowest/85 px-1.5 text-label-sm text-on-surface"
+      class:list={[
+        'sunken-well relative block h-24 w-18 overflow-hidden rounded-lg bg-surface-container-lowest',
+        fresh && 'border-2 border-surface-container-low',
+        seen && 'opacity-55',
+      ]}
     >
-      {formatDuration(waffle.durationSeconds)}
+      {
+        waffle.thumbnailPath ? (
+          <img
+            alt=""
+            class="h-full w-full object-cover"
+            height="96"
+            loading="lazy"
+            src={waffle.thumbnailPath}
+            width="72"
+          />
+        ) : (
+          <span class="flex h-full w-full items-center justify-center">
+            <Monogram initials={waffle.initials} size="sm" />
+          </span>
+        )
+      }
+      <span
+        class="absolute bottom-1 right-1 rounded-full bg-surface-container-lowest/85 px-1.5 text-label-sm text-on-surface"
+      >
+        {formatDuration(waffle.durationSeconds)}
+      </span>
     </span>
   </span>
 
   <span class="min-w-0 flex-1">
     <span class="flex items-center gap-1.5">
-      <span class="truncate font-serif text-headline-sm text-on-surface">
+      <span
+        class:list={[
+          'truncate font-serif text-headline-sm',
+          seen ? 'text-on-surface-variant' : 'text-on-surface',
+          fresh && 'font-semibold',
+        ]}
+      >
         {waffle.isMine ? 'Yours' : waffle.displayName}
       </span>
-      {waffle.watched && !waffle.isMine && <Icon class="shrink-0 text-outline" name="check" size={14} />}
+      {fresh && <span aria-label="New" class="h-2 w-2 shrink-0 rounded-full bg-primary"></span>}
     </span>
+    {seen && (
+      <span class="mt-0.5 flex items-center gap-1 text-label-sm text-outline">
+        <Icon name="check" size={13} />
+        Watched
+      </span>
+    )}
     {waffle.caption && (
       <span class="mt-0.5 block line-clamp-2 text-body-sm text-on-surface-variant">{waffle.caption}</span>
     )}
@@ -87,5 +113,5 @@ const href = `/g/${groupSlug}/watch/${waffle.id}?from=${playlist.join(',')}`;
     </span>
   </span>
 
-  <Icon class="shrink-0 text-primary" filled name="play" size={20} />
+  <Icon class={fresh ? 'shrink-0 text-primary' : 'shrink-0 text-outline'} filled name="play" size={20} />
 </a>

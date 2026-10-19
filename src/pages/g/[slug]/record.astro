@@ -99,6 +99,18 @@ const replacing = feed.mine !== null;
       </button>
     </div>
 
+    <!-- Sound on and off while reviewing. -->
+    <button
+      aria-label="Mute"
+      class="absolute right-space-sm top-space-sm flex h-10 w-10 items-center justify-center rounded-full bg-surface-container-lowest/80 text-on-surface"
+      hidden
+      id="mute"
+      type="button"
+    >
+      <span data-icon="sound"><Icon name="sound" size={20} /></span>
+      <span data-icon="muted" hidden><Icon name="muted" size={20} /></span>
+    </button>
+
     <!-- Whatever went wrong, in plain words, over the top of the picture. -->
     <div
       class="absolute inset-x-space-sm top-space-sm rounded-lg border border-error/40 bg-surface-container-lowest/90 p-space-sm text-body-sm text-on-error-container"
@@ -228,6 +240,7 @@ const replacing = feed.mine !== null;
     stage.dataset.stage = value;
     captureBar.hidden = value === 'review' || value === 'uploading';
     review.hidden = value !== 'review';
+    el('mute').hidden = value !== 'review';
     uploading.hidden = value !== 'uploading';
     timer.hidden = value !== 'recording';
     preview.hidden = value === 'review' || value === 'uploading';
@@ -558,13 +571,23 @@ const replacing = feed.mine !== null;
 
   el('start-camera').addEventListener('click', () => void turnCameraOn());
 
-  // Tap the clip: sound on if it started muted, otherwise pause and play.
+  // Tap the clip to pause and play.
   playback.addEventListener('click', () => {
-    if (playback.muted) {
-      playback.muted = false;
-      void playback.play().catch(() => undefined);
-    } else if (playback.paused) void playback.play().catch(() => undefined);
+    if (playback.paused) void playback.play().catch(() => undefined);
     else playback.pause();
+  });
+
+  // The mute button follows the clip, including a browser starting it muted by itself.
+  const muteButton = el<HTMLButtonElement>('mute');
+  const showMuted = () => {
+    muteButton.setAttribute('aria-label', playback.muted ? 'Unmute' : 'Mute');
+    muteButton.querySelector<HTMLElement>('[data-icon="sound"]')!.hidden = playback.muted;
+    muteButton.querySelector<HTMLElement>('[data-icon="muted"]')!.hidden = !playback.muted;
+  };
+  playback.addEventListener('volumechange', showMuted);
+  muteButton.addEventListener('click', () => {
+    playback.muted = !playback.muted;
+    if (playback.paused) void playback.play().catch(() => undefined);
   });
 
   shutter.addEventListener('click', () => {

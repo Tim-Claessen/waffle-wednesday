@@ -172,7 +172,7 @@ Just the base. If what you copy ends in `/rest/v1/`, drop that part.
 
 The app Worker → Settings → Variables and Secrets. Use the **runtime** section, not the build
 one: build variables only exist while Cloudflare builds, and the app reads these while it
-runs. Add, with type **Secret**, four times:
+runs. Add, with type **Secret**, five times:
 
 | Name | Value |
 | --- | --- |
@@ -180,6 +180,7 @@ runs. Add, with type **Secret**, four times:
 | `SUPABASE_SERVICE_ROLE_KEY` | From 2.6 |
 | `RESEND_API_KEY` | From 3 |
 | `CRON_SECRET` | Any long random string. A password manager's generator is fine. Keep it; step 5 needs the same value |
+| `GROUP_CREATORS` | The email you sign in with. Only these people see **New group**; comma-separate to add more |
 
 Secrets survive deploys. The plain variables in `wrangler.jsonc` don't: each deploy resets
 them to what's committed, which is why those three values are handed back rather than

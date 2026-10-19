@@ -251,6 +251,24 @@ Built as planned, with these specifics:
   and the admin can remove them. Acceptable for a link shared in a friends' group chat.
 - Settings is now every member's page (leave, password, sign out). The rest stays admin-only.
 
+### One reminder email per person, not per group
+
+Each run collects every group's due reminders first, then sends one email per person per
+kind ([reminder-bundle.ts](../src/lib/reminder-bundle.ts)), with a record button per group
+since a waffle belongs to one. The evening email lists only the person's own groups they
+haven't posted in, so it still says nothing about anybody else.
+
+Groups with different reminder times fall in different thirty-minute slots and still send
+separately, hours apart. That's each group's chosen time, not duplication; merging across
+slots would mean delaying one group's reminder to suit another's.
+
+### Starting a group is Tim only, for now
+
+A group is created in the app (switcher → New group), with the service key since members
+have no insert policy on `groups`. Who may do it is the `GROUP_CREATORS` secret, a list of
+emails, rather than a role: nobody else needs it yet, and a secret keeps the address out of
+the repo. Opening it up later is adding an email, or swapping the check for "any admin".
+
 ---
 
 ## Where the design files disagree with PLAN.md

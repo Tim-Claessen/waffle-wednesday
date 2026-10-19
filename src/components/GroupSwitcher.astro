@@ -4,11 +4,13 @@
  *
  * Here from the first version because people belong to several groups, and retrofitting
  * a switcher into a single-group interface means rewriting every screen. A plain
- * `<details>` element: no framework, works before any JavaScript has run. With one group
- * it is just the name.
+ * `<details>` element: no framework, works before any JavaScript has run. Always a
+ * dropdown, even with one group, so switching looks the same everywhere; starting a
+ * group lives at the bottom, for whoever is allowed to.
  */
 import Icon from './Icon.astro';
 import type { GroupSummary } from '../lib/db.ts';
+import { canCreateGroups } from '../lib/groups.ts';
 
 interface Props {
   groups: GroupSummary[];
@@ -16,43 +18,44 @@ interface Props {
 }
 
 const { groups, current } = Astro.props;
-const hasOthers = groups.length > 1;
+const canCreate = canCreateGroups(Astro.locals.user?.email);
 ---
 
-{
-  hasOthers ? (
-    <details class="group relative min-w-0">
-      <summary data-dock class="flex cursor-pointer list-none items-center gap-1.5 text-on-surface">
-        <span aria-hidden="true" class="text-[20px]">🧇</span>
-        <span class="truncate font-serif text-headline-sm">{current.name}</span>
-        <Icon class="shrink-0 text-outline transition-transform group-open:rotate-180" name="chevronDown" size={16} />
-      </summary>
-      <div
-        class="ghost-border absolute left-0 top-full z-50 mt-1 min-w-52 overflow-hidden rounded-md bg-surface-container-high shadow-ember"
-      >
-        <ul>
-          {groups.map((group) => (
-            <li>
-              <a
-                aria-current={group.id === current.id ? 'true' : undefined}
-                class:list={[
-                  'flex items-center justify-between gap-3 px-space-md py-space-sm text-body-md transition-colors hover:bg-surface-container-highest',
-                  group.id === current.id ? 'text-primary' : 'text-on-surface',
-                ]}
-                href={`/g/${group.slug}`}
-              >
-                <span>{group.name}</span>
-                {group.id === current.id && <Icon name="check" size={16} />}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </details>
-  ) : (
-    <a class="flex min-w-0 items-center gap-2 text-on-surface" data-dock href={`/g/${current.slug}`}>
-      <span aria-hidden="true" class="text-[20px]">🧇</span>
-      <span class="truncate font-serif text-headline-sm">{current.name}</span>
-    </a>
-  )
-}
+<details class="group relative min-w-0">
+  <summary data-dock class="flex cursor-pointer list-none items-center gap-1.5 text-on-surface">
+    <span aria-hidden="true" class="text-[20px]">🧇</span>
+    <span class="truncate font-serif text-headline-sm">{current.name}</span>
+    <Icon class="shrink-0 text-outline transition-transform group-open:rotate-180" name="chevronDown" size={16} />
+  </summary>
+  <div
+    class="ghost-border absolute left-0 top-full z-50 mt-1 min-w-52 overflow-hidden rounded-md bg-surface-container-high shadow-ember"
+  >
+    <ul>
+      {groups.map((group) => (
+        <li>
+          <a
+            aria-current={group.id === current.id ? 'true' : undefined}
+            class:list={[
+              'flex items-center justify-between gap-3 px-space-md py-space-sm text-body-md transition-colors hover:bg-surface-container-highest',
+              group.id === current.id ? 'text-primary' : 'text-on-surface',
+            ]}
+            href={`/g/${group.slug}`}
+          >
+            <span>{group.name}</span>
+            {group.id === current.id && <Icon name="check" size={16} />}
+          </a>
+        </li>
+      ))}
+      {canCreate && (
+        <li class="border-t border-outline-variant/30">
+          <a
+            class="flex items-center px-space-md py-space-sm text-label-md text-on-surface-variant transition-colors hover:bg-surface-container-highest hover:text-primary"
+            href="/groups/new"
+          >
+            + New group
+          </a>
+        </li>
+      )}
+    </ul>
+  </div>
+</details>

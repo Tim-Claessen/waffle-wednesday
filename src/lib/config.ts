@@ -50,6 +50,14 @@ export const config = {
   get siteUrl(): string {
     return required('PUBLIC_SITE_URL').replace(/\/$/, '');
   },
+  /** Who may start a group. A setting rather than code, so no address lives in the repo. */
+  get groupCreators(): string[] {
+    const raw = (env as Partial<Env>).GROUP_CREATORS ?? '';
+    return raw
+      .split(',')
+      .map((email) => email.trim().toLowerCase())
+      .filter(Boolean);
+  },
   /** Rate limiter for invite joins. Absent under a local dev server without the binding. */
   get joinLimiter(): RateLimit | null {
     return (env as Partial<Env>).JOIN_LIMITER ?? null;
