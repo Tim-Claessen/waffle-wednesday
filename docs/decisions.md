@@ -279,7 +279,7 @@ palette, EB Garamond over Manrope — is what got built, and the tokens are now 
 [global.css](../src/styles/global.css).
 
 Its engineering half contradicts PLAN.md in five places, and PLAN.md won each time, per
-CLAUDE.md. Recorded here so it doesn't get re-litigated:
+AGENTS.md. Recorded here so it doesn't get re-litigated:
 
 | The PRD says | What was built | Why |
 | --- | --- | --- |
