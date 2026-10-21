@@ -5,11 +5,13 @@
 	"compatibility_date": "2026-09-25",
 	"observability": { "enabled": true },
 
-	// Every thirty minutes. The app decides whether anything is actually due, using each
-	// group's own reminder times and timezone from the database — so changing a reminder
-	// time never needs a deploy of this.
+	// ON HOLD (2026-10-21): no schedule, so no reminders and nothing keeping Supabase awake.
+	// An empty list removes the trigger on deploy; leaving the key out would keep the old one.
+	// To resume, put back ["*/30 * * * *"]: every thirty minutes, and the app decides whether
+	// anything is due from each group's own reminder times, so a time change never needs a
+	// deploy of this.
 	"triggers": {
-		"crons": ["*/30 * * * *"]
+		"crons": []
 	},
 
 	"vars": {
