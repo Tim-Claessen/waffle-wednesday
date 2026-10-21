@@ -271,6 +271,28 @@ the repo. Opening it up later is adding an email, or swapping the check for "any
 
 ---
 
+## Put on hold (2026-10-21)
+
+Parked after the first phone run, before step 6 was finished. The state, the resume steps
+and what's next are in the [README](../README.md#on-hold-2026-10-21).
+
+### Stop the schedule in the repo, pause the database, leave the rest
+
+- **The cron is emptied in `wrangler.jsonc`, not in the dashboard.** Every push to `main`
+  redeploys the reminders Worker from its config, so a trigger removed only in the dashboard
+  would come back with the next unrelated commit. `crons: []` removes it on deploy; leaving
+  the key out would keep whatever is deployed.
+- **Supabase is paused by hand.** It would pause itself after about a week with no cron
+  hitting it, but a deliberate pause starts the restore window on a known date. A paused
+  project also stops counting against the free plan's two active projects.
+- **The app Worker stays up.** Workers have no pause, and the nearest thing, removing the
+  custom domain, deletes its DNS record and adds a step to resuming. Idle, it costs nothing,
+  and with the database paused it can't sign anyone in.
+- **R2, Resend and DNS are untouched.** None of them bill at this size, and none does
+  anything without the cron. Revoking the Resend key would be a delete that buys nothing.
+
+---
+
 ## Where the design files disagree with PLAN.md
 
 `design/claude_code_implementation_prd_design_tokens.md` is a generated PRD that came back

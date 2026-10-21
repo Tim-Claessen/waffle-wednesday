@@ -6,10 +6,9 @@ and why every decision was taken the way it was — read it before proposing any
 ## What this is
 
 A private weekly video check-in for a group of 8–9 old friends. One waffle of up to three minutes per
-person per week, visible to the group for that week, retained forever. Status: Phase 1 built and
-deployed at `https://waffle.timclaessen.com`; setup steps 1–5 done, first run on Tim's Android done
-and fixed up (2026-09-30), invite links built. Next: re-test on the phone, run migration 0002, the
-iPhone check (see [docs/setup.md](docs/setup.md)).
+person per week, visible to the group for that week, retained forever. Status: **on hold since 2026-10-21.** The
+[README](README.md#on-hold-2026-10-21) has the state of every service, how to resume and
+what's next.
 
 **Copy is minimal.** Tim wants as little text in the UI as possible: labels and buttons, not
 explanations. Don't add explanatory sentences to screens.
